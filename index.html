@@ -480,7 +480,7 @@ main{max-width:1100px;margin:0 auto;padding:20px 14px;}
 <script>
 // ══════════════════════════════════════════════
 //  ★ 把這裡換成你的 Apps Script 網址 ★
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfsVyvs7gXWjjxJru50DYkOe-U43TMNvpUMVUXMOvi6LzUhFhJQV89-OaJcavtzw7Z/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyiF-3mMYmxQPuQp9EhjjB2RvYLSehLPC-Ou-9AfLY0KcEJr2govopUtXp0QjpAktn2/exec";
 // ══════════════════════════════════════════════
 
 let S = { token:null, user:null };   // session
@@ -495,7 +495,10 @@ function loadD(){ try{ const x=localStorage.getItem("fld"); if(x) D.shop=JSON.pa
 async function api(body){
   setSS("sync");
   try{
-    const r = await fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(body)});
+    const action = body.action;
+    const data   = JSON.stringify(body);
+    const url    = SCRIPT_URL + "?action=" + encodeURIComponent(action) + "&data=" + encodeURIComponent(data);
+    const r = await fetch(url, { method: "GET", redirect: "follow" });
     const d = await r.json();
     setSS(d.success?"ok":"err");
     return d;
