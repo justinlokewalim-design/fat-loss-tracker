@@ -6,15 +6,9 @@
 <title>🔥 減脂計劃</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap');
-:root{
-  --bg:#0f1117;--sf:#181c27;--cd:#1e2336;--bd:#2a3050;
-  --ac:#6c63ff;--a2:#ff6b6b;--a3:#43d99e;--a4:#ffd166;--a5:#60c5fa;
-  --tx:#e8eaf0;--mt:#7a85a3;
-}
+:root{--bg:#0f1117;--sf:#181c27;--cd:#1e2336;--bd:#2a3050;--ac:#6c63ff;--a2:#ff6b6b;--a3:#43d99e;--a4:#ffd166;--tx:#e8eaf0;--mt:#7a85a3;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;min-height:100vh;}
-
-/* LOGIN */
 #ls{position:fixed;inset:0;background:var(--bg);z-index:2000;display:flex;align-items:center;justify-content:center;}
 .lb{background:var(--cd);border:1px solid var(--bd);border-radius:20px;padding:36px;max-width:420px;width:90%;}
 .ll{font-family:'Space Grotesk',sans-serif;font-size:1.9rem;font-weight:700;color:var(--ac);text-align:center;margin-bottom:4px;}
@@ -31,8 +25,6 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 .bmain:hover{opacity:.85;}.bmain:disabled{opacity:.5;cursor:default;}
 .lerr{background:rgba(255,107,107,.15);border:1px solid rgba(255,107,107,.3);border-radius:8px;padding:9px 12px;font-size:.78rem;color:var(--a2);margin-bottom:11px;display:none;}
 .linfo{margin-top:14px;text-align:center;font-size:.72rem;color:var(--mt);}
-
-/* APP */
 #app{display:none;}
 header{background:var(--sf);border-bottom:1px solid var(--bd);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .logo{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:var(--ac);}
@@ -48,30 +40,22 @@ header{background:var(--sf);border-bottom:1px solid var(--bd);padding:11px 18px;
 .bsm{padding:5px 11px;border-radius:7px;border:1px solid var(--bd);background:transparent;color:var(--mt);font-size:.76rem;cursor:pointer;}
 .bsm:hover{border-color:var(--ac);color:var(--ac);}
 .bsm.d{border-color:rgba(255,107,107,.4);color:var(--a2);}
-
 nav{display:flex;gap:3px;background:var(--sf);padding:6px 12px;border-bottom:1px solid var(--bd);overflow-x:auto;}
 nav button{padding:6px 13px;border:none;border-radius:7px;background:transparent;color:var(--mt);font-family:'Noto Sans TC',sans-serif;font-size:.78rem;cursor:pointer;white-space:nowrap;transition:all .2s;}
 nav button.active{background:var(--ac);color:#fff;font-weight:500;}
-
 main{max-width:1100px;margin:0 auto;padding:18px 13px;}
 .tab-content{display:none;}.tab-content.active{display:block;}
 .card{background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:14px;}
 .card h2{font-size:.88rem;font-weight:600;margin-bottom:12px;}
 .stitle{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:14px;}
 .stitle span{color:var(--ac);}
-
-/* stat cards */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
-.stat-card{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;}
-.stat-card .sv{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:2px;}
-.stat-card .sl{font-size:.72rem;color:var(--mt);}
-.stat-card .sd{font-size:.76rem;color:var(--a3);margin-top:3px;}
-
-/* progress bar */
+.sc{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;}
+.sc .sv{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:2px;}
+.sc .sl{font-size:.72rem;color:var(--mt);}
+.sc .sd{font-size:.76rem;color:var(--a3);margin-top:3px;}
 .pbar{height:6px;background:var(--sf);border-radius:3px;overflow:hidden;margin-top:6px;}
 .pfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--ac),var(--a3));transition:width .5s;}
-
-/* calendar */
 .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
 .cnav{background:var(--sf);border:1px solid var(--bd);color:var(--tx);padding:5px 11px;border-radius:7px;cursor:pointer;font-size:.76rem;}
 .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
@@ -83,8 +67,6 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
 .cc.cheat{background:rgba(255,107,107,.12);}
 .cc.wod{background:rgba(108,99,255,.1);}
 .cc.emp{background:transparent;border-color:transparent;cursor:default;}
-
-/* form */
 .fg label{display:block;font-size:.74rem;color:var(--mt);margin-bottom:4px;}
 .fg input,.fg select,.fg textarea{width:100%;padding:8px 11px;background:var(--sf);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-family:'Noto Sans TC',sans-serif;font-size:.83rem;}
 .fg textarea{resize:vertical;min-height:64px;}
@@ -92,40 +74,33 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;}
-.span2{grid-column:1/-1;}
-
-/* multi-select exercise */
-.ex-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:4px;}
-.ex-btn{padding:7px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--mt);font-size:.76rem;cursor:pointer;text-align:center;transition:all .15s;}
+.ex-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px;}
+.ex-btn{padding:7px 8px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--mt);font-size:.73rem;cursor:pointer;text-align:center;transition:all .15s;}
 .ex-btn.sel{border-color:var(--ac);background:rgba(108,99,255,.15);color:var(--ac);}
-
-/* buttons */
 .bsave{padding:9px 20px;background:linear-gradient(135deg,var(--a3),#2bb57d);border:none;border-radius:8px;color:#0f1117;font-weight:700;font-size:.83rem;cursor:pointer;margin-top:6px;}
 .bexp{padding:9px 20px;background:transparent;border:1px solid var(--ac);border-radius:8px;color:var(--ac);font-size:.83rem;cursor:pointer;margin-left:7px;}
-.bwarn{padding:9px 20px;background:transparent;border:1px solid var(--a2);border-radius:8px;color:var(--a2);font-size:.83rem;cursor:pointer;margin-left:7px;}
-
-/* chart */
 .chart-wrap{position:relative;margin-top:8px;}
-.chart-wrap.h180{height:180px;}
-.chart-wrap.h220{height:220px;}
-
-/* meal/workout week */
-.mw,.ww{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
-.mdc,.wdc{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:9px;}
+.chart-wrap.h180{height:180px;}.chart-wrap.h220{height:220px;}
+.mw{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+.mdc{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:9px;}
+.ww{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+.wdc{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:9px;}
 .wdc.aday{border-color:var(--ac);}.wdc.rest{opacity:.5;}
 .dlbl{font-size:.63rem;font-weight:700;letter-spacing:.06em;margin-bottom:5px;}
 .mi{font-size:.67rem;color:var(--mt);margin-bottom:3px;line-height:1.5;}
 .mi strong{color:var(--tx);display:block;}
 .cbadge{display:inline-block;font-size:.61rem;padding:2px 6px;background:rgba(255,107,107,.2);color:var(--a2);border-radius:16px;margin-top:3px;}
 .ei{font-size:.67rem;color:var(--mt);margin-bottom:2px;}
-
 /* shop */
+.week-nav{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.week-nav button{background:var(--sf);border:1px solid var(--bd);color:var(--tx);padding:5px 11px;border-radius:7px;cursor:pointer;font-size:.76rem;}
+.wlbl{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.9rem;}
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.si{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.77rem;}
+.shop-cat h3{font-size:.77rem;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--bd);}
+.si{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.77rem;}
 .si input[type=checkbox]{accent-color:var(--ac);width:14px;height:14px;cursor:pointer;flex-shrink:0;}
 .si .qty{color:var(--mt);font-size:.7rem;margin-left:auto;}
-.si .used{text-decoration:line-through;opacity:.4;}
-
+.si.used-item span{text-decoration:line-through;opacity:.4;}
 /* log table */
 .lt{width:100%;border-collapse:collapse;font-size:.74rem;}
 .lt th{color:var(--mt);font-weight:500;padding:6px 8px;text-align:left;border-bottom:1px solid var(--bd);}
@@ -134,72 +109,59 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
 .tag{display:inline-block;font-size:.62rem;padding:2px 5px;border-radius:14px;margin:1px 2px;}
 .tw{background:rgba(108,99,255,.15);color:var(--ac);}
 .tc{background:rgba(255,107,107,.15);color:var(--a2);}
-.tg{background:rgba(67,217,158,.15);color:var(--a3);}
-
-/* admin table */
+/* admin */
 .at{width:100%;border-collapse:collapse;font-size:.76rem;}
 .at th{background:var(--sf);padding:7px 10px;text-align:left;border-bottom:1px solid var(--bd);color:var(--mt);font-weight:500;}
 .at td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.04);}
 .rb{display:inline-block;font-size:.62rem;padding:2px 6px;border-radius:14px;}
 .rb.admin{background:rgba(255,209,102,.2);color:var(--a4);}
 .rb.user{background:rgba(67,217,158,.15);color:var(--a3);}
-
-/* tip grid */
+/* tip */
 .tg2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .tc2{background:var(--sf);border-radius:10px;padding:12px;border-left:3px solid;}
-.tc2.g{border-color:var(--a3);}.tc2.p{border-color:var(--ac);}
-.tc2.r{border-color:var(--a2);}.tc2.y{border-color:var(--a4);}
+.tc2.g{border-color:var(--a3);}.tc2.p{border-color:var(--ac);}.tc2.r{border-color:var(--a2);}.tc2.y{border-color:var(--a4);}
 .tc2 h4{font-size:.78rem;margin-bottom:4px;}
 .tc2 p{font-size:.72rem;color:var(--mt);line-height:1.6;}
-
 /* modal */
 .mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;align-items:center;justify-content:center;}
 .mov.open{display:flex;}
-.mo{background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:22px;max-width:440px;width:90%;max-height:85vh;overflow-y:auto;}
+.mo{background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:22px;max-width:500px;width:90%;max-height:85vh;overflow-y:auto;}
 .mclose{float:right;background:none;border:none;color:var(--mt);font-size:1.1rem;cursor:pointer;}
-
-/* toast */
-#toast{position:fixed;bottom:22px;right:22px;background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:10px 16px;font-size:.81rem;z-index:9999;transform:translateY(14px);opacity:0;transition:all .28s;pointer-events:none;}
-#toast.show{transform:translateY(0);opacity:1;}
-#toast.ok{border-color:rgba(67,217,158,.4);color:var(--a3);}
-#toast.err{border-color:rgba(255,107,107,.4);color:var(--a2);}
-
-/* streak */
-.streak{display:flex;align-items:center;gap:6px;font-size:.82rem;}
-.streak .num{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;color:var(--a4);}
-
+/* avoid tags */
+.avoid-grid{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px;}
+.avoid-tag{padding:6px 13px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--mt);font-size:.78rem;cursor:pointer;transition:all .15s;}
+.avoid-tag.sel{border-color:var(--a2);background:rgba(255,107,107,.15);color:var(--a2);}
+/* chart tabs */
+.chart-tabs{display:flex;gap:4px;margin-bottom:12px;}
+.ctab{padding:5px 13px;border:1px solid var(--bd);border-radius:7px;background:transparent;color:var(--mt);font-size:.76rem;cursor:pointer;}
+.ctab.active{background:var(--ac);color:#fff;border-color:var(--ac);}
+/* plan btns */
+.plan-opts{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;}
+.plan-btn{padding:6px 14px;border:1px solid var(--bd);border-radius:7px;background:var(--sf);color:var(--mt);font-size:.78rem;cursor:pointer;}
+.plan-btn.sel{border-color:var(--ac);background:rgba(108,99,255,.15);color:var(--ac);}
 /* week summary */
 .ws-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;}
 .ws-card{background:var(--sf);border-radius:10px;padding:12px;text-align:center;}
 .ws-card .wv{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:2px;}
 .ws-card .wl{font-size:.7rem;color:var(--mt);}
-
-/* body comp chart tabs */
-.chart-tabs{display:flex;gap:4px;margin-bottom:12px;}
-.ctab{padding:5px 13px;border:1px solid var(--bd);border-radius:7px;background:transparent;color:var(--mt);font-size:.76rem;cursor:pointer;}
-.ctab.active{background:var(--ac);color:#fff;border-color:var(--ac);}
-
-/* profile setup */
-.plan-option{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
-.plan-btn{padding:7px 16px;border:1px solid var(--bd);border-radius:8px;background:var(--sf);color:var(--mt);font-size:.8rem;cursor:pointer;}
-.plan-btn.sel{border-color:var(--ac);background:rgba(108,99,255,.15);color:var(--ac);}
-
-/* shop week nav */
-.week-nav{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.week-nav button{background:var(--sf);border:1px solid var(--bd);color:var(--tx);padding:5px 11px;border-radius:7px;cursor:pointer;font-size:.76rem;}
-.week-label{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.9rem;}
-
+.streak .num{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;color:var(--a4);}
+/* toast */
+#toast{position:fixed;bottom:22px;right:22px;background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:10px 16px;font-size:.81rem;z-index:9999;transform:translateY(14px);opacity:0;transition:all .28s;pointer-events:none;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.ok{border-color:rgba(67,217,158,.4);color:var(--a3);}
+#toast.err{border-color:rgba(255,107,107,.4);color:var(--a2);}
 .spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.2);border-top-color:var(--ac);border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:4px;}
 @keyframes sp{to{transform:rotate(360deg)}}
 .row{display:flex;gap:12px;}.col{flex:1;}
 .sep{border:none;border-top:1px solid var(--bd);margin:12px 0;}
-.badge{display:inline-block;font-size:.7rem;padding:2px 8px;border-radius:14px;}
-.badge.g{background:rgba(67,217,158,.15);color:var(--a3);}
-.badge.p{background:rgba(108,99,255,.15);color:var(--ac);}
-.badge.y{background:rgba(255,209,102,.15);color:var(--a4);}
 .denied{text-align:center;padding:50px 20px;color:var(--mt);}
-.denied .icon{font-size:2.5rem;margin-bottom:10px;}
-
+.recipe-card{margin-bottom:10px;background:var(--sf);border-radius:10px;padding:13px;}
+.phase-badge{display:inline-block;font-size:.62rem;padding:2px 7px;border-radius:14px;margin-right:5px;}
+.ph1{background:rgba(108,99,255,.2);color:var(--ac);}
+.ph2{background:rgba(255,107,107,.2);color:var(--a2);}
+.ph3{background:rgba(67,217,158,.2);color:var(--a3);}
+.avoided{opacity:.3;pointer-events:none;border-style:dashed;}
+.avoided-label{font-size:.62rem;color:var(--a2);margin-left:5px;}
 @media(max-width:700px){
   .g2,.g3,.g4,.sg,.tg2,.stats-row,.ws-grid{grid-template-columns:1fr 1fr;}
   .mw,.ww,.ex-grid{grid-template-columns:repeat(3,1fr);}
@@ -257,7 +219,7 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
   <button class="active" onclick="st('t-home',this)">🏠 總覽</button>
   <button onclick="st('t-cal',this)">📅 日曆</button>
   <button onclick="st('t-log',this)">✍️ 紀錄</button>
-  <button onclick="st('t-body',this)">📊 數據分析</button>
+  <button onclick="st('t-body',this)">📊 數據</button>
   <button onclick="st('t-meal',this)">🥗 飲食</button>
   <button onclick="st('t-wo',this)">💪 運動</button>
   <button onclick="st('t-shop',this)">🛒 購物</button>
@@ -268,41 +230,34 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
 
 <!-- HOME -->
 <div id="t-home" class="tab-content active">
-  <div class="stitle" id="home-title">你好！<span>載入中...</span></div>
-  <div class="stats-row" id="stats-row">
-    <div class="stat-card"><div class="sv" id="sc-day">--</div><div class="sl">計劃天數</div><div class="pbar"><div class="pfill" id="sc-prog" style="width:0%"></div></div></div>
-    <div class="stat-card"><div class="sv" id="sc-wt">-- kg</div><div class="sl">最新體重</div><div class="sd" id="sc-wtd"></div></div>
-    <div class="stat-card"><div class="sv" id="sc-bmi">--</div><div class="sl">BMI</div><div class="sd" id="sc-bmil"></div></div>
-    <div class="stat-card"><div class="sv" id="sc-goal">-- kg</div><div class="sl">距離目標</div><div class="sd" id="sc-goald"></div></div>
+  <div class="stitle" id="home-title">歡迎！<span>載入中...</span></div>
+  <div class="stats-row">
+    <div class="sc"><div class="sv" id="sc-day">--</div><div class="sl">計劃進度</div><div class="pbar"><div class="pfill" id="sc-prog" style="width:0%"></div></div></div>
+    <div class="sc"><div class="sv" id="sc-wt">-- kg</div><div class="sl">最新體重</div><div class="sd" id="sc-wtd"></div></div>
+    <div class="sc"><div class="sv" id="sc-bmi">--</div><div class="sl">BMI</div><div class="sd" id="sc-bmil"></div></div>
+    <div class="sc"><div class="sv" id="sc-goal">-- kg</div><div class="sl">距離目標</div><div class="sd" id="sc-goald"></div></div>
   </div>
   <div class="row">
     <div class="col">
-      <div class="card">
-        <h2>📅 今日安排</h2>
-        <div id="today-plan" style="font-size:.82rem;line-height:2;color:var(--mt)">載入中...</div>
-      </div>
-      <div class="card">
-        <h2>🔥 連續打卡</h2>
-        <div class="streak"><div class="num" id="streak-num">0</div><div><div style="font-size:.85rem">天連續紀錄</div><div style="font-size:.75rem;color:var(--mt)" id="streak-tip"></div></div></div>
+      <div class="card"><h2>📅 今日安排</h2><div id="today-plan" style="font-size:.82rem;line-height:2;color:var(--mt)">載入中...</div></div>
+      <div class="card"><h2>🔥 連續打卡</h2>
+        <div class="streak" style="display:flex;align-items:center;gap:8px">
+          <div class="num" id="streak-num">0</div>
+          <div><div style="font-size:.85rem">天連續紀錄</div><div style="font-size:.74rem;color:var(--mt)" id="streak-tip"></div></div>
+        </div>
       </div>
     </div>
     <div class="col">
-      <div class="card">
-        <h2>📈 本週小結</h2>
-        <div class="ws-grid" id="week-summary"></div>
-      </div>
-      <div class="card">
-        <h2>⚖️ 體重趨勢</h2>
-        <div class="chart-wrap h180"><canvas id="wChart"></canvas></div>
-      </div>
+      <div class="card"><h2>📈 本週小結</h2><div class="ws-grid" id="week-summary"></div></div>
+      <div class="card"><h2>⚖️ 體重趨勢</h2><div class="chart-wrap h180"><canvas id="wChart"></canvas></div></div>
     </div>
   </div>
   <div class="card"><h2>📌 核心原則</h2>
     <div class="tg2">
       <div class="tc2 g"><h4>🍳 烹飪：水煮 + 蒸</h4><p>零油脂，調味以低鈉醬油、檸檬汁、薑絲、黑胡椒為主。</p></div>
-      <div class="tc2 p"><h4>💪 運動時間表</h4><p>週二/五/六/日 = 主訓練。其餘日輕鬆恢復，視疲勞調整。</p></div>
-      <div class="tc2 r"><h4>🎉 Cheat Day</h4><p>每兩週 1 次（週六晚餐），防止代謝停滯，剩餘次數見日曆。</p></div>
-      <div class="tc2 y"><h4>🌅 固定早餐</h4><p>燕麥沖泡 + 水煮蛋 2個 + 水果 + 無糖豆漿，簡單零技術。</p></div>
+      <div class="tc2 p"><h4>💪 運動時間表</h4><p>週二/五/六/日 = 主訓練。其餘日輕鬆恢復。</p></div>
+      <div class="tc2 r"><h4>🎉 Cheat Day</h4><p>每兩週 1 次（週六晚餐），防代謝停滯。</p></div>
+      <div class="tc2 y"><h4>🌅 固定早餐</h4><p>燕麥沖泡 + 水煮蛋 2個 + 水果 + 無糖豆漿。</p></div>
     </div>
   </div>
 </div>
@@ -318,55 +273,42 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
     </div>
     <div class="cal"><div class="cdn">日</div><div class="cdn">一</div><div class="cdn">二</div><div class="cdn">三</div><div class="cdn">四</div><div class="cdn">五</div><div class="cdn">六</div></div>
     <div class="cal" id="cal-grid"></div>
-    <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;font-size:.7rem;color:var(--mt)">
-      <span>🟣 主訓練日</span><span>🔴 Cheat Day</span><span>🟢 已紀錄</span><span>⭐ 今天</span>
-    </div>
+    <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;font-size:.7rem;color:var(--mt)"><span>🟣 主訓練日</span><span>🔴 Cheat Day</span><span>🟢 已紀錄</span></div>
   </div>
 </div>
 
 <!-- LOG -->
 <div id="t-log" class="tab-content">
   <div class="stitle">✍️ 每日 <span>紀錄</span></div>
-  <div class="card">
-    <h2>基本資訊</h2>
+  <div class="card"><h2>基本資訊</h2>
     <div class="g2">
       <div class="fg"><label>📅 日期</label><input type="date" id="ld"/></div>
       <div class="fg"><label>⏰ 時間</label><input type="time" id="lt"/></div>
     </div>
   </div>
-  <div class="card">
-    <h2>🥗 飲食紀錄</h2>
+  <div class="card"><h2>🥗 飲食紀錄</h2>
     <div class="g2">
       <div class="fg"><label>🌅 早餐</label><input type="text" id="lbk" placeholder="燕麥+水煮蛋+蘋果"/></div>
       <div class="fg"><label>☀️ 午餐</label><input type="text" id="llu" placeholder="蒸雞胸+水煮花椰菜+地瓜"/></div>
       <div class="fg"><label>🌙 晚餐</label><input type="text" id="ldi" placeholder="蒸鮭魚+燙菠菜"/></div>
-      <div class="fg"><label>🍎 小食 / 點心</label><input type="text" id="lsn" placeholder="希臘優格 / 水果"/></div>
-      <div class="fg"><label>🎉 Cheat Day？</label>
-        <select id="lcheat"><option value="否">否</option><option value="是">是</option></select>
-      </div>
+      <div class="fg"><label>🍎 小食</label><input type="text" id="lsn" placeholder="希臘優格 / 水果"/></div>
+      <div class="fg"><label>🎉 Cheat Day？</label><select id="lcheat"><option value="否">否</option><option value="是">是</option></select></div>
     </div>
   </div>
-  <div class="card">
-    <h2>💪 今日運動（可多選）</h2>
-    <div class="fg"><label>選擇運動項目</label>
-      <div class="ex-grid" id="ex-grid"></div>
-    </div>
-    <div class="fg" style="margin-top:10px"><label>自定義補充</label><input type="text" id="lex-custom" placeholder="其他運動或補充說明..."/></div>
+  <div class="card"><h2>💪 今日運動（可多選）</h2>
+    <div class="ex-grid" id="ex-grid"></div>
+    <div class="fg" style="margin-top:10px"><label>補充說明</label><input type="text" id="lex-custom" placeholder="其他運動或補充..."/></div>
   </div>
-  <div class="card">
-    <h2>💧 健康指標</h2>
+  <div class="card"><h2>💧 健康指標</h2>
     <div class="g3">
-      <div class="fg"><label>💧 喝水量（公升 L）</label><input type="number" id="lwater" placeholder="2.0" step="0.1" min="0" max="10"/></div>
+      <div class="fg"><label>💧 喝水（公升 L）</label><input type="number" id="lwater" placeholder="2.0" step="0.1" min="0" max="10"/></div>
       <div class="fg"><label>😴 睡眠（小時）</label><input type="number" id="lsleep" placeholder="7.5" step="0.5"/></div>
       <div class="fg"><label>😊 狀態 1–5</label><input type="number" id="lmood" placeholder="4" min="1" max="5"/></div>
     </div>
-    <div class="fg" style="margin-top:11px"><label>📝 今日備注</label>
-      <input type="text" id="lnote" placeholder="今天感覺怎樣？有沒有偷懶？值得記錄的事？"/>
-    </div>
+    <div class="fg" style="margin-top:11px"><label>📝 今日備注</label><input type="text" id="lnote" placeholder="今天感覺怎樣？"/></div>
   </div>
   <button class="bsave" id="btnSave" onclick="saveLog()">💾 儲存到 Sheets</button>
   <button class="bexp" onclick="exportCSV()">📥 匯出 CSV</button>
-
   <div class="card" style="margin-top:14px">
     <h2>歷史紀錄 <span id="logCnt" style="font-size:.72rem;color:var(--mt);font-weight:400"></span></h2>
     <div style="overflow-x:auto">
@@ -379,11 +321,10 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
   </div>
 </div>
 
-<!-- BODY ANALYSIS -->
+<!-- BODY DATA -->
 <div id="t-body" class="tab-content">
-  <div class="stitle">📊 <span>數據分析</span></div>
-  <div class="card">
-    <h2>⚖️ 新增身體數據</h2>
+  <div class="stitle">📊 <span>身體數據分析</span></div>
+  <div class="card"><h2>⚖️ 新增量測</h2>
     <div class="g3">
       <div class="fg"><label>📅 日期</label><input type="date" id="bd"/></div>
       <div class="fg"><label>⏰ 時間（建議早上空腹）</label><input type="time" id="bt"/></div>
@@ -394,57 +335,60 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
     </div>
     <button class="bsave" id="btnBody" onclick="saveBodyStat()">💾 儲存數據</button>
   </div>
-
   <div class="card">
     <div class="chart-tabs">
       <button class="ctab active" onclick="switchChart('weight',this)">體重</button>
       <button class="ctab" onclick="switchChart('bodyfat',this)">體脂率</button>
-      <button class="ctab" onclick="switchChart('muscle',this)">肌肉含量</button>
+      <button class="ctab" onclick="switchChart('muscle',this)">肌肉</button>
       <button class="ctab" onclick="switchChart('all',this)">綜合</button>
     </div>
     <div class="chart-wrap h220"><canvas id="bodyChart"></canvas></div>
   </div>
-
-  <div class="stats-row" id="body-stats-row">
-    <div class="stat-card"><div class="sv" id="bs-wt">-- kg</div><div class="sl">最新體重</div><div class="sd" id="bs-wtd"></div></div>
-    <div class="stat-card"><div class="sv" id="bs-bf">-- %</div><div class="sl">最新體脂</div><div class="sd" id="bs-bfd"></div></div>
-    <div class="stat-card"><div class="sv" id="bs-mu">-- %</div><div class="sl">最新肌肉</div><div class="sd" id="bs-mud"></div></div>
-    <div class="stat-card"><div class="sv" id="bs-bmi">--</div><div class="sl">BMI</div><div class="sd" id="bs-bmid"></div></div>
+  <div class="stats-row">
+    <div class="sc"><div class="sv" id="bs-wt">--</div><div class="sl">最新體重 kg</div><div class="sd" id="bs-wtd"></div></div>
+    <div class="sc"><div class="sv" id="bs-bf">--</div><div class="sl">最新體脂 %</div><div class="sd" id="bs-bfd"></div></div>
+    <div class="sc"><div class="sv" id="bs-mu">--</div><div class="sl">最新肌肉 %</div><div class="sd" id="bs-mud"></div></div>
+    <div class="sc"><div class="sv" id="bs-bmi">--</div><div class="sl">BMI</div><div class="sd" id="bs-bmid"></div></div>
   </div>
-
-  <div class="card">
-    <h2>📋 量測歷史</h2>
+  <div class="card"><h2>量測歷史</h2>
     <div style="overflow-x:auto">
       <table class="lt">
-        <thead><tr><th>日期</th><th>時間</th><th>體重</th><th>體脂率</th><th>肌肉含量</th><th>BMI</th><th>備注</th></tr></thead>
+        <thead><tr><th>日期</th><th>時間</th><th>體重</th><th>體脂%</th><th>肌肉%</th><th>BMI</th><th>備注</th></tr></thead>
         <tbody id="body-tb"></tbody>
       </table>
     </div>
-    <div id="body-empty" style="text-align:center;color:var(--mt);padding:24px;font-size:.82rem">尚未量測，去新增第一筆吧！</div>
+    <div id="body-empty" style="text-align:center;color:var(--mt);padding:24px;font-size:.82rem">尚未量測</div>
   </div>
 </div>
 
 <!-- MEAL -->
 <div id="t-meal" class="tab-content">
   <div class="stitle">🥗 飲食 <span>計劃</span></div>
-  <div class="card">
-    <h2>🌅 固定早餐（每天）</h2>
+  <div id="avoid-notice" class="card" style="display:none;border-color:rgba(255,107,107,.3);background:rgba(255,107,107,.05)">
+    <div style="font-size:.82rem;color:var(--a2)">⚠️ 已根據你的飲食限制過濾食譜。<span id="avoid-list"></span>標記為灰色的食譜含有你不吃的食材。</div>
+  </div>
+  <div class="card"><h2>🌅 固定早餐（每天）</h2>
     <div style="display:flex;gap:11px;flex-wrap:wrap">
       <div style="flex:1;min-width:140px;background:var(--sf);border-radius:9px;padding:12px"><div style="margin-bottom:5px">🥤 燕麥沖泡</div><div style="font-size:.73rem;color:var(--mt);line-height:1.8">即食燕麥片 40g<br>無糖豆漿沖泡<br>可加少量肉桂粉</div></div>
-      <div style="flex:1;min-width:140px;background:var(--sf);border-radius:9px;padding:12px"><div style="margin-bottom:5px">🥚 水煮蛋</div><div style="font-size:.73rem;color:var(--mt);line-height:1.8">雞蛋 2個<br>水煮 8–10 分鐘<br>少量鹽調味</div></div>
-      <div style="flex:1;min-width:140px;background:var(--sf);border-radius:9px;padding:12px"><div style="margin-bottom:5px">🍎 水果</div><div style="font-size:.73rem;color:var(--mt);line-height:1.8">蘋果 1個 或<br>香蕉（訓練日）<br>奇異果 1個</div></div>
+      <div style="flex:1;min-width:140px;background:var(--sf);border-radius:9px;padding:12px"><div style="margin-bottom:5px">🥚 水煮蛋</div><div style="font-size:.73rem;color:var(--mt);line-height:1.8">雞蛋 2個，水煮 8–10 分鐘</div></div>
+      <div style="flex:1;min-width:140px;background:var(--sf);border-radius:9px;padding:12px"><div style="margin-bottom:5px">🍎 水果</div><div style="font-size:.73rem;color:var(--mt);line-height:1.8">蘋果 / 香蕉（訓練日）/ 奇異果</div></div>
     </div>
   </div>
-  <div class="card"><h2>七天輪替食譜（全水煮 / 蒸）</h2><div class="mw" id="meal-grid"></div></div>
-  <div class="card"><h2>🍳 詳細食譜</h2><div id="recipe-list"></div></div>
   <div class="card">
-    <h2>🧂 無油調味秘訣</h2>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.78rem">
-      <div style="background:var(--sf);border-radius:8px;padding:10px"><strong>🍋 檸檬汁 + 黑胡椒</strong><br><span style="color:var(--mt)">蒸魚、雞胸去腥提鮮</span></div>
-      <div style="background:var(--sf);border-radius:8px;padding:10px"><strong>🧄 蒜末 + 低鈉醬油</strong><br><span style="color:var(--mt)">燙青菜萬能醬</span></div>
-      <div style="background:var(--sf);border-radius:8px;padding:10px"><strong>🫚 芝麻醬稀釋拌</strong><br><span style="color:var(--mt)">雞胸絲，口感豐富不膩</span></div>
-      <div style="background:var(--sf);border-radius:8px;padding:10px"><strong>🌿 薑絲 + 蔥花</strong><br><span style="color:var(--mt)">蒸魚必備，去腥增香</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h2 style="margin:0">28天輪替食譜 <span id="curr-week-badge" style="font-size:.72rem;color:var(--mt);font-weight:400"></span></h2>
+      <div style="display:flex;gap:6px">
+        <button class="bsm" onclick="showMealWeek(0)">第1週</button>
+        <button class="bsm" onclick="showMealWeek(1)">第2週</button>
+        <button class="bsm" onclick="showMealWeek(2)">第3週</button>
+        <button class="bsm" onclick="showMealWeek(3)">第4週</button>
+      </div>
     </div>
+    <div class="mw" id="meal-grid"></div>
+  </div>
+  <div class="card"><h2>🍳 詳細食譜（28道，全水煮/蒸）</h2>
+    <div style="display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap" id="recipe-filter"></div>
+    <div id="recipe-list"></div>
   </div>
 </div>
 
@@ -452,18 +396,17 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
 <div id="t-wo" class="tab-content">
   <div class="stitle">💪 運動 <span>計劃</span></div>
   <div class="card"><h2>每週安排</h2><div class="ww" id="wo-grid"></div></div>
-  <div class="card">
-    <h2>🔥 燃脂效率排名</h2>
+  <div class="card"><h2>🔥 燃脂效率排名</h2>
     <div style="font-size:.8rem;line-height:2.2;color:var(--mt)">
-      <div>🥇 <strong style="color:var(--tx)">游泳 45分鐘</strong> — 全身，約 400–500 kcal，低衝擊護膝</div>
-      <div>🥈 <strong style="color:var(--tx)">跑步 HIIT</strong> — 後燃效應最強，30分 350–450 kcal</div>
-      <div>🥉 <strong style="color:var(--tx)">居家 HIIT（瑜伽墊）</strong> — 20分 250–320 kcal</div>
-      <div>4️⃣ <strong style="color:var(--tx)">瑜伽 / 核心訓練</strong> — 恢復日首選，防受傷</div>
-      <div>5️⃣ <strong style="color:var(--tx)">騎單車 / 踩腳踏車</strong> — 低衝擊，適合膝蓋不好</div>
-      <div>6️⃣ <strong style="color:var(--tx)">爬樓梯 / 快走</strong> — 隨時隨地，適合忙碌日</div>
+      <div>🥇 <strong style="color:var(--tx)">游泳 45分鐘</strong> — 400–500 kcal，低衝擊護膝</div>
+      <div>🥈 <strong style="color:var(--tx)">跑步 HIIT</strong> — 後燃效應最強，350–450 kcal</div>
+      <div>🥉 <strong style="color:var(--tx)">居家 HIIT</strong> — 250–320 kcal，瑜伽墊即可</div>
+      <div>4️⃣ <strong style="color:var(--tx)">騎單車</strong> — 低衝擊，膝蓋不好的好選擇</div>
+      <div>5️⃣ <strong style="color:var(--tx)">瑜伽 / 核心</strong> — 恢復日首選，防受傷</div>
+      <div>6️⃣ <strong style="color:var(--tx)">快走 / 爬樓梯</strong> — 隨時隨地，忙碌日必備</div>
     </div>
   </div>
-  <div class="card"><h2>居家訓練詳細計劃（瑜伽墊）</h2><div id="wo-detail"></div></div>
+  <div class="card"><h2>居家訓練詳細計劃</h2><div id="wo-detail"></div></div>
 </div>
 
 <!-- SHOPPING -->
@@ -473,22 +416,20 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
     <div class="week-nav">
       <button onclick="prevShopWeek()">◀</button>
       <div>
-        <div class="week-label" id="shop-week-label"></div>
+        <div class="wlbl" id="shop-week-label"></div>
         <div style="font-size:.72rem;color:var(--mt)" id="shop-week-range"></div>
       </div>
       <button onclick="nextShopWeek()">▶</button>
-      <div style="margin-left:auto;font-size:.76rem;color:var(--mt)">📅 建議週日採購下週食材</div>
+      <div style="margin-left:auto;font-size:.74rem;color:var(--mt)">📅 建議週日採購</div>
     </div>
-    <p style="font-size:.77rem;color:var(--mt);margin-bottom:12px">勾選已購買 ✓，打叉標記已用完（自動加入下週清單）</p>
-    <div class="sg">
-      <div><h3 style="font-size:.77rem;color:var(--a3);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--bd)">🥩 蛋白質</h3><div id="sp-protein"></div></div>
-      <div><h3 style="font-size:.77rem;color:var(--a4);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--bd)">🌾 澱粉</h3><div id="sp-carb"></div></div>
-      <div><h3 style="font-size:.77rem;color:var(--a3);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--bd)">🥦 蔬菜</h3><div id="sp-veg"></div></div>
-      <div><h3 style="font-size:.77rem;color:var(--a2);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--bd)">🍎 水果+調味</h3><div id="sp-fruit"></div></div>
+    <div id="recipe-this-week" style="background:var(--sf);border-radius:9px;padding:12px;margin-bottom:12px;font-size:.78rem">
+      <strong>本週食譜：</strong><span id="recipe-week-list" style="color:var(--mt)">載入中...</span>
     </div>
+    <p style="font-size:.76rem;color:var(--mt);margin-bottom:11px">根據本週食譜自動生成。✓ = 已購買，🗑 = 已用完（自動帶入下週）</p>
+    <div class="sg" id="shop-content"></div>
     <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
       <button class="bexp" onclick="clearShop()">🔄 重置本週</button>
-      <button class="bexp" onclick="carryOverUsed()">➡️ 將用完食材加入下週</button>
+      <button class="bexp" onclick="carryOverUsed()">➡️ 將用完食材帶入下週</button>
     </div>
     <div id="carry-msg" style="font-size:.76rem;color:var(--a3);margin-top:8px;display:none"></div>
   </div>
@@ -497,19 +438,18 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
 <!-- PROFILE -->
 <div id="t-profile" class="tab-content">
   <div class="stitle">👤 <span>個人資料</span></div>
-  <div class="card">
-    <h2>計劃設定</h2>
+  <div class="card"><h2>計劃設定</h2>
     <div class="g2">
       <div class="fg"><label>📅 計劃開始日期</label><input type="date" id="p-start"/></div>
       <div class="fg"><label>🎯 計劃天數</label>
-        <div class="plan-option">
+        <div class="plan-opts">
           <button class="plan-btn" onclick="setPlanDays(30,this)">30天</button>
           <button class="plan-btn" onclick="setPlanDays(60,this)">60天</button>
           <button class="plan-btn sel" onclick="setPlanDays(90,this)">90天</button>
           <button class="plan-btn" onclick="setPlanDays(120,this)">120天</button>
           <button class="plan-btn" onclick="setPlanDays(180,this)">180天</button>
         </div>
-        <input type="number" id="p-days" value="90" min="1" max="365" style="margin-top:8px;width:120px" placeholder="自定義天數"/>
+        <input type="number" id="p-days" value="90" min="1" max="365" style="margin-top:8px;width:120px"/>
       </div>
     </div>
     <hr class="sep">
@@ -522,29 +462,32 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
           <option value="減脂">減脂為主</option>
           <option value="增肌減脂">增肌減脂</option>
           <option value="維持">維持體重</option>
-          <option value="增重">增重</option>
         </select>
       </div>
     </div>
-    <button class="bsave" id="btnProfile" onclick="saveProfile()">💾 儲存設定</button>
+    <hr class="sep">
+    <h2>🚫 飲食限制（影響食譜和購物清單）</h2>
+    <p style="font-size:.76rem;color:var(--mt);margin-bottom:8px">選擇你不吃的食材，系統自動過濾相關食譜：</p>
+    <div class="avoid-grid" id="avoid-grid"></div>
+    <div class="fg" style="margin-top:12px"><label>🤧 過敏食材（自由填寫）</label>
+      <input type="text" id="p-allergies" placeholder="例如：花生、芝麻、蝦..."/></div>
+    <button class="bsave" id="btnProfile" onclick="saveProfile()" style="margin-top:12px">💾 儲存設定</button>
   </div>
-  <div class="card" id="bmi-card" style="display:none">
-    <h2>📊 身體指數計算</h2>
+  <div class="card" id="bmi-card" style="display:none"><h2>📊 身體指數</h2>
     <div class="g3">
       <div style="background:var(--sf);border-radius:10px;padding:14px;text-align:center">
         <div style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700" id="calc-bmi">--</div>
         <div style="font-size:.72rem;color:var(--mt)">BMI</div>
-        <div style="font-size:.76rem;margin-top:4px" id="calc-bmi-label"></div>
+        <div style="font-size:.76rem;margin-top:4px" id="calc-bmi-l"></div>
       </div>
       <div style="background:var(--sf);border-radius:10px;padding:14px;text-align:center">
         <div style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700" id="calc-tdee">--</div>
-        <div style="font-size:.72rem;color:var(--mt)">每日建議熱量 (kcal)</div>
-        <div style="font-size:.76rem;color:var(--mt);margin-top:4px">中等活動量</div>
+        <div style="font-size:.72rem;color:var(--mt)">每日建議熱量 kcal</div>
       </div>
       <div style="background:var(--sf);border-radius:10px;padding:14px;text-align:center">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700" id="calc-deficit">--</div>
-        <div style="font-size:.72rem;color:var(--mt)">減脂建議熱量 (kcal)</div>
-        <div style="font-size:.76rem;color:var(--a3);margin-top:4px">赤字約 400–500 kcal</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700" id="calc-def">--</div>
+        <div style="font-size:.72rem;color:var(--mt)">減脂熱量 kcal</div>
+        <div style="font-size:.72rem;color:var(--a3);margin-top:3px">赤字 ~400–500 kcal</div>
       </div>
     </div>
   </div>
@@ -552,29 +495,21 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
 
 <!-- ADMIN -->
 <div id="t-adm" class="tab-content">
-  <div id="adm-denied" class="denied" style="display:none">
-    <div class="icon">🔒</div>
-    <div style="font-size:1rem;color:var(--a2)">權限不足</div>
-    <div style="font-size:.82rem;margin-top:8px">只有管理員才能查看此頁面</div>
-  </div>
+  <div id="adm-denied" class="denied" style="display:none"><div style="font-size:2.5rem">🔒</div><div style="color:var(--a2);margin-top:8px">只有管理員才能查看</div></div>
   <div id="adm-content">
     <div class="stitle">⚙️ 管理員 <span>控制台</span></div>
-    <div class="card">
-      <h2>新增用戶（管理員只設帳號，計劃由用戶自行設定）</h2>
+    <div class="card"><h2>新增用戶</h2>
       <div class="g2">
-        <div class="fg"><label>用戶名（登入用）</label><input type="text" id="au" placeholder="例如 alice"/></div>
-        <div class="fg"><label>顯示名稱</label><input type="text" id="adn" placeholder="例如 Alice 姐"/></div>
+        <div class="fg"><label>用戶名</label><input type="text" id="au" placeholder="alice"/></div>
+        <div class="fg"><label>顯示名稱</label><input type="text" id="adn" placeholder="Alice 姐"/></div>
         <div class="fg"><label>初始密碼（至少 6 字）</label><input type="password" id="apw"/></div>
-        <div class="fg"><label>角色</label>
-          <select id="ar"><option value="user">普通用戶</option><option value="admin">管理員</option></select>
-        </div>
+        <div class="fg"><label>角色</label><select id="ar"><option value="user">普通用戶</option><option value="admin">管理員</option></select></div>
       </div>
       <button class="bsave" onclick="adminAdd()">➕ 新增用戶</button>
     </div>
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-        <h2 style="margin:0">用戶列表</h2>
-        <button class="bsm" onclick="adminLoad()">🔄 刷新</button>
+        <h2 style="margin:0">用戶列表</h2><button class="bsm" onclick="adminLoad()">🔄 刷新</button>
       </div>
       <div style="overflow-x:auto">
         <table class="at">
@@ -586,354 +521,400 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
   </div>
 </div>
 
-</main>
-</div>
+</main></div>
 
 <!-- Day Modal -->
 <div class="mov" id="day-modal">
-  <div class="mo">
-    <button class="mclose" onclick="closeModal('day-modal')">✕</button>
-    <h2 id="dm-title" style="margin-bottom:12px"></h2>
-    <div id="dm-body"></div>
+  <div class="mo"><button class="mclose" onclick="closeModal('day-modal')">✕</button>
+    <h2 id="dm-title" style="margin-bottom:12px"></h2><div id="dm-body"></div>
   </div>
 </div>
-
 <!-- PW Modal -->
 <div class="mov" id="pw-modal">
-  <div class="mo" style="max-width:360px">
-    <button class="mclose" onclick="closeModal('pw-modal')">✕</button>
+  <div class="mo" style="max-width:360px"><button class="mclose" onclick="closeModal('pw-modal')">✕</button>
     <h2 style="margin-bottom:14px">更改密碼</h2>
     <div id="pmerr" class="lerr"></div>
     <div class="fi"><label>舊密碼</label><input type="password" id="pmo"/></div>
-    <div class="fi"><label>新密碼（至少 6 字）</label><input type="password" id="pmn"/></div>
+    <div class="fi"><label>新密碼</label><input type="password" id="pmn"/></div>
     <div class="fi"><label>確認</label><input type="password" id="pmc"/></div>
     <button class="bmain" onclick="inAppChangePw()">確認更改</button>
   </div>
 </div>
-
 <div id="toast"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script>
-// ══════════════════════════════════════════════
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzULrTaxIph_rg_s9OAZ8ryzjdJmbmXUW39IK76XQlkEHrbFsUpr4ocDgGK2pWWdLQq/exec";
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyUSOGr2Zy1x7W9bhUKT5jxo7s1mjw3tlf19fVOQE8923IgPfO0_QqjyLt5FqkXwHI/exec";
+// ══════════════════════════════════════════
 
-let S = { token:null, user:null };
-let D = {
-  logs:[], bodyStats:[], profile:null,
-  shop:{}, shopWeekOffset:0,
-  calY:new Date().getFullYear(), calM:new Date().getMonth(),
-  selectedExercises:[], planDays:90
+// ════════════════════════════════════════════════════════════
+//  28天食譜資料庫（全水煮/蒸，不重樣）
+//  tags: 標記含有的食材類別，用於過濾
+// ════════════════════════════════════════════════════════════
+const RECIPE_DB = [
+  // ── 第1週 ──
+  {id:1, week:0, day:0, name:"蒸鮭魚配燙菠菜", lunch:"蒸雞胸+水煮花椰菜+蒸地瓜", dinner:"蒸鮭魚（薑絲）+燙菠菜", tags:["海鮮","雞肉"],
+    ingredients:["鮭魚200g","雞胸肉150g","花椰菜200g","地瓜1個","菠菜1把","薑絲","低鈉醬油"]},
+  {id:2, week:0, day:1, name:"水煮蛋豆腐毛豆餐", lunch:"水煮蛋+燙豆腐+毛豆+地瓜", dinner:"水煮蝦仁+燙高麗菜+糙米半碗", tags:["蛋","豆腐","海鮮"],
+    ingredients:["雞蛋3個","板豆腐半塊","毛豆200g","地瓜1個","蝦仁200g","高麗菜200g","糙米半碗"]},
+  {id:3, week:0, day:2, name:"蒸雞胸玉米餐", lunch:"蒸雞胸絲+水煮四季豆+蒸玉米", dinner:"蒸鱸魚（蔥薑）+燙花椰菜", tags:["雞肉","海鮮"],
+    ingredients:["雞胸肉150g","四季豆200g","玉米1條","鱸魚200g","花椰菜200g","薑絲","蔥"]},
+  {id:4, week:0, day:3, name:"水煮豬里肌菠菜餐", lunch:"水煮豬里肌+燙菠菜+糙米半碗", dinner:"蒸豆腐（醬油+薑）+水煮木耳", tags:["豬肉","豆腐"],
+    ingredients:["豬里肌150g","菠菜1把","糙米半碗","板豆腐半塊","木耳50g","低鈉醬油","薑末"]},
+  {id:5, week:0, day:4, name:"蒸雞胸南瓜餐", lunch:"蒸雞胸+水煮地瓜葉+蒸南瓜", dinner:"水煮蝦+燙花椰菜+水煮蛋", tags:["雞肉","海鮮","蛋"],
+    ingredients:["雞胸肉150g","地瓜葉1把","南瓜200g","蝦200g","花椰菜200g","雞蛋2個"]},
+  {id:6, week:0, day:5, name:"蒸鯛魚毛豆餐", lunch:"蒸鯛魚+水煮毛豆+蒸地瓜", dinner:"雞胸絲涼拌黃瓜（醬油+芝麻醬）", tags:["海鮮","雞肉"],
+    ingredients:["鯛魚200g","毛豆150g","地瓜1個","雞胸肉150g","小黃瓜2條","低鈉醬油","芝麻醬少量"]},
+  {id:7, week:0, day:6, name:"週六便當+Cheat", lunch:"水煮里肌+燙高麗菜+糙米", dinner:"Cheat Dinner 🎉", tags:["豬肉"],
+    ingredients:["豬里肌150g","高麗菜200g","糙米半碗"]},
+
+  // ── 第2週 ──
+  {id:8, week:1, day:0, name:"蒸蝦仁地瓜葉餐", lunch:"水煮蝦仁+蒸地瓜+燙地瓜葉", dinner:"蒸雞胸（檸檬汁）+水煮花椰菜", tags:["海鮮","雞肉"],
+    ingredients:["蝦仁200g","地瓜1個","地瓜葉1把","雞胸肉150g","花椰菜200g","檸檬汁"]},
+  {id:9, week:1, day:1, name:"水煮蛋菠菜糙米餐", lunch:"水煮蛋2個+燙菠菜+糙米+蒸南瓜", dinner:"蒸豆腐+水煮四季豆", tags:["蛋","豆腐"],
+    ingredients:["雞蛋2個","菠菜1把","糙米半碗","南瓜200g","板豆腐半塊","四季豆150g"]},
+  {id:10, week:1, day:2, name:"蒸鮭魚高麗菜餐", lunch:"蒸鮭魚+燙高麗菜+蒸玉米", dinner:"水煮豬里肌+燙四季豆+糙米", tags:["海鮮","豬肉"],
+    ingredients:["鮭魚200g","高麗菜200g","玉米1條","豬里肌150g","四季豆150g","糙米半碗"]},
+  {id:11, week:1, day:3, name:"雞胸木耳湯麵", lunch:"蒸雞胸+水煮木耳+蒸地瓜葉", dinner:"水煮蝦+蒸南瓜+燙菠菜", tags:["雞肉","海鮮"],
+    ingredients:["雞胸肉150g","木耳50g","地瓜葉1把","蝦200g","南瓜200g","菠菜1把"]},
+  {id:12, week:1, day:4, name:"蒸鯛魚毛豆南瓜餐", lunch:"蒸鯛魚+水煮毛豆+蒸南瓜", dinner:"蒸雞胸絲+燙高麗菜+水煮蛋", tags:["海鮮","雞肉","蛋"],
+    ingredients:["鯛魚200g","毛豆150g","南瓜200g","雞胸肉150g","高麗菜200g","雞蛋2個"]},
+  {id:13, week:1, day:5, name:"水煮豬里肌小黃瓜餐", lunch:"水煮豬里肌+燙花椰菜+糙米", dinner:"蒸豆腐（黑胡椒）+燙地瓜葉+水煮蛋", tags:["豬肉","豆腐","蛋"],
+    ingredients:["豬里肌150g","花椰菜200g","糙米半碗","板豆腐半塊","地瓜葉1把","雞蛋2個","黑胡椒"]},
+  {id:14, week:1, day:6, name:"週六便當+Cheat", lunch:"蒸雞胸+水煮花椰菜+蒸地瓜", dinner:"Cheat Dinner 🎉", tags:["雞肉"],
+    ingredients:["雞胸肉150g","花椰菜200g","地瓜1個"]},
+
+  // ── 第3週 ──
+  {id:15, week:2, day:0, name:"蒸鱸魚木耳餐", lunch:"蒸鱸魚+燙菠菜+蒸地瓜", dinner:"水煮蝦仁+蒸玉米+燙四季豆", tags:["海鮮"],
+    ingredients:["鱸魚200g","菠菜1把","地瓜1個","蝦仁200g","玉米1條","四季豆150g"]},
+  {id:16, week:2, day:1, name:"豆腐蛋白餐", lunch:"蒸豆腐+水煮蛋+燙高麗菜+糙米", dinner:"蒸雞胸（薑蒜汁）+燙花椰菜", tags:["豆腐","蛋","雞肉"],
+    ingredients:["板豆腐半塊","雞蛋2個","高麗菜200g","糙米半碗","雞胸肉150g","花椰菜200g","薑","蒜末"]},
+  {id:17, week:2, day:2, name:"豬里肌地瓜葉餐", lunch:"水煮豬里肌+燙地瓜葉+蒸南瓜", dinner:"蒸鮭魚+燙四季豆+糙米半碗", tags:["豬肉","海鮮"],
+    ingredients:["豬里肌150g","地瓜葉1把","南瓜200g","鮭魚200g","四季豆150g","糙米半碗"]},
+  {id:18, week:2, day:3, name:"雞胸毛豆蒸餐", lunch:"蒸雞胸+水煮毛豆+蒸地瓜", dinner:"蒸豆腐（蔥薑汁）+燙高麗菜", tags:["雞肉","豆腐"],
+    ingredients:["雞胸肉150g","毛豆150g","地瓜1個","板豆腐半塊","高麗菜200g","蔥薑"]},
+  {id:19, week:2, day:4, name:"水煮蝦木耳餐", lunch:"水煮蝦+蒸玉米+燙菠菜", dinner:"水煮蛋+蒸南瓜+燙花椰菜", tags:["海鮮","蛋"],
+    ingredients:["蝦200g","玉米1條","菠菜1把","雞蛋3個","南瓜200g","花椰菜200g"]},
+  {id:20, week:2, day:5, name:"蒸鯛魚高麗餐", lunch:"蒸鯛魚+燙高麗菜+蒸地瓜葉", dinner:"水煮豬里肌+水煮蛋+燙花椰菜", tags:["海鮮","豬肉","蛋"],
+    ingredients:["鯛魚200g","高麗菜200g","地瓜葉1把","豬里肌150g","雞蛋2個","花椰菜200g"]},
+  {id:21, week:2, day:6, name:"週六便當+Cheat", lunch:"水煮豬里肌+燙菠菜+糙米", dinner:"Cheat Dinner 🎉", tags:["豬肉"],
+    ingredients:["豬里肌150g","菠菜1把","糙米半碗"]},
+
+  // ── 第4週 ──
+  {id:22, week:3, day:0, name:"蒸鮭魚南瓜特餐", lunch:"蒸鮭魚+蒸南瓜+燙四季豆", dinner:"蒸雞胸（黑胡椒）+燙地瓜葉+水煮蛋", tags:["海鮮","雞肉","蛋"],
+    ingredients:["鮭魚200g","南瓜200g","四季豆150g","雞胸肉150g","地瓜葉1把","雞蛋2個","黑胡椒"]},
+  {id:23, week:3, day:1, name:"豆腐木耳蛋白餐", lunch:"蒸豆腐+水煮木耳+燙菠菜+糙米", dinner:"水煮蝦仁+蒸地瓜+燙高麗菜", tags:["豆腐","海鮮"],
+    ingredients:["板豆腐半塊","木耳50g","菠菜1把","糙米半碗","蝦仁200g","地瓜1個","高麗菜200g"]},
+  {id:24, week:3, day:2, name:"雞胸涼拌特餐", lunch:"雞胸絲+燙花椰菜+蒸玉米", dinner:"蒸鱸魚（薑蔥汁）+燙地瓜葉", tags:["雞肉","海鮮"],
+    ingredients:["雞胸肉150g","花椰菜200g","玉米1條","鱸魚200g","地瓜葉1把","薑蔥"]},
+  {id:25, week:3, day:3, name:"豬里肌四季豆餐", lunch:"水煮豬里肌+燙四季豆+蒸南瓜", dinner:"蒸雞胸+水煮毛豆+燙菠菜", tags:["豬肉","雞肉"],
+    ingredients:["豬里肌150g","四季豆150g","南瓜200g","雞胸肉150g","毛豆150g","菠菜1把"]},
+  {id:26, week:3, day:4, name:"水煮蝦蛋特餐", lunch:"水煮蝦+蒸地瓜+水煮蛋", dinner:"蒸豆腐（蒜末醬油）+燙高麗菜", tags:["海鮮","蛋","豆腐"],
+    ingredients:["蝦200g","地瓜1個","雞蛋2個","板豆腐半塊","高麗菜200g","蒜末","低鈉醬油"]},
+  {id:27, week:3, day:5, name:"鮭魚豆腐融合餐", lunch:"蒸鮭魚+燙花椰菜+蒸地瓜葉", dinner:"蒸豆腐+燙菠菜+水煮蛋", tags:["海鮮","豆腐","蛋"],
+    ingredients:["鮭魚200g","花椰菜200g","地瓜葉1把","板豆腐半塊","菠菜1把","雞蛋2個"]},
+  {id:28, week:3, day:6, name:"週六便當+Cheat", lunch:"蒸雞胸+蒸南瓜+燙四季豆", dinner:"Cheat Dinner 🎉", tags:["雞肉"],
+    ingredients:["雞胸肉150g","南瓜200g","四季豆150g"]},
+];
+
+// ── 食材對應購物類別 ──────────────────────────────────────────
+const INGREDIENT_CATS = {
+  "雞胸肉150g":"protein","雞胸肉200g":"protein","鮭魚200g":"protein",
+  "鯛魚200g":"protein","鱸魚200g":"protein","蝦仁200g":"protein",
+  "蝦200g":"protein","豬里肌150g":"protein","板豆腐半塊":"protein",
+  "雞蛋2個":"protein","雞蛋3個":"protein","毛豆150g":"protein",
+  "毛豆200g":"protein",
+  "糙米半碗":"carb","地瓜1個":"carb","南瓜200g":"carb","玉米1條":"carb",
+  "花椰菜200g":"veg","菠菜1把":"veg","高麗菜200g":"veg","四季豆150g":"veg",
+  "地瓜葉1把":"veg","木耳50g":"veg","小黃瓜2條":"veg","小黃瓜1條":"veg",
+  "低鈉醬油":"seasoning","薑絲":"seasoning","薑末":"seasoning","薑蔥":"seasoning",
+  "薑":"seasoning","蔥":"seasoning","蒜末":"seasoning","黑胡椒":"seasoning",
+  "檸檬汁":"seasoning","芝麻醬少量":"seasoning","蔥薑":"seasoning","薑蒜汁":"seasoning",
 };
-let charts = {};
+const SHOP_CATS = {
+  protein:{label:"🥩 蛋白質",color:"var(--a3)"},
+  carb:{label:"🌾 澱粉",color:"var(--a4)"},
+  veg:{label:"🥦 蔬菜",color:"var(--a3)"},
+  seasoning:{label:"🧂 調味料",color:"var(--mt)"},
+};
+// 固定每週必備
+const FIXED_SHOP = [
+  {n:"即食燕麥片 500g",cat:"carb"},{n:"無糖豆漿 1000ml×2",cat:"protein"},
+  {n:"蘋果 6個",cat:"carb"},{n:"香蕉 6條",cat:"carb"},{n:"奇異果 4個",cat:"carb"},
+  {n:"檸檬 3個",cat:"seasoning"},{n:"低鈉醬油 1瓶",cat:"seasoning"},
+  {n:"薑 ~100g",cat:"seasoning"},{n:"蒜頭 1顆",cat:"seasoning"},
+  {n:"黑胡椒粉 1罐",cat:"seasoning"},
+];
 
-// ── persist ──
-function loadS(){ try{ const x=sessionStorage.getItem("fls2"); if(x) S=JSON.parse(x); }catch(e){} }
-function saveS(){ sessionStorage.setItem("fls2",JSON.stringify(S)); }
-function loadLocal(){ try{ const x=localStorage.getItem("fld2"); if(x){ const p=JSON.parse(x); D.shop=p.shop||{}; }}catch(e){} }
-function saveLocal(){ localStorage.setItem("fld2",JSON.stringify({shop:D.shop})); }
+// ── 飲食限制選項 ────────────────────────────────────────────
+const AVOID_OPTIONS = [
+  {key:"豬肉",label:"🐷 不吃豬肉",tags:["豬肉"]},
+  {key:"牛肉",label:"🐮 不吃牛肉",tags:["牛肉"]},
+  {key:"海鮮",label:"🦐 不吃海鮮",tags:["海鮮"]},
+  {key:"蛋",label:"🥚 不吃蛋",tags:["蛋"]},
+  {key:"豆腐",label:"🫘 不吃豆腐",tags:["豆腐"]},
+  {key:"雞肉",label:"🍗 不吃雞肉",tags:["雞肉"]},
+];
 
-// ── api ──
+// ── State ─────────────────────────────────────────────────────
+let S={token:null,user:null};
+let D={logs:[],bodyStats:[],profile:null,shop:{},shopWeekOffset:0,
+       calY:new Date().getFullYear(),calM:new Date().getMonth(),
+       selectedEx:[],planDays:90,selectedAvoid:[],mealWeekShowing:0};
+let charts={};
+let currentChartType="weight";
+
+function loadS(){ try{const x=sessionStorage.getItem("fls3");if(x)S=JSON.parse(x);}catch(e){} }
+function saveS(){ sessionStorage.setItem("fls3",JSON.stringify(S)); }
+function loadLocal(){ try{const x=localStorage.getItem("fld3");if(x){const p=JSON.parse(x);D.shop=p.shop||{};}}catch(e){} }
+function saveLocal(){ localStorage.setItem("fld3",JSON.stringify({shop:D.shop})); }
+
+// ── API ───────────────────────────────────────────────────────
 async function api(body){
   setSS("sync");
   try{
     const url=SCRIPT_URL+"?action="+encodeURIComponent(body.action)+"&data="+encodeURIComponent(JSON.stringify(body));
     const r=await fetch(url,{method:"GET",redirect:"follow"});
     const d=await r.json();
-    setSS(d.success?"ok":"err");
-    return d;
-  }catch(e){ setSS("err"); return{success:false,error:"無法連接，請檢查網路"}; }
+    setSS(d.success?"ok":"err"); return d;
+  }catch(e){setSS("err");return{success:false,error:"無法連接，請檢查網路"};}
 }
 function setSS(s){
   const dot=document.getElementById("sdot"),txt=document.getElementById("stxt");
-  if(!dot) return;
+  if(!dot)return;
   if(s==="sync"){dot.className="sdot off";txt.textContent="同步中...";}
   else if(s==="ok"){dot.className="sdot";txt.textContent="已同步";}
   else{dot.className="sdot off";txt.textContent="連線異常";}
 }
-
-// ── toast ──
 let _tt;
-function toast(msg,t="ok"){
-  const el=document.getElementById("toast");
-  el.textContent=msg; el.className="show "+t;
-  clearTimeout(_tt); _tt=setTimeout(()=>el.className="",3200);
-}
+function toast(msg,t="ok"){const el=document.getElementById("toast");el.textContent=msg;el.className="show "+t;clearTimeout(_tt);_tt=setTimeout(()=>el.className="",3200);}
 
-// ── login ──
+// ── Login ─────────────────────────────────────────────────────
 function ltab(id,btn){
   document.querySelectorAll(".lsec").forEach(s=>s.classList.remove("active"));
   document.querySelectorAll(".ltab").forEach(b=>b.classList.remove("active"));
-  document.getElementById(id).classList.add("active"); btn.classList.add("active");
+  document.getElementById(id).classList.add("active");btn.classList.add("active");
 }
 async function doLogin(){
-  const u=document.getElementById("iu").value.trim();
-  const p=document.getElementById("ip").value;
-  const e=document.getElementById("lerr"); e.style.display="none";
+  const u=document.getElementById("iu").value.trim(),p=document.getElementById("ip").value;
+  const e=document.getElementById("lerr");e.style.display="none";
   if(!u||!p){e.textContent="請填寫用戶名和密碼";e.style.display="block";return;}
   const btn=document.getElementById("btnl");
-  btn.disabled=true; btn.innerHTML='<span class="spin"></span>登入中...';
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span>登入中...';
   const r=await api({action:"login",username:u,password:p});
-  btn.disabled=false; btn.textContent="登入";
-  if(r.success){ S.token=r.token; S.user=r.user; saveS(); initApp(); }
-  else{ e.textContent=r.error||"登入失敗"; e.style.display="block"; }
+  btn.disabled=false;btn.textContent="登入";
+  if(r.success){S.token=r.token;S.user=r.user;saveS();initApp();}
+  else{e.textContent=r.error||"登入失敗";e.style.display="block";}
 }
 async function doChangePw(){
-  const u=document.getElementById("cpu").value.trim();
-  const o=document.getElementById("cpo").value;
-  const n=document.getElementById("cpn").value;
-  const c=document.getElementById("cpc").value;
-  const e=document.getElementById("cperr"); e.style.display="none";
+  const u=document.getElementById("cpu").value.trim(),o=document.getElementById("cpo").value;
+  const n=document.getElementById("cpn").value,c=document.getElementById("cpc").value;
+  const e=document.getElementById("cperr");e.style.display="none";
   if(!u||!o||!n){e.textContent="請填寫全部欄位";e.style.display="block";return;}
   if(n!==c){e.textContent="兩次密碼不一致";e.style.display="block";return;}
   if(n.length<6){e.textContent="新密碼至少 6 字";e.style.display="block";return;}
   const lr=await api({action:"login",username:u,password:o});
   if(!lr.success){e.textContent="舊密碼不正確";e.style.display="block";return;}
   const r=await api({action:"changePassword",token:lr.token,oldPassword:o,newPassword:n});
-  if(r.success){ alert("✅ 密碼已更改！請重新登入。"); ltab("lf",document.querySelector(".ltab")); }
-  else{ e.textContent=r.error||"更改失敗"; e.style.display="block"; }
+  if(r.success){alert("✅ 密碼已更改！請重新登入。");ltab("lf",document.querySelector(".ltab"));}
+  else{e.textContent=r.error||"更改失敗";e.style.display="block";}
 }
-function logout(){ S={token:null,user:null}; saveS(); document.getElementById("app").style.display="none"; document.getElementById("ls").style.display="flex"; }
+function logout(){S={token:null,user:null};saveS();document.getElementById("app").style.display="none";document.getElementById("ls").style.display="flex";}
 
-// ── init ──
+// ── Init ──────────────────────────────────────────────────────
 async function initApp(){
   document.getElementById("ls").style.display="none";
   document.getElementById("app").style.display="block";
   document.getElementById("hd-dn").textContent=S.user.displayName||S.user.username;
   if(S.user.role==="admin") document.getElementById("admBtn").style.display="inline-block";
-
   document.getElementById("ld").value=today();
   document.getElementById("lt").value=new Date().toTimeString().slice(0,5);
   document.getElementById("bd").value=today();
   document.getElementById("bt").value=new Date().toTimeString().slice(0,5);
-  D.calY=new Date().getFullYear(); D.calM=new Date().getMonth();
+  D.calY=new Date().getFullYear();D.calM=new Date().getMonth();
+  renderExGrid();renderAvoidGrid();
 
-  renderExGrid();
-  renderMeals(); renderRecipes(); renderWO(); renderWODetail();
-  updateShopWeekLabel();
-
-  const [lr, br, pr] = await Promise.all([
+  const [lr,br,pr]=await Promise.all([
     api({action:"getLogs",token:S.token}),
     api({action:"getBodyStats",token:S.token}),
     api({action:"getProfile",token:S.token})
   ]);
   if(lr.success) D.logs=lr.logs.sort((a,b)=>b.date.localeCompare(a.date));
   if(br.success) D.bodyStats=br.stats.sort((a,b)=>b.date.localeCompare(a.date));
-  if(pr.success&&pr.profile) {
-    D.profile=pr.profile;
-    D.planDays=parseInt(pr.profile.planDays)||90;
-    loadProfileUI();
-  }
+  if(pr.success&&pr.profile){D.profile=pr.profile;D.planDays=parseInt(pr.profile.planDays)||90;D.selectedAvoid=pr.profile.avoid||[];loadProfileUI();}
 
-  renderHome(); renderCal(); renderLogHist();
-  renderBodyStats(); renderBodyChart("weight");
-  renderShop();
+  renderHome();renderCal();renderLogHist();renderBodyStats();renderBodyChart("weight");
+  renderMealTab();renderWO();renderWODetail();renderShop();
 }
 
-// ── helpers ──
-function today(){ return new Date().toISOString().slice(0,10); }
+// ── Helpers ───────────────────────────────────────────────────
+function today(){return new Date().toISOString().slice(0,10);}
 function dayNum(){
-  const sd=D.profile&&D.profile.planStartDate;
-  if(!sd) return null;
+  const sd=D.profile&&D.profile.planStartDate;if(!sd)return null;
   const d=Math.floor((new Date(today())-new Date(sd))/86400000)+1;
   return d>0?d:null;
 }
-function planProgress(){
-  const d=dayNum(); if(!d) return 0;
-  return Math.min(100,Math.round(d/D.planDays*100));
-}
-function isWO(ds){ return [0,2,5,6].includes(new Date(ds).getDay()); }
+function planProgress(){const d=dayNum();if(!d)return 0;return Math.min(100,Math.round(d/D.planDays*100));}
+function isWO(ds){return [0,2,5,6].includes(new Date(ds).getDay());}
 function isCD(ds){
-  const sd=D.profile&&D.profile.planStartDate; if(!sd) return false;
+  const sd=D.profile&&D.profile.planStartDate;if(!sd)return false;
   const diff=Math.floor((new Date(ds)-new Date(sd))/86400000);
   return diff>0&&diff%14===13;
 }
-function calcBMI(w,h){ if(!w||!h) return null; return (w/((h/100)**2)).toFixed(1); }
-function bmiLabel(bmi){
-  if(!bmi) return "";
-  if(bmi<18.5) return "體重過輕";
-  if(bmi<24) return "正常範圍 ✓";
-  if(bmi<28) return "輕度超重";
-  return "肥胖";
-}
-function calcTDEE(w,h){
-  if(!w||!h) return null;
-  const bmr=10*w+6.25*h-5*25-161;
-  return Math.round(bmr*1.55);
-}
+function calcBMI(w,h){if(!w||!h)return null;return (w/((h/100)**2)).toFixed(1);}
+function bmiLabel(b){if(!b)return "";if(b<18.5)return "體重過輕";if(b<24)return "✓ 正常";if(b<28)return "輕度超重";return "肥胖";}
+function calcTDEE(w,h){if(!w||!h)return null;return Math.round((10*w+6.25*h-5*25-161)*1.55);}
 function calcStreak(){
-  if(!D.logs.length) return 0;
+  if(!D.logs.length)return 0;
   const sorted=[...D.logs].sort((a,b)=>b.date.localeCompare(a.date));
-  let streak=0, cur=new Date(today());
+  let streak=0,cur=new Date(today());
   for(const log of sorted){
-    const ld=new Date(log.date);
-    const diff=Math.round((cur-ld)/86400000);
-    if(diff===0||diff===1){ streak++; cur=ld; }
-    else break;
+    const diff=Math.round((cur-new Date(log.date))/86400000);
+    if(diff===0||diff===1){streak++;cur=new Date(log.date);}else break;
   }
   return streak;
 }
 
-// ── HOME ──
+// ── Recipe filtering ─────────────────────────────────────────
+function isRecipeAvoided(recipe){
+  if(!D.selectedAvoid||!D.selectedAvoid.length)return false;
+  const avoidTags=AVOID_OPTIONS.filter(o=>D.selectedAvoid.includes(o.key)).flatMap(o=>o.tags);
+  return recipe.tags.some(t=>avoidTags.includes(t));
+}
+function getWeekRecipes(weekIdx){
+  return RECIPE_DB.filter(r=>r.week===weekIdx);
+}
+function getCurrentPlanWeek(){
+  const d=dayNum();if(!d)return 0;
+  return Math.floor((d-1)/7)%4;
+}
+
+// ── HOME ─────────────────────────────────────────────────────
 function renderHome(){
-  const day=dayNum(), pct=planProgress();
+  const day=dayNum(),pct=planProgress();
   const lastBS=D.bodyStats[0];
   const wt=lastBS?lastBS.weight:null;
   const h=D.profile?parseFloat(D.profile.height)||null:null;
   const goal=D.profile?parseFloat(D.profile.goalWeight)||null:null;
   const streak=calcStreak();
-
   document.getElementById("home-title").innerHTML=`你好，<span>${S.user.displayName||S.user.username}</span>！`;
-  document.getElementById("hd-day").textContent=day?`Day ${day} / ${D.planDays}`:"未設定";
+  document.getElementById("hd-day").textContent=day?`Day ${day}/${D.planDays}`:"未設定";
   document.getElementById("hd-wt").textContent=wt?wt+" kg":"-- kg";
   document.getElementById("hd-streak").textContent="🔥 "+streak;
   document.getElementById("streak-num").textContent=streak;
-  document.getElementById("streak-tip").textContent=streak>=7?"太厲害了！保持下去！":streak>=3?"很好，繼續加油！":"每天紀錄，養成習慣！";
-
-  // stat cards
+  document.getElementById("streak-tip").textContent=streak>=7?"太厲害！保持下去！":streak>=3?"很好，繼續！":"每天紀錄，養成習慣！";
   document.getElementById("sc-day").textContent=day?`Day ${day}`:"未開始";
   document.getElementById("sc-prog").style.width=pct+"%";
   document.getElementById("sc-wt").textContent=wt?wt+" kg":"--";
-  if(wt&&goal){
-    const diff=(wt-goal).toFixed(1);
-    document.getElementById("sc-wtd").textContent=diff>0?`↓ 還差 ${diff} kg`:"🎉 已達標！";
-  }
+  if(wt&&goal)document.getElementById("sc-wtd").textContent=(wt-goal)>0?`↓ 還差 ${(wt-goal).toFixed(1)} kg`:"🎉 達標！";
   const bmi=calcBMI(wt,h);
   document.getElementById("sc-bmi").textContent=bmi||"--";
   document.getElementById("sc-bmil").textContent=bmiLabel(bmi);
   document.getElementById("sc-goal").textContent=goal?goal+" kg":"未設定";
-  if(wt&&goal){ const d=(wt-goal).toFixed(1); document.getElementById("sc-goald").textContent=d>0?`還差 ${d} kg`:"✅ 達標！"; }
-
-  renderTodayPlan();
-  renderWeekSummary();
-  renderWChart();
+  if(wt&&goal)document.getElementById("sc-goald").textContent=(wt-goal)>0?`還差 ${(wt-goal).toFixed(1)} kg`:"✅ 達標！";
+  renderTodayPlan();renderWeekSummary();renderWChart();
 }
 
-// ── Today plan ──
-const MEALS=[
-  {d:'日',l:'蒸雞胸+水煮花椰菜+蒸地瓜',n:'蒸鮭魚（薑絲）+燙菠菜',c:false},
-  {d:'一',l:'水煮蛋+燙豆腐+毛豆+地瓜',n:'水煮蝦仁+燙高麗菜+糙米',c:false},
-  {d:'二',l:'蒸雞胸絲+水煮四季豆+蒸玉米',n:'蒸鱸魚（蔥薑）+燙花椰菜',c:false},
-  {d:'三',l:'水煮豬里肌+燙菠菜+糙米',n:'蒸豆腐（醬油+薑）+水煮木耳',c:false},
-  {d:'四',l:'蒸雞胸+水煮地瓜葉+蒸南瓜',n:'水煮蝦+燙花椰菜+水煮蛋',c:false},
-  {d:'五',l:'蒸鯛魚+水煮毛豆+蒸地瓜',n:'雞胸絲涼拌黃瓜（醬油+芝麻醬）',c:false},
-  {d:'六',l:'水煮里肌+燙高麗菜+糙米',n:'Cheat Dinner 🎉',c:true},
-];
-const WOS=[
-  {d:'日',m:'游泳 45分鐘 / 跑步 30分鐘',t:'main'},
-  {d:'一',m:'拉伸 + 瑜伽 20分鐘',t:'rest'},
-  {d:'二',m:'居家 HIIT 30分鐘',t:'main'},
-  {d:'三',m:'散步 30分鐘',t:'light'},
-  {d:'四',m:'核心訓練 25分鐘',t:'light'},
-  {d:'五',m:'跑步 HIIT 35分鐘',t:'main'},
-  {d:'六',m:'游泳 45分 / 跑步 40分',t:'main'},
-];
+// ── Today plan uses 28-day rotation ───────────────────────────
+const DAY_NAMES=['日','一','二','三','四','五','六'];
 function renderTodayPlan(){
   const dow=new Date().getDay();
-  const ns=['日','一','二','三','四','五','六'];
+  const planWeek=getCurrentPlanWeek();
+  const recipe=RECIPE_DB.find(r=>r.week===planWeek&&r.day===dow);
+  const avoided=recipe?isRecipeAvoided(recipe):false;
+  const wo=WO_DETAIL[dow];
   document.getElementById("today-plan").innerHTML=`
-    <div style="margin-bottom:6px">週<strong>${ns[dow]}</strong>
+    <div style="margin-bottom:6px">週<strong>${DAY_NAMES[dow]}</strong>，${dayNum()?`第 <strong>${dayNum()}</strong> 天，第 ${planWeek+1} 週食譜`:"計劃未開始"}
       ${isCD(today())?'<span class="tag tc">🎉 Cheat Day</span>':''}
       ${isWO(today())?'<span class="tag tw">💪 主訓練日</span>':'<span style="font-size:.72rem;color:var(--mt)">🌿 輕鬆日</span>'}
     </div>
-    <div style="margin-bottom:4px">🏃 ${WOS[dow].m}</div>
-    <div style="margin-bottom:4px">🥗 午：${MEALS[dow].l}</div>
-    <div>🌙 晚：${MEALS[dow].n}</div>`;
+    <div style="margin-bottom:4px">🏃 ${wo.m}</div>
+    ${recipe?`
+    <div style="margin-bottom:4px">🥗 午：${avoided?"<s>"+recipe.lunch+"</s> ⚠️ 含限制食材":recipe.lunch}</div>
+    <div>🌙 晚：${isCD(today())?"Cheat Dinner 🎉":avoided?"<s>"+recipe.dinner+"</s> ⚠️ 含限制食材":recipe.dinner}</div>
+    `:`<div style="color:var(--mt)">今日無食譜安排</div>`}`;
 }
 
-// ── Week summary ──
+// ── Week summary ──────────────────────────────────────────────
 function renderWeekSummary(){
-  const mon=new Date(); mon.setDate(mon.getDate()-mon.getDay()+1);
+  const mon=new Date();mon.setDate(mon.getDate()-mon.getDay()+1);
   const weekLogs=D.logs.filter(l=>{const d=new Date(l.date);return d>=mon;});
-  const woCount=weekLogs.filter(l=>l.exercises&&l.exercises.length>0&&!l.exercises.every(e=>e==="")).length;
-  const avgWt=weekLogs.filter(l=>{ const bs=D.bodyStats.find(s=>s.date===l.date); return bs&&bs.weight;}).length;
-  const lastBS=D.bodyStats[0];
-  const prevBS=D.bodyStats.length>1?D.bodyStats[1]:null;
-  const wtChange=lastBS&&prevBS?((lastBS.weight-prevBS.weight)).toFixed(1):null;
+  const woCount=weekLogs.filter(l=>l.exercises&&l.exercises.some(e=>e&&e!=="")).length;
+  const lastBS=D.bodyStats[0],prevBS=D.bodyStats.length>1?D.bodyStats[1]:null;
+  const wtChange=lastBS&&prevBS&&lastBS.weight&&prevBS.weight?(lastBS.weight-prevBS.weight).toFixed(1):null;
   const cheatCount=weekLogs.filter(l=>l.isCheatDay==="是").length;
-  const cheatLeft=1-cheatCount;
   document.getElementById("week-summary").innerHTML=`
-    <div class="ws-card"><div class="wv" style="color:var(--ac)">${woCount}</div><div class="wl">本週運動天數</div></div>
-    <div class="ws-card"><div class="wv" style="color:var(--a3)">${weekLogs.length}</div><div class="wl">本週紀錄天數</div></div>
+    <div class="ws-card"><div class="wv" style="color:var(--ac)">${woCount}</div><div class="wl">本週運動天</div></div>
+    <div class="ws-card"><div class="wv" style="color:var(--a3)">${weekLogs.length}</div><div class="wl">本週紀錄天</div></div>
     <div class="ws-card"><div class="wv" style="color:${wtChange&&wtChange<0?'var(--a3)':'var(--a2)'}">${wtChange?wtChange+" kg":"--"}</div><div class="wl">體重變化</div></div>
-    <div class="ws-card"><div class="wv" style="color:${cheatLeft>=0?'var(--a4)':'var(--a2)'}">${cheatLeft}</div><div class="wl">Cheat Day 剩餘</div></div>`;
+    <div class="ws-card"><div class="wv" style="color:${1-cheatCount>=0?'var(--a4)':'var(--a2)'}">${1-cheatCount}</div><div class="wl">Cheat剩餘</div></div>`;
 }
 
-// ── Calendar ──
+// ── Calendar ──────────────────────────────────────────────────
 function renderCal(){
   const y=D.calY,m=D.calM;
   const ms=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
   document.getElementById("cal-title").textContent=`${y} 年 ${ms[m]}`;
-  const g=document.getElementById("cal-grid"); g.innerHTML="";
+  const g=document.getElementById("cal-grid");g.innerHTML="";
   const first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate();
   for(let i=0;i<first;i++){const el=document.createElement("div");el.className="cc emp";g.appendChild(el);}
   for(let d=1;d<=days;d++){
     const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const el=document.createElement("div"); el.className="cc"; el.textContent=d;
-    if(ds===today()) el.classList.add("today");
-    if(isWO(ds)) el.classList.add("wod");
-    if(isCD(ds)) el.classList.add("cheat");
-    if(D.logs.some(l=>l.date===ds)||D.bodyStats.some(s=>s.date===ds)) el.classList.add("has-data");
+    const el=document.createElement("div");el.className="cc";el.textContent=d;
+    if(ds===today())el.classList.add("today");
+    if(isWO(ds))el.classList.add("wod");
+    if(isCD(ds))el.classList.add("cheat");
+    if(D.logs.some(l=>l.date===ds)||D.bodyStats.some(s=>s.date===ds))el.classList.add("has-data");
     el.onclick=()=>openDayModal(ds);
     g.appendChild(el);
   }
 }
 function prevM(){D.calM--;if(D.calM<0){D.calM=11;D.calY--;}renderCal();}
 function nextM(){D.calM++;if(D.calM>11){D.calM=0;D.calY++;}renderCal();}
-
 function openDayModal(ds){
-  const log=D.logs.find(l=>l.date===ds);
-  const bs=D.bodyStats.find(s=>s.date===ds);
+  const log=D.logs.find(l=>l.date===ds),bs=D.bodyStats.find(s=>s.date===ds);
   document.getElementById("dm-title").textContent=ds+(isCD(ds)?' 🎉':'')+(isWO(ds)?' 💪':'');
   let html='';
-  if(bs) html+=`<div style="font-size:.82rem;line-height:2;color:var(--mt);margin-bottom:10px">
+  if(bs)html+=`<div style="font-size:.82rem;line-height:2;color:var(--mt);margin-bottom:10px">
     ${bs.weight?`<div>⚖️ <strong style="color:var(--tx)">${bs.weight} kg</strong></div>`:''}
     ${bs.bodyFat?`<div>🔥 體脂：${bs.bodyFat}%</div>`:''}
     ${bs.muscle?`<div>💪 肌肉：${bs.muscle}%</div>`:''}
   </div>`;
-  if(log) html+=`<div style="font-size:.82rem;line-height:2;color:var(--mt)">
+  if(log)html+=`<div style="font-size:.82rem;line-height:2;color:var(--mt)">
     ${log.breakfast?`<div>🌅 早：${log.breakfast}</div>`:''}
     ${log.lunch?`<div>☀️ 午：${log.lunch}</div>`:''}
     ${log.dinner?`<div>🌙 晚：${log.dinner}</div>`:''}
-    ${log.exercises&&log.exercises.length?`<div>🏃 運動：${log.exercises.join('、')}</div>`:''}
-    ${log.water?`<div>💧 喝水：${log.water} L</div>`:''}
-    ${log.sleep?`<div>😴 睡眠：${log.sleep} 小時</div>`:''}
+    ${log.exercises&&log.exercises.length?`<div>🏃 ${log.exercises.join('、')}</div>`:''}
+    ${log.water?`<div>💧 ${log.water} L</div>`:''}
+    ${log.sleep?`<div>😴 ${log.sleep} 小時</div>`:''}
     ${log.notes?`<div>📝 ${log.notes}</div>`:''}
   </div>`;
-  if(!html) html=`<p style="color:var(--mt);font-size:.82rem">這天還沒有紀錄。</p>`;
+  if(!html)html=`<p style="color:var(--mt);font-size:.82rem">這天還沒有紀錄。</p>`;
   document.getElementById("dm-body").innerHTML=html;
   document.getElementById("day-modal").classList.add("open");
 }
 function closeModal(id){document.getElementById(id).classList.remove("open");}
 
-// ── Exercise grid ──
-const EX_OPTIONS=[
-  "跑步 30分","跑步 HIIT 35分","游泳 30分","游泳 45分",
-  "居家 HIIT 20分","居家 HIIT 30分","瑜伽 25分","核心訓練 25分",
-  "散步 30分","騎單車 30分","重量訓練 40分","爬樓梯 20分",
-  "有氧操 30分","彈力帶訓練","拉伸 20分","休息日"
-];
+// ── Exercise grid ─────────────────────────────────────────────
+const EX_OPTIONS=["跑步 30分","跑步 HIIT 35分","游泳 30分","游泳 45分","居家 HIIT 20分","居家 HIIT 30分",
+  "瑜伽 25分","核心訓練 25分","散步 30分","騎單車 30分","重量訓練 40分","爬樓梯 20分",
+  "有氧操 30分","彈力帶訓練","拉伸 20分","休息日"];
 function renderExGrid(){
   document.getElementById("ex-grid").innerHTML=EX_OPTIONS.map(e=>
-    `<div class="ex-btn" onclick="toggleEx(this,'${e}')">${e}</div>`
-  ).join("");
+    `<div class="ex-btn" onclick="toggleEx(this,'${e}')">${e}</div>`).join("");
 }
 function toggleEx(el,name){
   el.classList.toggle("sel");
-  if(el.classList.contains("sel")) D.selectedExercises.push(name);
-  else D.selectedExercises=D.selectedExercises.filter(e=>e!==name);
+  if(el.classList.contains("sel"))D.selectedEx.push(name);
+  else D.selectedEx=D.selectedEx.filter(e=>e!==name);
 }
-function clearExSel(){
-  D.selectedExercises=[];
-  document.querySelectorAll(".ex-btn").forEach(b=>b.classList.remove("sel"));
-}
+function clearExSel(){D.selectedEx=[];document.querySelectorAll(".ex-btn").forEach(b=>b.classList.remove("sel"));}
 
-// ── Log ──
+// ── Log ───────────────────────────────────────────────────────
 async function saveLog(){
   const custom=document.getElementById("lex-custom").value.trim();
-  const exList=[...D.selectedExercises];
-  if(custom) exList.push(custom);
+  const exList=[...D.selectedEx];if(custom)exList.push(custom);
   const log={
     date:document.getElementById("ld").value||today(),
     time:document.getElementById("lt").value,
@@ -949,19 +930,17 @@ async function saveLog(){
     notes:document.getElementById("lnote").value
   };
   const btn=document.getElementById("btnSave");
-  btn.disabled=true; btn.innerHTML='<span class="spin"></span>儲存中...';
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span>儲存中...';
   const r=await api({action:"saveLog",token:S.token,log});
-  btn.disabled=false; btn.textContent="💾 儲存到 Sheets";
+  btn.disabled=false;btn.textContent="💾 儲存到 Sheets";
   if(r.success){
     const i=D.logs.findIndex(l=>l.date===log.date);
-    if(i>=0) D.logs[i]=log; else D.logs.push(log);
+    if(i>=0)D.logs[i]=log;else D.logs.push(log);
     D.logs.sort((a,b)=>b.date.localeCompare(a.date));
-    clearExSel();
-    renderLogHist(); renderCal(); renderHome();
+    clearExSel();renderLogHist();renderCal();renderHome();
     toast("✅ 已儲存！");
-  } else toast("❌ "+(r.error||"儲存失敗"),"err");
+  }else toast("❌ "+(r.error||"儲存失敗"),"err");
 }
-
 function renderLogHist(){
   const tb=document.getElementById("log-tb"),em=document.getElementById("log-empty");
   document.getElementById("logCnt").textContent=D.logs.length?`（${D.logs.length} 筆）`:"";
@@ -969,34 +948,29 @@ function renderLogHist(){
   em.style.display="none";
   tb.innerHTML=D.logs.map(l=>`<tr>
     <td>${l.date}</td>
-    <td style="max-width:100px;font-size:.72rem">${l.breakfast||"—"}</td>
-    <td style="max-width:100px;font-size:.72rem">${l.lunch||"—"}</td>
-    <td style="max-width:100px;font-size:.72rem">${l.dinner||"—"}</td>
-    <td>${l.exercises&&l.exercises.length?l.exercises.map(e=>`<span class="tag tw">${e}</span>`).join(""):"—"}</td>
-    <td>${l.water?l.water+"L":"—"}</td>
-    <td>${l.sleep?l.sleep+"h":"—"}</td>
+    <td style="max-width:90px;font-size:.71rem">${l.breakfast||"—"}</td>
+    <td style="max-width:90px;font-size:.71rem">${l.lunch||"—"}</td>
+    <td style="max-width:90px;font-size:.71rem">${l.dinner||"—"}</td>
+    <td>${l.exercises&&l.exercises.length?l.exercises.filter(Boolean).map(e=>`<span class="tag tw">${e}</span>`).join(""):"—"}</td>
+    <td>${l.water?l.water+"L":"—"}</td><td>${l.sleep?l.sleep+"h":"—"}</td>
     <td>${l.mood?'⭐'.repeat(parseInt(l.mood)||0):"—"}</td>
-    <td style="font-size:.7rem;max-width:100px">${l.notes||"—"}</td>
+    <td style="font-size:.7rem;max-width:90px">${l.notes||"—"}</td>
   </tr>`).join("");
 }
-
 function exportCSV(){
   const h=["Date","Breakfast","Lunch","Dinner","Snack","Exercises","Water_L","Sleep_Hours","Is_Cheat_Day","Mood","Notes"];
   const rows=D.logs.map(l=>[l.date,
-    `"${(l.breakfast||"").replace(/"/g,'""')}"`,
-    `"${(l.lunch||"").replace(/"/g,'""')}"`,
-    `"${(l.dinner||"").replace(/"/g,'""')}"`,
-    `"${(l.snack||"").replace(/"/g,'""')}"`,
-    `"${(l.exercises||[]).join('|')}"`,
-    l.water||"",l.sleep||"",l.isCheatDay||"否",l.mood||"",
+    `"${(l.breakfast||"").replace(/"/g,'""')}"`,`"${(l.lunch||"").replace(/"/g,'""')}"`,
+    `"${(l.dinner||"").replace(/"/g,'""')}"`,`"${(l.snack||"").replace(/"/g,'""')}"`,
+    `"${(l.exercises||[]).join('|')}"`,l.water||"",l.sleep||"",l.isCheatDay||"否",l.mood||"",
     `"${(l.notes||"").replace(/"/g,'""')}"`]);
   const csv=[h.join(","),...rows.map(r=>r.join(","))].join("\n");
   const a=document.createElement("a");
   a.href="data:text/csv;charset=utf-8,\uFEFF"+encodeURIComponent(csv);
-  a.download="飲食運動紀錄_"+S.user.username+"_"+today()+".csv"; a.click();
+  a.download="紀錄_"+S.user.username+"_"+today()+".csv";a.click();
 }
 
-// ── Body Stats ──
+// ── Body Stats ────────────────────────────────────────────────
 async function saveBodyStat(){
   const stat={
     date:document.getElementById("bd").value||today(),
@@ -1007,25 +981,23 @@ async function saveBodyStat(){
     notes:document.getElementById("bn").value
   };
   const btn=document.getElementById("btnBody");
-  btn.disabled=true; btn.innerHTML='<span class="spin"></span>儲存中...';
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span>儲存中...';
   const r=await api({action:"saveBodyStats",token:S.token,stat});
-  btn.disabled=false; btn.textContent="💾 儲存數據";
+  btn.disabled=false;btn.textContent="💾 儲存數據";
   if(r.success){
     const i=D.bodyStats.findIndex(s=>s.date===stat.date);
-    if(i>=0) D.bodyStats[i]=stat; else D.bodyStats.push(stat);
+    if(i>=0)D.bodyStats[i]=stat;else D.bodyStats.push(stat);
     D.bodyStats.sort((a,b)=>b.date.localeCompare(a.date));
-    renderBodyStats(); renderBodyChart(currentChartType||"weight");
-    renderHome(); renderCal();
+    renderBodyStats();renderBodyChart(currentChartType);renderHome();renderCal();
     toast("✅ 數據已儲存！");
-  } else toast("❌ "+(r.error||"儲存失敗"),"err");
+  }else toast("❌ "+(r.error||"失敗"),"err");
 }
-
 function renderBodyStats(){
   const tb=document.getElementById("body-tb"),em=document.getElementById("body-empty");
   const h=D.profile?parseFloat(D.profile.height)||null:null;
   if(!D.bodyStats.length){tb.innerHTML="";em.style.display="block";return;}
   em.style.display="none";
-  const last=D.bodyStats[0], prev=D.bodyStats.length>1?D.bodyStats[1]:null;
+  const last=D.bodyStats[0],prev=D.bodyStats.length>1?D.bodyStats[1]:null;
   const bmi=calcBMI(last.weight,h);
   document.getElementById("bs-wt").textContent=last.weight?last.weight+" kg":"--";
   document.getElementById("bs-bf").textContent=last.bodyFat?last.bodyFat+"%":"--";
@@ -1036,51 +1008,37 @@ function renderBodyStats(){
     const wd=last.weight&&prev.weight?(last.weight-prev.weight).toFixed(1):null;
     const bd=last.bodyFat&&prev.bodyFat?(last.bodyFat-prev.bodyFat).toFixed(1):null;
     const md=last.muscle&&prev.muscle?(last.muscle-prev.muscle).toFixed(1):null;
-    document.getElementById("bs-wtd").textContent=wd?(wd>0?"↑"+wd:"↓"+Math.abs(wd))+" kg vs 上次":"";
-    document.getElementById("bs-bfd").textContent=bd?(bd>0?"↑"+bd:"↓"+Math.abs(bd))+"% vs 上次":"";
-    document.getElementById("bs-mud").textContent=md?(md>0?"↑"+md:"↓"+Math.abs(md))+"% vs 上次":"";
+    document.getElementById("bs-wtd").textContent=wd?(parseFloat(wd)>0?"↑":"↓")+Math.abs(wd)+" kg":"";
+    document.getElementById("bs-bfd").textContent=bd?(parseFloat(bd)>0?"↑":"↓")+Math.abs(bd)+"%":"";
+    document.getElementById("bs-mud").textContent=md?(parseFloat(md)>0?"↑":"↓")+Math.abs(md)+"%":"";
   }
   tb.innerHTML=D.bodyStats.map(s=>{
     const b=calcBMI(s.weight,h);
-    return `<tr>
-      <td>${s.date}</td><td>${s.time||"—"}</td>
-      <td>${s.weight?s.weight+" kg":"—"}</td>
-      <td>${s.bodyFat?s.bodyFat+"%":"—"}</td>
-      <td>${s.muscle?s.muscle+"%":"—"}</td>
-      <td>${b||"—"}</td>
-      <td style="font-size:.72rem">${s.notes||"—"}</td>
-    </tr>`;
+    return `<tr><td>${s.date}</td><td>${s.time||"—"}</td><td>${s.weight?s.weight+" kg":"—"}</td><td>${s.bodyFat?s.bodyFat+"%":"—"}</td><td>${s.muscle?s.muscle+"%":"—"}</td><td>${b||"—"}</td><td style="font-size:.72rem">${s.notes||"—"}</td></tr>`;
   }).join("");
 }
-
-let currentChartType="weight";
 function switchChart(type,btn){
   currentChartType=type;
   document.querySelectorAll(".ctab").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  renderBodyChart(type);
+  btn.classList.add("active");renderBodyChart(type);
 }
 function renderBodyChart(type){
   const stats=[...D.bodyStats].sort((a,b)=>a.date.localeCompare(b.date));
-  const labels=stats.map(s=>s.date.slice(5));
-  let datasets=[];
-  if(type==="weight"||type==="all"){
-    const goal=D.profile?parseFloat(D.profile.goalWeight)||null:null;
-    datasets.push({label:"體重 kg",data:stats.map(s=>s.weight),borderColor:"#6c63ff",backgroundColor:"rgba(108,99,255,.1)",borderWidth:2,pointRadius:4,tension:.3,fill:type==="weight",yAxisID:"y"});
-    if(goal&&type==="weight") datasets.push({label:"目標",data:stats.map(()=>goal),borderColor:"#43d99e",borderDash:[5,5],borderWidth:1,pointRadius:0,yAxisID:"y"});
-  }
-  if(type==="bodyfat"||type==="all") datasets.push({label:"體脂 %",data:stats.map(s=>s.bodyFat),borderColor:"#ff6b6b",backgroundColor:"rgba(255,107,107,.1)",borderWidth:2,pointRadius:4,tension:.3,fill:type==="bodyfat",yAxisID:type==="all"?"y2":"y"});
-  if(type==="muscle"||type==="all") datasets.push({label:"肌肉 %",data:stats.map(s=>s.muscle),borderColor:"#43d99e",backgroundColor:"rgba(67,217,158,.1)",borderWidth:2,pointRadius:4,tension:.3,fill:type==="muscle",yAxisID:type==="all"?"y2":"y"});
-  if(charts.body) charts.body.destroy();
+  const labels=stats.map(s=>s.date.slice(5));let datasets=[];
+  const goal=D.profile?parseFloat(D.profile.goalWeight)||null:null;
+  if(type==="weight"||type==="all")datasets.push({label:"體重 kg",data:stats.map(s=>s.weight),borderColor:"#6c63ff",backgroundColor:"rgba(108,99,255,.1)",borderWidth:2,pointRadius:4,tension:.3,fill:type==="weight",yAxisID:"y"});
+  if(goal&&type==="weight")datasets.push({label:"目標",data:stats.map(()=>goal),borderColor:"#43d99e",borderDash:[5,5],borderWidth:1,pointRadius:0,yAxisID:"y"});
+  if(type==="bodyfat"||type==="all")datasets.push({label:"體脂 %",data:stats.map(s=>s.bodyFat),borderColor:"#ff6b6b",backgroundColor:"rgba(255,107,107,.1)",borderWidth:2,pointRadius:4,tension:.3,fill:type==="bodyfat",yAxisID:type==="all"?"y2":"y"});
+  if(type==="muscle"||type==="all")datasets.push({label:"肌肉 %",data:stats.map(s=>s.muscle),borderColor:"#43d99e",backgroundColor:"rgba(67,217,158,.1)",borderWidth:2,pointRadius:4,tension:.3,fill:type==="muscle",yAxisID:type==="all"?"y2":"y"});
+  if(charts.body)charts.body.destroy();
   const ctx=document.getElementById("bodyChart").getContext("2d");
   const scales={x:{ticks:{color:"#7a85a3",font:{size:10}},grid:{color:"rgba(255,255,255,.05)"}},y:{ticks:{color:"#7a85a3"},grid:{color:"rgba(255,255,255,.05)"}}};
-  if(type==="all") scales.y2={position:"right",ticks:{color:"#7a85a3"},grid:{drawOnChartArea:false}};
+  if(type==="all")scales.y2={position:"right",ticks:{color:"#7a85a3"},grid:{drawOnChartArea:false}};
   charts.body=new Chart(ctx,{type:"line",data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:"#7a85a3",font:{size:11}}}},scales}});
 }
-
 function renderWChart(){
   const stats=[...D.bodyStats].filter(s=>s.weight).sort((a,b)=>a.date.localeCompare(b.date));
-  if(charts.w) charts.w.destroy();
+  if(charts.w)charts.w.destroy();
   const ctx=document.getElementById("wChart").getContext("2d");
   const goal=D.profile?parseFloat(D.profile.goalWeight)||null:null;
   charts.w=new Chart(ctx,{type:"line",data:{labels:stats.map(s=>s.date.slice(5)),datasets:[
@@ -1088,52 +1046,65 @@ function renderWChart(){
     goal?{label:"目標",data:stats.map(()=>goal),borderColor:"#43d99e",borderDash:[5,5],borderWidth:1,pointRadius:0}:null
   ].filter(Boolean)},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:"#7a85a3",font:{size:10}}}},scales:{x:{ticks:{color:"#7a85a3",font:{size:9}},grid:{color:"rgba(255,255,255,.05)"}},y:{ticks:{color:"#7a85a3"},grid:{color:"rgba(255,255,255,.05)"}}}}});
 }
-
-// ── Meals / Recipes / Workout ──
-function renderMeals(){
-  document.getElementById("meal-grid").innerHTML=MEALS.map(d=>`
-    <div class="mdc">
-      <div class="dlbl" style="color:${d.c?'var(--a2)':'var(--ac)'}">週${d.d}</div>
-      <div class="mi"><strong>🥗 午</strong>${d.l}</div>
-      <div class="mi"><strong>🌙 晚</strong>${d.n}</div>
-      ${d.c?'<div class="cbadge">Cheat</div>':''}
-    </div>`).join("");
+function renderMealTab(){
+  const avoid=D.selectedAvoid||[];
+  document.getElementById("avoid-notice").style.display=avoid.length>0?"block":"none";
+  if(avoid.length>0)document.getElementById("avoid-list").textContent=avoid.join("、")+" ";
+  const planWeek=getCurrentPlanWeek();
+  document.getElementById("curr-week-badge").textContent=dayNum()?`（目前：第 ${planWeek+1} 週）`:"（計劃未開始）";
+  showMealWeek(planWeek);renderRecipes();
 }
-const RECS=[
-  {n:'🐟 蒸鮭魚',t:'12分',m:'蒸',i:'鮭魚200g、薑絲、低鈉醬油',s:'①薑絲鋪底 ②蒸10–12分 ③淋醬油+蔥絲'},
-  {n:'🍗 蒸雞胸',t:'20分',m:'蒸',i:'雞胸150g、薑片、鹽',s:'①鹽醃5分 ②蒸15–18分 ③撕絲蘸醬油+檸檬'},
-  {n:'🦐 水煮蝦',t:'8分',m:'水煮',i:'鮮蝦200g、薑片、鹽',s:'①水滾加薑鹽 ②煮3–4分至橙色 ③浸冷水保彈牙'},
-  {n:'🥦 燙花椰菜',t:'5分',m:'水煮',i:'花椰菜200g、鹽、蒜末',s:'①水滾加鹽 ②汆燙2–3分 ③淋醬油+蒜末'},
-  {n:'🥩 水煮豬里肌',t:'15分',m:'水煮',i:'豬里肌150g、薑蔥、鹽',s:'①水加薑蔥滾 ②煮12–15分 ③切片蘸黑椒+醬油'},
-  {n:'🫘 蒸豆腐',t:'8分',m:'蒸',i:'板豆腐半塊、低鈉醬油、薑末、蔥花',s:'①豆腐切片 ②蒸6–8分 ③淋醬油+薑末+蔥花'},
-];
+function showMealWeek(weekIdx){
+  D.mealWeekShowing=weekIdx;
+  const recipes=getWeekRecipes(weekIdx);
+  document.getElementById("meal-grid").innerHTML=recipes.map(r=>{
+    const avoided=isRecipeAvoided(r);
+    return `<div class="mdc ${avoided?'avoided':''}">
+      <div class="dlbl" style="color:${r.day===6?'var(--a2)':'var(--ac)'}">週${DAY_NAMES[r.day]}</div>
+      <div class="mi"><strong>🥗 午</strong>${r.lunch}</div>
+      <div class="mi"><strong>🌙 晚</strong>${r.dinner}</div>
+      ${r.day===6?'<div class="cbadge">Cheat</div>':''}
+      ${avoided?'<div style="font-size:.6rem;color:var(--a2);margin-top:3px">⚠️ 含限制食材</div>':''}
+    </div>`;
+  }).join("");
+}
 function renderRecipes(){
-  document.getElementById("recipe-list").innerHTML=RECS.map(r=>`
-    <div style="margin-bottom:10px;background:var(--sf);border-radius:10px;padding:12px">
+  const filter=document.getElementById("recipe-filter");
+  filter.innerHTML=['全部','海鮮','雞肉','豬肉','蛋','豆腐'].map((f,i)=>
+    `<button class="bsm ${i===0?'active':''}" onclick="filterRecipes('${f}',this)">${f}</button>`
+  ).join("");
+  showFilteredRecipes('全部');
+}
+function filterRecipes(f,btn){document.querySelectorAll("#recipe-filter .bsm").forEach(b=>b.classList.remove("active"));btn.classList.add("active");showFilteredRecipes(f);}
+function showFilteredRecipes(f){
+  const DETAILED_RECIPES=[
+    {n:'🐟 蒸鮭魚',t:'12分',m:'蒸',i:'鮭魚200g、薑絲、低鈉醬油',s:'①薑絲鋪底 ②蒸10–12分 ③淋醬油+蔥絲',tags:["海鮮"]},
+    {n:'🍗 蒸雞胸',t:'20分',m:'蒸',i:'雞胸150g、薑片、鹽',s:'①鹽醃5分 ②蒸15–18分 ③撕絲蘸醬油+檸檬',tags:["雞肉"]},
+    {n:'🦐 水煮蝦',t:'8分',m:'水煮',i:'鮮蝦200g、薑片、鹽',s:'①水滾加薑鹽 ②煮3–4分至橙色 ③浸冷水',tags:["海鮮"]},
+    {n:'🥦 燙花椰菜',t:'5分',m:'水煮',i:'花椰菜200g、鹽、蒜末',s:'①水滾加鹽 ②汆燙2–3分 ③淋醬油+蒜末',tags:[]},
+    {n:'🥩 水煮豬里肌',t:'15分',m:'水煮',i:'豬里肌150g、薑蔥、鹽',s:'①水加薑蔥滾 ②煮12–15分 ③切片蘸黑椒+醬油',tags:["豬肉"]},
+    {n:'🫘 蒸豆腐',t:'8分',m:'蒸',i:'板豆腐半塊、低鈉醬油、薑末、蔥花',s:'①豆腐切片 ②蒸6–8分 ③淋醬油+薑末',tags:["豆腐"]},
+    {n:'🐟 蒸鯛魚',t:'10分',m:'蒸',i:'鯛魚200g、薑蔥、低鈉醬油',s:'①薑蔥鋪底 ②蒸8–10分 ③淋少量醬油',tags:["海鮮"]},
+    {n:'🍳 水煮蛋',t:'10分',m:'水煮',i:'雞蛋2–3個、鹽',s:'①冷水下蛋 ②煮8–10分 ③冷水浸2分易剝殼',tags:["蛋"]},
+  ];
+  const list=f==='全部'?DETAILED_RECIPES:DETAILED_RECIPES.filter(r=>r.tags.includes(f)||r.tags.length===0);
+  document.getElementById("recipe-list").innerHTML=list.map(r=>{
+    const avoided=r.tags.some(t=>{const avoidTags=AVOID_OPTIONS.filter(o=>D.selectedAvoid.includes(o.key)).flatMap(o=>o.tags);return avoidTags.includes(t);});
+    return `<div class="recipe-card ${avoided?'avoided':''}">
       <div style="display:flex;justify-content:space-between;margin-bottom:5px">
-        <strong>${r.n}</strong>
+        <strong>${r.n}${avoided?'<span class="avoided-label">⚠️ 含限制食材</span>':''}</strong>
         <span><span style="font-size:.62rem;padding:2px 5px;border-radius:6px;font-weight:600;${r.m==='蒸'?'background:rgba(108,99,255,.2);color:var(--ac)':'background:rgba(67,217,158,.2);color:var(--a3)'}">${r.m}</span>
         <span style="font-size:.7rem;color:var(--a3);margin-left:4px">⏱ ${r.t}</span></span>
       </div>
       <div style="font-size:.76rem;color:var(--mt);margin-bottom:4px">🛒 ${r.i}</div>
       <div style="font-size:.76rem;color:var(--mt)">👨‍🍳 ${r.s}</div>
-    </div>`).join("");
+    </div>`;
+  }).join("");
 }
-const WO_DETAIL=[
-  {d:'日',m:'游泳 45分鐘 / 跑步 30分鐘',t:'main',dt:['游泳自由式+蛙式交替','目標 800–1000m','緩游 5分放鬆']},
-  {d:'一',m:'拉伸 + 瑜伽 20分鐘',t:'rest',dt:['肩頸放鬆','大腿前後伸展','貓牛式+嬰兒式']},
-  {d:'二',m:'居家 HIIT 30分鐘',t:'main',dt:['開合跳 30s×4','波比跳 20s×4','高抬腿 30s×4','平板撐 40s×3']},
-  {d:'三',m:'散步 30分鐘',t:'light',dt:['快走 30分鐘','腹式呼吸','全身拉伸']},
-  {d:'四',m:'核心訓練 25分鐘',t:'light',dt:['捲腹 15×3','側平板 30s','橋式 15×3']},
-  {d:'五',m:'跑步 HIIT 35分鐘',t:'main',dt:['慢跑熱身 5分','衝刺30s/慢跑90s×8','緩跑收操 5分']},
-  {d:'六',m:'游泳 45分 / 跑步 40分',t:'main',dt:['主力燃脂日','心率 70–80%','搭配 Cheat Dinner']},
-];
 function renderWO(){
   document.getElementById("wo-grid").innerHTML=WO_DETAIL.map(w=>`
     <div class="wdc ${w.t==='main'?'aday':w.t==='rest'?'rest':''}">
-      <div class="dlbl" style="color:${w.t==='main'?'var(--ac)':w.t==='light'?'var(--a4)':'var(--mt)'}">
-        週${w.d} ${w.t==='main'?'💪':w.t==='light'?'🌿':'😴'}
-      </div>
+      <div class="dlbl" style="color:${w.t==='main'?'var(--ac)':w.t==='light'?'var(--a4)':'var(--mt)'}">週${w.d} ${w.t==='main'?'💪':w.t==='light'?'🌿':'😴'}</div>
       <div style="font-size:.68rem;font-weight:600;margin-bottom:4px;color:var(--tx)">${w.m}</div>
       ${w.dt.map(d=>`<div class="ei">• ${d}</div>`).join("")}
     </div>`).join("");
@@ -1142,163 +1113,123 @@ function renderWODetail(){
   document.getElementById("wo-detail").innerHTML=`<div style="font-size:.78rem;line-height:1.9;color:var(--mt)">
     <strong style="color:var(--tx);display:block;margin-bottom:5px">週二/五 — 居家 HIIT（30分）</strong>
     熱身 5分 → 開合跳 30s×4 → 波比跳 20s×4 → 高抬腿 30s×4 → 深蹲跳 20s×3 → 平板撐 40s×3 → 緩和 5分
-    <br><br>
-    <strong style="color:var(--tx);display:block;margin-bottom:5px">週五 — 跑步 HIIT（35分）</strong>
-    慢跑 5分 → 衝刺30s/慢跑90s×8–10組 → 緩跑 5分
-    <br><br>
-    <strong style="color:var(--tx);display:block;margin-bottom:5px">週六/日 — 游泳（45分）</strong>
-    自由式+蛙式交替，每100m休息30s，目標800–1000m
-  </div>`;
+    <br><br><strong style="color:var(--tx);display:block;margin-bottom:5px">週六/日 — 游泳（45分）</strong>
+    自由式+蛙式交替，每100m休息30s，目標800–1000m</div>`;
 }
-
-// ── Shopping ──
-const SHOPD={
-  protein:[{n:'雞胸肉',q:'500g×2'},{n:'雞蛋',q:'一打'},{n:'鮭魚切片',q:'200g×2'},
-    {n:'鱸魚/鯛魚',q:'200g×2'},{n:'鮮蝦/蝦仁',q:'300g'},{n:'豬里肌',q:'300g'},
-    {n:'板豆腐',q:'2塊'},{n:'無糖豆漿',q:'1000ml×2'}],
-  carb:[{n:'即食燕麥片',q:'500g'},{n:'糙米',q:'1kg'},{n:'地瓜',q:'500g'},{n:'南瓜',q:'半個'},{n:'玉米',q:'2條'}],
-  veg:[{n:'花椰菜（白/綠）',q:'各1棵'},{n:'菠菜',q:'2把'},{n:'高麗菜',q:'半顆'},
-    {n:'四季豆',q:'200g'},{n:'地瓜葉',q:'2把'},{n:'小黃瓜',q:'3條'},
-    {n:'毛豆（冷凍）',q:'200g'},{n:'木耳（乾）',q:'50g'}],
-  fruit:[{n:'蘋果',q:'6個'},{n:'香蕉',q:'6條'},{n:'奇異果',q:'4個'},
-    {n:'檸檬',q:'3個'},{n:'低鈉醬油',q:'1瓶'},{n:'薑',q:'~100g'},
-    {n:'蒜頭',q:'1顆'},{n:'黑胡椒粉',q:'1罐'}]
-};
-
-function getWeekKey(offset){
-  const mon=new Date(); mon.setDate(mon.getDate()-mon.getDay()+1+offset*7);
-  return mon.toISOString().slice(0,10);
-}
+function getWeekKey(offset){const mon=new Date();mon.setDate(mon.getDate()-mon.getDay()+1+offset*7);return mon.toISOString().slice(0,10);}
 function updateShopWeekLabel(){
   const offset=D.shopWeekOffset;
-  const mon=new Date(); mon.setDate(mon.getDate()-mon.getDay()+1+offset*7);
-  const sun=new Date(mon); sun.setDate(mon.getDate()+6);
-  document.getElementById("shop-week-label").textContent=
-    offset===0?"本週（採購日：今個週日）":offset===1?"下週（採購日：本週日）":`第 ${offset>0?"+":""}${offset} 週`;
-  document.getElementById("shop-week-range").textContent=
-    `${mon.toLocaleDateString('zh-HK',{month:'short',day:'numeric'})} – ${sun.toLocaleDateString('zh-HK',{month:'short',day:'numeric'})}`;
+  const mon=new Date();mon.setDate(mon.getDate()-mon.getDay()+1+offset*7);
+  const sun=new Date(mon);sun.setDate(mon.getDate()+6);
+  document.getElementById("shop-week-label").textContent=offset===0?"本週":offset===1?"下週":`${offset>0?"+":""}${offset} 週`;
+  document.getElementById("shop-week-range").textContent=`${mon.toLocaleDateString('zh-HK',{month:'short',day:'numeric'})} – ${sun.toLocaleDateString('zh-HK',{month:'short',day:'numeric'})}（建議週日採購）`;
 }
-function prevShopWeek(){ D.shopWeekOffset--; updateShopWeekLabel(); renderShop(); }
-function nextShopWeek(){ D.shopWeekOffset++; updateShopWeekLabel(); renderShop(); }
-
+function getShopWeekRecipeIdx(){
+  if(!D.profile||!D.profile.planStartDate)return Math.abs(D.shopWeekOffset)%4;
+  const planStart=new Date(D.profile.planStartDate);
+  const shopMon=new Date();shopMon.setDate(shopMon.getDate()-shopMon.getDay()+1+D.shopWeekOffset*7);
+  const weeksSinceStart=Math.floor((shopMon-planStart)/604800000);
+  return Math.max(0,weeksSinceStart)%4;
+}
+function buildShopList(){
+  const recipeWeekIdx=getShopWeekRecipeIdx();
+  const weekRecipes=getWeekRecipes(recipeWeekIdx);
+  const ingredientSet={};
+  weekRecipes.forEach(r=>{
+    if(r.dinner==="Cheat Dinner 🎉")return;
+    r.ingredients.forEach(ing=>{
+      const cat=INGREDIENT_CATS[ing]||"veg";
+      if(!ingredientSet[ing])ingredientSet[ing]={cat};
+    });
+  });
+  FIXED_SHOP.forEach(f=>{if(!ingredientSet[f.n])ingredientSet[f.n]={cat:f.cat};});
+  return ingredientSet;
+}
 function renderShop(){
+  updateShopWeekLabel();
+  const recipeWeekIdx=getShopWeekRecipeIdx();
+  const weekRecipes=getWeekRecipes(recipeWeekIdx);
+  document.getElementById("recipe-week-list").textContent=`第 ${recipeWeekIdx+1} 週食譜 — `+weekRecipes.map(r=>r.name).join("、");
+  const shopList=buildShopList();
   const wk=getWeekKey(D.shopWeekOffset);
-  ['protein','carb','veg','fruit'].forEach(cat=>{
-    document.getElementById("sp-"+cat).innerHTML=SHOPD[cat].map((item,i)=>{
-      const bk=`${wk}_${cat}_${i}`;
-      const bought=D.shop[bk+"_bought"];
-      const used=D.shop[bk+"_used"];
-      return `<div class="si">
-        <input type="checkbox" title="已購買" ${bought?"checked":""} onchange="togShop('${bk}_bought',this.checked)">
-        <span class="${used?'used':''}">${item.n}</span>
-        <span class="qty">${item.q}</span>
-        <input type="checkbox" title="已用完" style="accent-color:var(--a2)" ${used?"checked":""} onchange="togShop('${bk}_used',this.checked)">
-        <span style="font-size:.62rem;color:var(--mt)">用完</span>
-      </div>`;
-    }).join("");
-  });
+  const grouped={protein:[],carb:[],veg:[],seasoning:[]};
+  Object.entries(shopList).forEach(([name,{cat}])=>{(grouped[cat]||grouped.veg).push(name);});
+  const html=Object.entries(SHOP_CATS).map(([cat,{label,color}])=>`
+    <div class="shop-cat"><h3 style="color:${color}">${label}</h3>
+      ${grouped[cat].map((name,i)=>{
+        const k=`${wk}_${cat}_${i}_${name.replace(/[\s\/]/g,'_')}`;
+        const bought=D.shop[k+"_b"],used=D.shop[k+"_u"];
+        return `<div class="si ${used?'used-item':''}">
+          <input type="checkbox" title="已購買" ${bought?"checked":""} onchange="togShop('${k}_b',this.checked)">
+          <span>${name}</span>
+          <input type="checkbox" title="已用完" style="accent-color:var(--a2);margin-left:auto" ${used?"checked":""} onchange="togShop('${k}_u',this.checked)">
+          <span style="font-size:.62rem;color:var(--mt)">用完</span>
+        </div>`;
+      }).join("")}
+    </div>`).join("");
+  document.getElementById("shop-content").innerHTML=html;
 }
-function togShop(k,v){ D.shop[k]=v; saveLocal(); }
-function clearShop(){
-  const wk=getWeekKey(D.shopWeekOffset);
-  Object.keys(D.shop).forEach(k=>{ if(k.startsWith(wk)) delete D.shop[k]; });
-  saveLocal(); renderShop();
-}
+function togShop(k,v){D.shop[k]=v;saveLocal();}
+function clearShop(){const wk=getWeekKey(D.shopWeekOffset);Object.keys(D.shop).forEach(k=>{if(k.startsWith(wk))delete D.shop[k];});saveLocal();renderShop();}
 function carryOverUsed(){
-  const wk=getWeekKey(D.shopWeekOffset);
-  const nwk=getWeekKey(D.shopWeekOffset+1);
+  const wk=getWeekKey(D.shopWeekOffset),nwk=getWeekKey(D.shopWeekOffset+1);
   let count=0;
-  Object.keys(D.shop).forEach(k=>{
-    if(k.startsWith(wk)&&k.endsWith("_used")&&D.shop[k]){
-      const nk=k.replace(wk,nwk).replace("_used","_bought");
-      D.shop[nk]=false;
-      count++;
-    }
-  });
+  Object.keys(D.shop).forEach(k=>{if(k.startsWith(wk)&&k.endsWith("_u")&&D.shop[k]){D.shop[k.replace(wk,nwk).replace("_u","_b")]=false;count++;}});
   saveLocal();
   const msg=document.getElementById("carry-msg");
-  msg.textContent=`已將 ${count} 項食材標記加入下週清單`;
-  msg.style.display="block";
+  msg.textContent=`已將 ${count} 項食材加入下週清單`;msg.style.display="block";
   setTimeout(()=>msg.style.display="none",3000);
 }
-
-// ── Profile ──
-let _planDaysVal=90;
-function setPlanDays(n,btn){
-  _planDaysVal=n;
-  document.getElementById("p-days").value=n;
-  document.querySelectorAll(".plan-btn").forEach(b=>b.classList.remove("sel"));
-  btn.classList.add("sel");
+function prevShopWeek(){D.shopWeekOffset--;renderShop();}
+function nextShopWeek(){D.shopWeekOffset++;renderShop();}
+function renderAvoidGrid(){
+  document.getElementById("avoid-grid").innerHTML=AVOID_OPTIONS.map(o=>
+    `<div class="avoid-tag ${D.selectedAvoid.includes(o.key)?'sel':''}" onclick="toggleAvoid('${o.key}',this)">${o.label}</div>`
+  ).join("");
 }
+function toggleAvoid(key,el){el.classList.toggle("sel");if(el.classList.contains("sel"))D.selectedAvoid.push(key);else D.selectedAvoid=D.selectedAvoid.filter(k=>k!==key);}
+function setPlanDays(n,btn){document.getElementById("p-days").value=n;document.querySelectorAll(".plan-btn").forEach(b=>b.classList.remove("sel"));btn.classList.add("sel");}
 function loadProfileUI(){
-  if(!D.profile) return;
-  if(D.profile.planStartDate) document.getElementById("p-start").value=D.profile.planStartDate;
-  if(D.profile.planDays){
-    document.getElementById("p-days").value=D.profile.planDays;
-    _planDaysVal=parseInt(D.profile.planDays);
-    document.querySelectorAll(".plan-btn").forEach(b=>{
-      if(parseInt(b.textContent)===_planDaysVal) b.classList.add("sel");
-      else b.classList.remove("sel");
-    });
-  }
-  if(D.profile.height) document.getElementById("p-height").value=D.profile.height;
-  if(D.profile.goalWeight) document.getElementById("p-goal").value=D.profile.goalWeight;
-  if(D.profile.goalType) document.getElementById("p-gtype").value=D.profile.goalType;
+  if(!D.profile)return;
+  if(D.profile.planStartDate)document.getElementById("p-start").value=D.profile.planStartDate;
+  if(D.profile.planDays){document.getElementById("p-days").value=D.profile.planDays;document.querySelectorAll(".plan-btn").forEach(b=>{if(parseInt(b.textContent)===parseInt(D.profile.planDays))b.classList.add("sel");else b.classList.remove("sel");});}
+  if(D.profile.height)document.getElementById("p-height").value=D.profile.height;
+  if(D.profile.goalWeight)document.getElementById("p-goal").value=D.profile.goalWeight;
+  if(D.profile.goalType)document.getElementById("p-gtype").value=D.profile.goalType;
+  if(D.profile.allergies)document.getElementById("p-allergies").value=D.profile.allergies;
+  if(D.profile.avoid){D.selectedAvoid=D.profile.avoid;renderAvoidGrid();}
   updateBMICard();
 }
 function updateBMICard(){
   const h=parseFloat(document.getElementById("p-height").value)||null;
-  const lastBS=D.bodyStats[0];
-  const w=lastBS?lastBS.weight:null;
-  if(!h||!w){ document.getElementById("bmi-card").style.display="none"; return; }
+  const lastBS=D.bodyStats[0];const w=lastBS?lastBS.weight:null;
+  if(!h||!w){document.getElementById("bmi-card").style.display="none";return;}
   document.getElementById("bmi-card").style.display="block";
-  const bmi=calcBMI(w,h);
-  const tdee=calcTDEE(w,h);
+  const bmi=calcBMI(w,h),tdee=calcTDEE(w,h);
   document.getElementById("calc-bmi").textContent=bmi;
-  document.getElementById("calc-bmi-label").textContent=bmiLabel(bmi);
+  document.getElementById("calc-bmi-l").textContent=bmiLabel(bmi);
   document.getElementById("calc-tdee").textContent=tdee?tdee.toLocaleString():"--";
-  document.getElementById("calc-deficit").textContent=tdee?Math.round(tdee-450).toLocaleString():"--";
+  document.getElementById("calc-def").textContent=tdee?Math.round(tdee-450).toLocaleString():"--";
 }
 async function saveProfile(){
-  const profile={
-    planStartDate:document.getElementById("p-start").value,
-    planDays:parseInt(document.getElementById("p-days").value)||90,
-    height:parseFloat(document.getElementById("p-height").value)||"",
-    goalWeight:parseFloat(document.getElementById("p-goal").value)||"",
-    goalType:document.getElementById("p-gtype").value
-  };
-  const btn=document.getElementById("btnProfile");
-  btn.disabled=true; btn.innerHTML='<span class="spin"></span>儲存中...';
+  const profile={planStartDate:document.getElementById("p-start").value,planDays:parseInt(document.getElementById("p-days").value)||90,height:parseFloat(document.getElementById("p-height").value)||"",goalWeight:parseFloat(document.getElementById("p-goal").value)||"",goalType:document.getElementById("p-gtype").value,avoid:D.selectedAvoid,allergies:document.getElementById("p-allergies").value};
+  const btn=document.getElementById("btnProfile");btn.disabled=true;btn.innerHTML='<span class="spin"></span>儲存中...';
   const r=await api({action:"saveProfile",token:S.token,profile});
-  btn.disabled=false; btn.textContent="💾 儲存設定";
-  if(r.success){
-    D.profile=profile; D.planDays=profile.planDays;
-    updateBMICard(); renderHome();
-    toast("✅ 個人資料已儲存！");
-  } else toast("❌ "+(r.error||"儲存失敗"),"err");
+  btn.disabled=false;btn.textContent="💾 儲存設定";
+  if(r.success){D.profile=profile;D.planDays=profile.planDays;D.selectedAvoid=profile.avoid||[];updateBMICard();renderHome();renderMealTab();renderShop();toast("✅ 已儲存！食譜和購物清單已更新。");}
+  else toast("❌ "+(r.error||"失敗"),"err");
 }
-
-// ── PW modal ──
-function openPwModal(){
-  document.getElementById("pw-modal").classList.add("open");
-  document.getElementById("pmerr").style.display="none";
-  ["pmo","pmn","pmc"].forEach(id=>document.getElementById(id).value="");
-}
+function openPwModal(){document.getElementById("pw-modal").classList.add("open");document.getElementById("pmerr").style.display="none";["pmo","pmn","pmc"].forEach(id=>document.getElementById(id).value="");}
 async function inAppChangePw(){
-  const o=document.getElementById("pmo").value;
-  const n=document.getElementById("pmn").value;
-  const c=document.getElementById("pmc").value;
-  const e=document.getElementById("pmerr"); e.style.display="none";
+  const o=document.getElementById("pmo").value,n=document.getElementById("pmn").value,c=document.getElementById("pmc").value;
+  const e=document.getElementById("pmerr");e.style.display="none";
   if(!o||!n){e.textContent="請填寫全部欄位";e.style.display="block";return;}
   if(n!==c){e.textContent="兩次密碼不一致";e.style.display="block";return;}
   if(n.length<6){e.textContent="新密碼至少 6 字";e.style.display="block";return;}
   const r=await api({action:"changePassword",token:S.token,oldPassword:o,newPassword:n});
-  if(r.success){closeModal("pw-modal");toast("✅ 密碼已更改！");}
-  else{e.textContent=r.error||"更改失敗";e.style.display="block";}
+  if(r.success){closeModal("pw-modal");toast("✅ 密碼已更改！");}else{e.textContent=r.error||"更改失敗";e.style.display="block";}
 }
-
-// ── Admin ──
-function isAdmin(){ return S.user&&S.user.role==="admin"; }
+function isAdmin(){return S.user&&S.user.role==="admin";}
 async function adminAdd(){
   if(!isAdmin()){toast("❌ 權限不足","err");return;}
   const u={username:document.getElementById("au").value.trim(),displayName:document.getElementById("adn").value.trim(),password:document.getElementById("apw").value,role:document.getElementById("ar").value};
@@ -1309,46 +1240,32 @@ async function adminAdd(){
   else toast("❌ "+(r.error||"失敗"),"err");
 }
 async function adminLoad(){
-  if(!isAdmin()) return;
+  if(!isAdmin())return;
   const r=await api({action:"adminListUsers",token:S.token});
-  if(!r.success){toast("❌ "+(r.error||"載入失敗"),"err");return;}
+  if(!r.success){toast("❌ "+(r.error||"失敗"),"err");return;}
   const tb=document.getElementById("adm-tb");
   if(!r.users.length){tb.innerHTML=`<tr><td colspan="6" style="color:var(--mt);padding:16px;text-align:center">暫無用戶</td></tr>`;return;}
-  tb.innerHTML=r.users.map(u=>`<tr>
-    <td><code style="background:var(--sf);padding:1px 5px;border-radius:4px;font-size:.74rem">${u.username}</code></td>
-    <td>${u.displayName}</td>
-    <td><span class="rb ${u.role}">${u.role==='admin'?'管理員':'用戶'}</span></td>
-    <td>${u.createdAt||"—"}</td>
-    <td>${u.lastLogin||"未登入"}</td>
-    <td><button class="bsm d" onclick="adminDel('${u.username}')">刪除</button></td>
-  </tr>`).join("");
+  tb.innerHTML=r.users.map(u=>`<tr><td><code style="background:var(--sf);padding:1px 5px;border-radius:4px;font-size:.74rem">${u.username}</code></td><td>${u.displayName}</td><td><span class="rb ${u.role}">${u.role==='admin'?'管理員':'用戶'}</span></td><td>${u.createdAt||"—"}</td><td>${u.lastLogin||"未登入"}</td><td><button class="bsm d" onclick="adminDel('${u.username}')">刪除</button></td></tr>`).join("");
 }
 async function adminDel(un){
   if(!isAdmin()){toast("❌ 權限不足","err");return;}
-  if(!confirm(`確定刪除用戶 ${un}？`)) return;
+  if(!confirm(`確定刪除用戶 ${un}？`))return;
   const r=await api({action:"adminDeleteUser",token:S.token,targetUsername:un});
-  if(r.success){toast("✅ 用戶已刪除");adminLoad();}
-  else toast("❌ "+(r.error||"失敗"),"err");
+  if(r.success){toast("✅ 用戶已刪除");adminLoad();}else toast("❌ "+(r.error||"失敗"),"err");
 }
-
-// ── Tab switch ──
 function st(id,btn){
   document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
   document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-  document.getElementById(id).classList.add("active"); btn.classList.add("active");
-  if(id==="t-adm"){
-    document.getElementById("adm-denied").style.display=isAdmin()?"none":"block";
-    document.getElementById("adm-content").style.display=isAdmin()?"block":"none";
-    if(isAdmin()) adminLoad();
-  }
-  if(id==="t-profile") updateBMICard();
+  document.getElementById(id).classList.add("active");btn.classList.add("active");
+  if(id==="t-adm"){document.getElementById("adm-denied").style.display=isAdmin()?"none":"block";document.getElementById("adm-content").style.display=isAdmin()?"block":"none";if(isAdmin())adminLoad();}
+  if(id==="t-meal")renderMealTab();
+  if(id==="t-shop")renderShop();
+  if(id==="t-profile")updateBMICard();
 }
-
-// ── Boot ──
 document.addEventListener("DOMContentLoaded",()=>{
-  loadS(); loadLocal();
+  loadS();loadLocal();
   document.getElementById("ip").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin();});
-  if(S.token&&S.user) initApp();
+  if(S.token&&S.user)initApp();
 });
 </script>
 </body>
