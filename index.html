@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔥 減脂計劃</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap');
+:root{
+  --bg:#0f1117;--surface:#181c27;--card:#1e2336;--border:#2a3050;
+  --accent:#6c63ff;--a2:#ff6b6b;--a3:#43d99e;--a4:#ffd166;
+  --text:#e8eaf0;--muted:#7a85a3;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-serif;min-height:100vh;}
+
+/* ── LOGIN ── */
+#login-screen{position:fixed;inset:0;background:var(--bg);z-index:2000;display:flex;align-items:center;justify-content:center;}
+.lb{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px;max-width:420px;width:90%;}
+.lb-logo{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;color:var(--accent);text-align:center;margin-bottom:4px;}
+.lb-sub{text-align:center;color:var(--muted);font-size:.83rem;margin-bottom:26px;}
+.ltabs{display:flex;gap:3px;background:var(--surface);border-radius:10px;padding:4px;margin-bottom:22px;}
+.ltab{flex:1;padding:8px;border:none;border-radius:7px;background:transparent;color:var(--muted);font-family:'Noto Sans TC',sans-serif;font-size:.83rem;cursor:pointer;}
+.ltab.active{background:var(--accent);color:#fff;font-weight:500;}
+.lsec{display:none;}.lsec.active{display:block;}
+.fi{margin-bottom:14px;}
+.fi label{display:block;font-size:.78rem;color:var(--muted);margin-bottom:4px;}
+.fi input{width:100%;padding:10px 13px;background:var(--surface);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:.88rem;}
+.fi input:focus{outline:none;border-color:var(--accent);}
+.btn-main{width:100%;padding:12px;background:linear-gradient(135deg,var(--accent),#9b59f7);border:none;border-radius:10px;color:#fff;font-size:.93rem;font-weight:600;cursor:pointer;transition:opacity .2s;}
+.btn-main:hover{opacity:.85;}.btn-main:disabled{opacity:.5;cursor:default;}
+.lerr{background:rgba(255,107,107,.15);border:1px solid rgba(255,107,107,.3);border-radius:8px;padding:9px 13px;font-size:.8rem;color:var(--a2);margin-bottom:12px;display:none;}
+.linfo{margin-top:16px;text-align:center;font-size:.74rem;color:var(--muted);}
+
+/* ── SHELL ── */
+#app{display:none;}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;color:var(--accent);}
+.hdr{display:flex;align-items:center;gap:14px;}
+.hd-stats{display:flex;gap:16px;}
+.hs{text-align:center;}
+.hs .v{font-family:'Space Grotesk',sans-serif;font-size:.92rem;font-weight:700;}
+.hs .l{font-size:.63rem;color:var(--muted);}
+.hd-user{font-size:.82rem;color:var(--muted);}
+.hd-user strong{color:var(--text);}
+.bsm{padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.78rem;cursor:pointer;}
+.bsm:hover{border-color:var(--accent);color:var(--accent);}
+.bsm.d{border-color:rgba(255,107,107,.4);color:var(--a2);}
+.sync{display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--muted);}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--a3);}
+.sdot.off{background:var(--a4);}
+
+nav{display:flex;gap:3px;background:var(--surface);padding:7px 13px;border-bottom:1px solid var(--border);overflow-x:auto;}
+nav button{padding:6px 14px;border:none;border-radius:7px;background:transparent;color:var(--muted);font-family:'Noto Sans TC',sans-serif;font-size:.8rem;cursor:pointer;white-space:nowrap;transition:all .2s;}
+nav button.active{background:var(--accent);color:#fff;font-weight:500;}
+
+main{max-width:1100px;margin:0 auto;padding:20px 14px;}
+.tab-content{display:none;}.tab-content.active{display:block;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:20px;margin-bottom:16px;}
+.card h2{font-size:.9rem;font-weight:600;margin-bottom:13px;}
+.stitle{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;margin-bottom:15px;}
+.stitle span{color:var(--accent);}
+
+/* phases */
+.phases{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.pc{padding:13px;border-radius:12px;border:1px solid;}
+.p1{border-color:var(--accent);background:rgba(108,99,255,.1);}
+.p2{border-color:var(--a2);background:rgba(255,107,107,.1);}
+.p3{border-color:var(--a3);background:rgba(67,217,158,.1);}
+.pn{font-size:.64rem;font-weight:700;letter-spacing:.08em;margin-bottom:3px;}
+.p1 .pn{color:var(--accent);}.p2 .pn{color:var(--a2);}.p3 .pn{color:var(--a3);}
+.pc h3{font-size:.82rem;margin-bottom:3px;}
+.pc p{font-size:.72rem;color:var(--muted);line-height:1.6;}
+
+/* calendar */
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+.cnav{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:5px 11px;border-radius:7px;cursor:pointer;font-size:.78rem;}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cdn{text-align:center;font-size:.66rem;color:var(--muted);padding:3px 0;}
+.cc{aspect-ratio:1;border-radius:8px;border:1px solid transparent;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;position:relative;font-size:.74rem;}
+.cc:hover{border-color:var(--accent);}
+.cc.today{border-color:var(--accent);color:var(--accent);font-weight:700;}
+.cc.has-data::after{content:'';position:absolute;bottom:3px;width:4px;height:4px;border-radius:50%;background:var(--a3);}
+.cc.cheat{background:rgba(255,107,107,.13);}
+.cc.wod{background:rgba(108,99,255,.1);}
+.cc.emp{background:transparent;border-color:transparent;cursor:default;}
+
+/* log form */
+.lg{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.fg label{display:block;font-size:.76rem;color:var(--muted);margin-bottom:4px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:8px 11px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:.84rem;}
+.fg textarea{resize:vertical;min-height:70px;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--accent);}
+.bsave{padding:9px 22px;background:linear-gradient(135deg,var(--a3),#2bb57d);border:none;border-radius:8px;color:#0f1117;font-weight:700;font-size:.84rem;cursor:pointer;margin-top:6px;}
+.bexp{padding:9px 22px;background:transparent;border:1px solid var(--accent);border-radius:8px;color:var(--accent);font-size:.84rem;cursor:pointer;margin-left:7px;}
+.chart-wrap{position:relative;height:175px;margin-top:7px;}
+
+/* meal + workout */
+.mw,.ww{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+.mdc,.wdc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px;}
+.wdc.aday{border-color:var(--accent);}.wdc.rest{opacity:.5;}
+.dlbl{font-size:.64rem;font-weight:700;letter-spacing:.06em;margin-bottom:5px;}
+.mi{font-size:.68rem;color:var(--muted);margin-bottom:3px;line-height:1.5;}
+.mi strong{color:var(--text);display:block;}
+.cbadge{display:inline-block;font-size:.62rem;padding:2px 7px;background:rgba(255,107,107,.2);color:var(--a2);border-radius:16px;margin-top:3px;}
+.ei{font-size:.68rem;color:var(--muted);margin-bottom:2px;}
+.kb{display:inline-block;font-size:.61rem;padding:2px 5px;border-radius:7px;font-weight:600;}
+.ks{background:rgba(108,99,255,.2);color:var(--accent);}
+.kb2{background:rgba(67,217,158,.2);color:var(--a3);}
+
+/* shop */
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.si{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.78rem;}
+.si input[type=checkbox]{accent-color:var(--accent);width:14px;height:14px;cursor:pointer;}
+.si .qty{color:var(--muted);font-size:.72rem;}
+
+/* log table */
+.lt{width:100%;border-collapse:collapse;font-size:.76rem;}
+.lt th{color:var(--muted);font-weight:500;padding:6px 8px;text-align:left;border-bottom:1px solid var(--border);}
+.lt td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:top;}
+.lt tr:hover td{background:rgba(255,255,255,.02);}
+.tag{display:inline-block;font-size:.64rem;padding:2px 6px;border-radius:16px;}
+.tw{background:rgba(108,99,255,.15);color:var(--accent);}
+.tc{background:rgba(255,107,107,.15);color:var(--a2);}
+
+/* admin */
+.at{width:100%;border-collapse:collapse;font-size:.78rem;}
+.at th{background:var(--surface);padding:7px 11px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted);font-weight:500;}
+.at td{padding:7px 11px;border-bottom:1px solid rgba(255,255,255,.04);}
+.at tr:hover td{background:rgba(255,255,255,.02);}
+.rb{display:inline-block;font-size:.64rem;padding:2px 6px;border-radius:16px;}
+.rb.admin{background:rgba(255,209,102,.2);color:var(--a4);}
+.rb.user{background:rgba(67,217,158,.15);color:var(--a3);}
+
+/* sheets table */
+.sht{width:100%;border-collapse:collapse;font-size:.76rem;}
+.sht th{background:var(--surface);padding:7px 11px;text-align:left;font-weight:600;border:1px solid var(--border);color:var(--accent);}
+.sht td{padding:6px 11px;border:1px solid var(--border);color:var(--muted);}
+.sht tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+
+/* tip grid */
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.tc2{background:var(--surface);border-radius:10px;padding:13px;border-left:3px solid;}
+.tc2.g{border-color:var(--a3);}.tc2.p{border-color:var(--accent);}
+.tc2.r{border-color:var(--a2);}.tc2.y{border-color:var(--a4);}
+.tc2 h4{font-size:.78rem;margin-bottom:4px;}
+.tc2 p{font-size:.72rem;color:var(--muted);line-height:1.6;}
+
+/* modal */
+.mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;align-items:center;justify-content:center;}
+.mov.open{display:flex;}
+.mo{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;max-width:440px;width:90%;max-height:82vh;overflow-y:auto;}
+.mclose{float:right;background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;}
+
+/* toast */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 18px;font-size:.83rem;z-index:9999;transform:translateY(16px);opacity:0;transition:all .28s;pointer-events:none;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.ok{border-color:rgba(67,217,158,.4);color:var(--a3);}
+#toast.err{border-color:rgba(255,107,107,.4);color:var(--a2);}
+
+/* spinner */
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.2);border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:5px;}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+.row{display:flex;gap:13px;}
+.col{flex:1;}
+
+@media(max-width:700px){
+  .lg,.sg,.phases,.tg{grid-template-columns:1fr 1fr;}
+  .mw,.ww{grid-template-columns:repeat(3,1fr);}
+  .hd-stats{display:none;}
+  .row{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div id="login-screen">
+  <div class="lb">
+    <div class="lb-logo">🔥 減脂計劃</div>
+    <div class="lb-sub">記錄你的三個月減脂旅程</div>
+    <div class="ltabs">
+      <button class="ltab active" onclick="ltab('lf',this)">登入</button>
+      <button class="ltab" onclick="ltab('cpf',this)">更改密碼</button>
+    </div>
+
+    <!-- login -->
+    <div id="lf" class="lsec active">
+      <div id="lerr" class="lerr"></div>
+      <div class="fi"><label>用戶名</label><input id="iu" type="text" placeholder="Username" autocomplete="username"/></div>
+      <div class="fi"><label>密碼</label><input id="ip" type="password" placeholder="Password" autocomplete="current-password"/></div>
+      <button class="btn-main" id="btnl" onclick="doLogin()">登入</button>
+    </div>
+
+    <!-- change pw -->
+    <div id="cpf" class="lsec">
+      <div id="cperr" class="lerr"></div>
+      <div class="fi"><label>用戶名</label><input id="cpu" type="text" placeholder="Username"/></div>
+      <div class="fi"><label>舊密碼</label><input id="cpo" type="password" placeholder="舊密碼"/></div>
+      <div class="fi"><label>新密碼（最少 6 字）</label><input id="cpn" type="password" placeholder="新密碼"/></div>
+      <div class="fi"><label>確認新密碼</label><input id="cpc" type="password" placeholder="再輸入一次"/></div>
+      <button class="btn-main" onclick="doChangePw()">更改密碼</button>
+    </div>
+
+    <div class="linfo">沒有帳號？請聯絡管理員開設</div>
+  </div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div id="app">
+<header>
+  <div class="logo">🔥 <span id="hd-pname">減脂計劃</span></div>
+  <div class="hdr">
+    <div class="hd-stats">
+      <div class="hs"><div class="v" id="hd-day">Day 1</div><div class="l">今天</div></div>
+      <div class="hs"><div class="v" id="hd-wt">-- kg</div><div class="l">最新體重</div></div>
+      <div class="hs"><div class="v" id="hd-ph">P1</div><div class="l">階段</div></div>
+    </div>
+    <div class="hd-user">你好，<strong id="hd-dn"></strong></div>
+    <div class="sync"><div class="sdot" id="sdot"></div><span id="stxt">已同步</span></div>
+    <button class="bsm" onclick="openPwModal()">改密碼</button>
+    <button class="bsm d" onclick="logout()">登出</button>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="st('t-home',this)">🏠 總覽</button>
+  <button onclick="st('t-cal',this)">📅 日曆</button>
+  <button onclick="st('t-log',this)">✍️ 紀錄</button>
+  <button onclick="st('t-meal',this)">🥗 飲食</button>
+  <button onclick="st('t-wo',this)">💪 運動</button>
+  <button onclick="st('t-shop',this)">🛒 購物</button>
+  <button onclick="st('t-sheets',this)">📊 Sheets</button>
+  <button id="admBtn" style="display:none" onclick="st('t-adm',this)">⚙️ 管理員</button>
+</nav>
+
+<main>
+
+<!-- HOME -->
+<div id="t-home" class="tab-content active">
+  <div class="stitle">今日概況 <span id="td-date" style="font-size:.82rem;font-weight:400;color:var(--muted)"></span></div>
+  <div class="phases">
+    <div class="pc p1"><div class="pn">PHASE 1 · 第 1–4 週</div><h3>適應期</h3><p>建立習慣，低強度有氧+核心，赤字 300–400 kcal，目標 −1~2 kg</p></div>
+    <div class="pc p2"><div class="pn">PHASE 2 · 第 5–8 週</div><h3>燃脂期</h3><p>HIIT+游泳，赤字 400–500 kcal，目標 −2~3 kg</p></div>
+    <div class="pc p3"><div class="pn">PHASE 3 · 第 9–12 週</div><h3>精雕期</h3><p>防平台期，維持肌肉，再 −1~2 kg + 體態提升</p></div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="card"><h2>📅 今日安排</h2><div id="today-plan" style="font-size:.83rem;line-height:2;color:var(--muted)">載入中...</div></div>
+    </div>
+    <div class="col">
+      <div class="card"><h2>⚖️ 體重趨勢</h2><div class="chart-wrap"><canvas id="wChart"></canvas></div></div>
+    </div>
+  </div>
+  <div class="card"><h2>📌 核心原則</h2>
+    <div class="tg">
+      <div class="tc2 g"><h4>🍳 烹飪：水煮 + 蒸</h4><p>零油脂，調味以低鈉醬油、檸檬汁、薑絲、黑胡椒為主。</p></div>
+      <div class="tc2 p"><h4>💪 運動時間表</h4><p>週二/五/六/日 = 主訓練（45–60分）。其餘日輕鬆恢復。</p></div>
+      <div class="tc2 r"><h4>🎉 Cheat Day</h4><p>每兩週 1 次（週六晚餐），防止代謝停滯。</p></div>
+      <div class="tc2 y"><h4>🌅 固定早餐</h4><p>燕麥沖泡 + 水煮蛋 2個 + 水果 + 無糖豆漿。</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- CALENDAR -->
+<div id="t-cal" class="tab-content">
+  <div class="stitle">📅 計劃 <span>日曆</span></div>
+  <div class="card">
+    <div class="ch">
+      <button class="cnav" onclick="prevM()">◀</button>
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:600" id="cal-title"></div>
+      <button class="cnav" onclick="nextM()">▶</button>
+    </div>
+    <div class="cal"><div class="cdn">日</div><div class="cdn">一</div><div class="cdn">二</div><div class="cdn">三</div><div class="cdn">四</div><div class="cdn">五</div><div class="cdn">六</div></div>
+    <div class="cal" id="cal-grid"></div>
+    <div style="margin-top:11px;display:flex;gap:11px;flex-wrap:wrap;font-size:.72rem;color:var(--muted)">
+      <span>🟣 主訓練日</span><span>🔴 Cheat Day</span><span>🟢 已紀錄</span>
+    </div>
+  </div>
+</div>
+
+<!-- LOG -->
+<div id="t-log" class="tab-content">
+  <div class="stitle">✍️ 每日 <span>紀錄</span></div>
+  <div class="card">
+    <h2>新增 / 更新紀錄</h2>
+    <div class="lg">
+      <div class="fg"><label>📅 日期</label><input type="date" id="ld"/></div>
+      <div class="fg"><label>⏰ 時間</label><input type="time" id="lt"/></div>
+      <div class="fg"><label>⚖️ 體重 (kg) — 早上空腹最準</label><input type="number" id="lw" placeholder="64.5" step="0.1"/></div>
+      <div class="fg"><label>🏃 今日運動</label>
+        <select id="le">
+          <option value="">— 選擇 —</option>
+          <option>跑步 30分鐘</option><option>跑步 HIIT 35分鐘</option>
+          <option>游泳 30分鐘</option><option>游泳 45分鐘</option>
+          <option>居家 HIIT 20分鐘</option><option>居家 HIIT 30分鐘</option>
+          <option>瑜伽 / 核心訓練 25分鐘</option>
+          <option>散步 30分鐘</option><option>休息日</option>
+        </select>
+      </div>
+      <div class="fg" style="grid-column:1/-1"><label>🥗 今日飲食</label>
+        <textarea id="lf" placeholder="早餐：燕麥+水煮蛋，午餐：蒸雞胸+水煮花椰菜..."></textarea>
+      </div>
+      <div class="fg"><label>💧 喝水（杯）</label><input type="number" id="lwater" placeholder="8" min="0" max="20"/></div>
+      <div class="fg"><label>😴 睡眠（小時）</label><input type="number" id="lsleep" placeholder="7.5" step="0.5"/></div>
+      <div class="fg"><label>😊 狀態 1–5</label><input type="number" id="lmood" placeholder="4" min="1" max="5"/></div>
+      <div class="fg"><label>🎉 Cheat Day？</label>
+        <select id="lcheat"><option value="否">否</option><option value="是">是</option></select>
+      </div>
+      <div class="fg" style="grid-column:1/-1"><label>📝 備注</label>
+        <input type="text" id="lnote" placeholder="今天感覺怎樣？有沒有偷懶？"/>
+      </div>
+    </div>
+    <button class="bsave" id="btnSave" onclick="saveLog()">💾 儲存到 Sheets</button>
+    <button class="bexp" onclick="exportCSV()">📥 匯出 CSV</button>
+  </div>
+  <div class="card">
+    <h2>歷史紀錄 <span id="logCnt" style="font-size:.74rem;color:var(--muted);font-weight:400"></span></h2>
+    <div style="overflow-x:auto">
+      <table class="lt">
+        <thead><tr><th>日期</th><th>體重</th><th>運動</th><th>飲食</th><th>水</th><th>睡</th><th>狀態</th><th>備注</th></tr></thead>
+        <tbody id="log-tb"></tbody>
+      </table>
+    </div>
+    <div id="log-empty" style="text-align:center;color:var(--muted);padding:26px;font-size:.83rem">暫無紀錄，快去新增！</div>
+  </div>
+</div>
+
+<!-- MEAL -->
+<div id="t-meal" class="tab-content">
+  <div class="stitle">🥗 飲食 <span>計劃</span></div>
+  <div class="card">
+    <h2>🌅 固定早餐（每天，零烹飪版）</h2>
+    <div style="display:flex;gap:11px;flex-wrap:wrap">
+      <div style="flex:1;min-width:155px;background:var(--surface);border-radius:9px;padding:12px">
+        <div style="margin-bottom:5px">🥤 燕麥沖泡</div>
+        <div style="font-size:.74rem;color:var(--muted);line-height:1.8">即食燕麥片 40g<br>無糖豆漿沖泡<br>可加少量肉桂粉</div>
+      </div>
+      <div style="flex:1;min-width:155px;background:var(--surface);border-radius:9px;padding:12px">
+        <div style="margin-bottom:5px">🥚 水煮蛋</div>
+        <div style="font-size:.74rem;color:var(--muted);line-height:1.8">雞蛋 2個<br>水煮 8–10 分鐘<br>少量鹽調味</div>
+      </div>
+      <div style="flex:1;min-width:155px;background:var(--surface);border-radius:9px;padding:12px">
+        <div style="margin-bottom:5px">🍎 水果</div>
+        <div style="font-size:.74rem;color:var(--muted);line-height:1.8">蘋果 1個 或<br>香蕉（訓練日）<br>奇異果 1個</div>
+      </div>
+    </div>
+  </div>
+  <div class="card"><h2>七天輪替食譜（全水煮 / 蒸）</h2><div class="mw" id="meal-grid"></div></div>
+  <div class="card"><h2>🍳 詳細食譜</h2><div id="recipe-list"></div></div>
+  <div class="card">
+    <h2>🧂 無油調味秘訣</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;font-size:.8rem">
+      <div style="background:var(--surface);border-radius:9px;padding:11px"><strong>🍋 檸檬汁 + 黑胡椒</strong><br><span style="color:var(--muted)">蒸魚、雞胸肉去腥提鮮</span></div>
+      <div style="background:var(--surface);border-radius:9px;padding:11px"><strong>🧄 蒜末 + 低鈉醬油</strong><br><span style="color:var(--muted)">燙青菜萬能醬</span></div>
+      <div style="background:var(--surface);border-radius:9px;padding:11px"><strong>🫚 芝麻醬稀釋拌</strong><br><span style="color:var(--muted)">雞胸絲，口感豐富不膩</span></div>
+      <div style="background:var(--surface);border-radius:9px;padding:11px"><strong>🌿 薑絲 + 蔥花</strong><br><span style="color:var(--muted)">蒸魚必備，去腥增香</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- WORKOUT -->
+<div id="t-wo" class="tab-content">
+  <div class="stitle">💪 運動 <span>計劃</span></div>
+  <div class="card"><h2>每週安排</h2><div class="ww" id="wo-grid"></div></div>
+  <div class="card">
+    <h2>🔥 燃脂效率排名</h2>
+    <div style="font-size:.8rem;line-height:2.2;color:var(--muted)">
+      <div>🥇 <strong style="color:var(--text)">游泳 45分鐘</strong> — 全身，約 400–500 kcal，低衝擊護膝</div>
+      <div>🥈 <strong style="color:var(--text)">跑步 HIIT</strong> — 後燃效應最強，30分 350–450 kcal</div>
+      <div>🥉 <strong style="color:var(--text)">居家 HIIT（瑜伽墊）</strong> — 20分 250–320 kcal</div>
+      <div>4️⃣ <strong style="color:var(--text)">瑜伽 / 核心</strong> — 恢復日首選</div>
+    </div>
+  </div>
+  <div class="card"><h2>居家訓練詳細計劃</h2><div id="wo-detail"></div></div>
+</div>
+
+<!-- SHOP -->
+<div id="t-shop" class="tab-content">
+  <div class="stitle">🛒 <span>購物清單</span></div>
+  <div class="card">
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:12px">每週採購清單（水煮/蒸專用）。勾選已買的！</p>
+    <div class="sg">
+      <div><h3 style="font-size:.78rem;color:var(--a3);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)">🥩 蛋白質</h3><div id="sp-protein"></div></div>
+      <div><h3 style="font-size:.78rem;color:var(--a4);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)">🌾 澱粉</h3><div id="sp-carb"></div></div>
+      <div><h3 style="font-size:.78rem;color:var(--a3);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)">🥦 蔬菜</h3><div id="sp-veg"></div></div>
+      <div><h3 style="font-size:.78rem;color:var(--a2);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)">🍎 水果+調味</h3><div id="sp-fruit"></div></div>
+    </div>
+    <button class="bexp" style="margin-top:11px" onclick="clearShop()">🔄 重置清單</button>
+  </div>
+</div>
+
+<!-- SHEETS GUIDE -->
+<div id="t-sheets" class="tab-content">
+  <div class="stitle">📊 Google Sheets <span>結構說明</span></div>
+  <div class="card">
+    <h2>系統自動建立的兩個分頁</h2>
+    <div style="overflow-x:auto">
+      <table class="sht">
+        <thead><tr><th>分頁名</th><th>用途</th><th>欄位</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Users</strong></td><td>用戶資料庫</td><td>Username / PasswordHash / DisplayName / Role / StartDate / StartWeight / GoalWeight / CreatedAt / LastLogin</td></tr>
+          <tr><td><strong>Logs</strong></td><td>所有人每日紀錄</td><td>Username / Date / Time / Weight_kg / Exercise / Food / Water_Cups / Sleep_Hours / Is_Cheat_Day / Mood / Notes / SavedAt</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <h2>📈 建議建立的圖表</h2>
+    <div class="tg">
+      <div class="tc2 p"><h4>體重折線圖</h4><p>按 Username 篩選，X軸 Date，Y軸 Weight_kg，加目標橫線。</p></div>
+      <div class="tc2 g"><h4>每週運動頻率</h4><p>COUNTIF Exercise 欄，對比計劃天數，防偷懶。</p></div>
+      <div class="tc2 y"><h4>多人進度比較</h4><p>PIVOT TABLE 比較各用戶體重變化，互相激勵。</p></div>
+      <div class="tc2 r"><h4>Cheat Day 統計</h4><p>條件格式標記 Is_Cheat_Day = 是，一眼看頻率。</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="t-adm" class="tab-content">
+  <div class="stitle">⚙️ 管理員 <span>控制台</span></div>
+  <div class="card">
+    <h2>新增用戶</h2>
+    <div class="lg">
+      <div class="fg"><label>用戶名（登入用）</label><input type="text" id="au" placeholder="例如 alice"/></div>
+      <div class="fg"><label>顯示名稱</label><input type="text" id="adn" placeholder="例如 Alice 姐"/></div>
+      <div class="fg"><label>初始密碼</label><input type="password" id="apw" placeholder="至少 6 字"/></div>
+      <div class="fg"><label>角色</label>
+        <select id="ar"><option value="user">普通用戶</option><option value="admin">管理員</option></select>
+      </div>
+      <div class="fg"><label>計劃開始日期</label><input type="date" id="asd"/></div>
+      <div class="fg"><label>起始體重 (kg)</label><input type="number" id="asw" placeholder="65" step="0.1"/></div>
+      <div class="fg"><label>目標體重 (kg)</label><input type="number" id="agw" placeholder="57" step="0.1"/></div>
+    </div>
+    <button class="bsave" onclick="adminAdd()">➕ 新增用戶</button>
+  </div>
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
+      <h2 style="margin:0">用戶列表</h2>
+      <button class="bsm" onclick="adminLoad()">🔄 刷新</button>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="at">
+        <thead><tr><th>用戶名</th><th>顯示名</th><th>角色</th><th>開始日期</th><th>目標體重</th><th>最後登入</th><th>操作</th></tr></thead>
+        <tbody id="adm-tb"><tr><td colspan="7" style="color:var(--muted);padding:18px;text-align:center">點擊刷新載入</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</main>
+</div><!-- end #app -->
+
+<!-- Day modal -->
+<div class="mov" id="day-modal">
+  <div class="mo">
+    <button class="mclose" onclick="closeModal('day-modal')">✕</button>
+    <h2 id="dm-title" style="margin-bottom:12px"></h2>
+    <div id="dm-body"></div>
+  </div>
+</div>
+
+<!-- PW modal -->
+<div class="mov" id="pw-modal">
+  <div class="mo" style="max-width:380px">
+    <button class="mclose" onclick="closeModal('pw-modal')">✕</button>
+    <h2 style="margin-bottom:15px">更改密碼</h2>
+    <div id="pmerr" class="lerr"></div>
+    <div class="fi"><label>舊密碼</label><input type="password" id="pmo"/></div>
+    <div class="fi"><label>新密碼（至少 6 字）</label><input type="password" id="pmn"/></div>
+    <div class="fi"><label>確認新密碼</label><input type="password" id="pmc"/></div>
+    <button class="btn-main" onclick="inAppChangePw()">確認更改</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+// ══════════════════════════════════════════════
+//  ★ 把這裡換成你的 Apps Script 網址 ★
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx_C9hUbLxJEg5YwABD5P3V5HISD9SfyW4d3clOP-4WIoGSo0-CTasLmjcX3ggDyKFh/exec";
+// ══════════════════════════════════════════════
+
+let S = { token:null, user:null };   // session
+let D = { logs:[], shop:{}, calY:new Date().getFullYear(), calM:new Date().getMonth() }; // data
+
+// ── persist ──
+function loadS(){ try{ const x=sessionStorage.getItem("fls"); if(x) S=JSON.parse(x); }catch(e){} }
+function saveS(){ sessionStorage.setItem("fls", JSON.stringify(S)); }
+function loadD(){ try{ const x=localStorage.getItem("fld"); if(x) D.shop=JSON.parse(x); }catch(e){} }
+
+// ── api ──
+async function api(body){
+  setSS("sync");
+  try{
+    const r = await fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(body)});
+    const d = await r.json();
+    setSS(d.success?"ok":"err");
+    return d;
+  }catch(e){ setSS("err"); return{success:false,error:"無法連接，請檢查網路"}; }
+}
+function setSS(s){
+  const dot=document.getElementById("sdot"), txt=document.getElementById("stxt");
+  if(!dot) return;
+  if(s==="sync"){dot.className="sdot off";txt.textContent="同步中...";}
+  else if(s==="ok"){dot.className="sdot";txt.textContent="已同步";}
+  else{dot.className="sdot off";txt.textContent="連線異常";}
+}
+
+// ── toast ──
+let _tt;
+function toast(msg,t="ok"){
+  const el=document.getElementById("toast");
+  el.textContent=msg; el.className="show "+t;
+  clearTimeout(_tt); _tt=setTimeout(()=>el.className="",3200);
+}
+
+// ── login tab ──
+function ltab(id,btn){
+  document.querySelectorAll(".lsec").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".ltab").forEach(b=>b.classList.remove("active"));
+  document.getElementById(id).classList.add("active"); btn.classList.add("active");
+}
+
+// ── login ──
+async function doLogin(){
+  const u=document.getElementById("iu").value.trim();
+  const p=document.getElementById("ip").value;
+  const e=document.getElementById("lerr"); e.style.display="none";
+  if(!u||!p){e.textContent="請填寫用戶名和密碼";e.style.display="block";return;}
+  const btn=document.getElementById("btnl");
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span>登入中...';
+  const r=await api({action:"login",username:u,password:p});
+  btn.disabled=false; btn.textContent="登入";
+  if(r.success){ S.token=r.token; S.user=r.user; saveS(); initApp(); }
+  else{ e.textContent=r.error||"登入失敗"; e.style.display="block"; }
+}
+
+async function doChangePw(){
+  const u=document.getElementById("cpu").value.trim();
+  const o=document.getElementById("cpo").value;
+  const n=document.getElementById("cpn").value;
+  const c=document.getElementById("cpc").value;
+  const e=document.getElementById("cperr"); e.style.display="none";
+  if(!u||!o||!n){e.textContent="請填寫全部欄位";e.style.display="block";return;}
+  if(n!==c){e.textContent="兩次密碼不一致";e.style.display="block";return;}
+  if(n.length<6){e.textContent="新密碼至少 6 字";e.style.display="block";return;}
+  const lr=await api({action:"login",username:u,password:o});
+  if(!lr.success){e.textContent="舊密碼不正確";e.style.display="block";return;}
+  const r=await api({action:"changePassword",token:lr.token,oldPassword:o,newPassword:n});
+  if(r.success){ alert("✅ 密碼已更改！請重新登入。"); ltab("lf",document.querySelector(".ltab")); }
+  else{ e.textContent=r.error||"更改失敗"; e.style.display="block"; }
+}
+
+function logout(){ S={token:null,user:null}; saveS(); document.getElementById("app").style.display="none"; document.getElementById("login-screen").style.display="flex"; }
+
+// ── init app ──
+async function initApp(){
+  document.getElementById("login-screen").style.display="none";
+  document.getElementById("app").style.display="block";
+  document.getElementById("hd-dn").textContent = S.user.displayName||S.user.username;
+  document.getElementById("hd-pname").textContent = (S.user.displayName||"我")+"的減脂計劃";
+  if(S.user.role==="admin") document.getElementById("admBtn").style.display="inline-block";
+  // load logs
+  const r=await api({action:"getLogs",token:S.token});
+  if(r.success) D.logs=r.logs.sort((a,b)=>b.date.localeCompare(a.date));
+  // defaults
+  document.getElementById("ld").value=today();
+  document.getElementById("lt").value=new Date().toTimeString().slice(0,5);
+  document.getElementById("td-date").textContent=today();
+  document.getElementById("asd").value=today();
+  D.calY=new Date().getFullYear(); D.calM=new Date().getMonth();
+  updateHdr(); renderTodayPlan(); renderCal(); renderLogHist(); renderWChart();
+  renderMeals(); renderRecipes(); renderWO(); renderWODetail(); renderShop();
+}
+
+// ── helpers ──
+function today(){ return new Date().toISOString().slice(0,10); }
+function dayNum(){
+  const sd=S.user&&S.user.startDate; if(!sd) return 1;
+  return Math.max(1,Math.floor((new Date(today())-new Date(sd))/86400000)+1);
+}
+function phase(d){ return d<=28?1:d<=56?2:3; }
+function isWO(ds){ return [0,2,5,6].includes(new Date(ds).getDay()); }
+function isCD(ds){
+  const sd=S.user&&S.user.startDate; if(!sd) return false;
+  const d=Math.floor((new Date(ds)-new Date(sd))/86400000);
+  return d>0&&d%14===13;
+}
+function updateHdr(){
+  const d=dayNum();
+  document.getElementById("hd-day").textContent="Day "+d;
+  const last=D.logs.filter(l=>l.weight).sort((a,b)=>b.date.localeCompare(a.date))[0];
+  const w=last?last.weight:(S.user.startWeight||null);
+  document.getElementById("hd-wt").textContent=w?w+" kg":"-- kg";
+  document.getElementById("hd-ph").textContent="P"+phase(d);
+}
+
+// ── today plan ──
+const MEALS=[
+  {d:'日',l:'蒸雞胸+水煮花椰菜+蒸地瓜',n:'蒸鮭魚（薑絲）+燙菠菜',c:false},
+  {d:'一',l:'水煮蛋+燙豆腐+毛豆+地瓜',n:'水煮蝦仁+燙高麗菜+糙米',c:false},
+  {d:'二',l:'蒸雞胸絲+水煮四季豆+蒸玉米',n:'蒸鱸魚（蔥薑）+燙花椰菜',c:false},
+  {d:'三',l:'水煮豬里肌+燙菠菜+糙米',n:'蒸豆腐（醬油+薑）+水煮木耳',c:false},
+  {d:'四',l:'蒸雞胸+水煮地瓜葉+蒸南瓜',n:'水煮蝦+燙花椰菜+水煮蛋',c:false},
+  {d:'五',l:'蒸鯛魚+水煮毛豆+蒸地瓜',n:'雞胸絲涼拌黃瓜（醬油+芝麻醬）',c:false},
+  {d:'六',l:'水煮里肌+燙高麗菜+糙米',n:'Cheat Dinner 🎉',c:true},
+];
+const WOS=[
+  {d:'日',m:'游泳 45分鐘 / 跑步 30分鐘',t:'main',dt:['游泳自由式+蛙式交替','目標 800–1000m','緩游 5分放鬆']},
+  {d:'一',m:'拉伸 + 瑜伽 20分鐘',t:'rest',dt:['肩頸放鬆','大腿前後伸展','貓牛式+嬰兒式']},
+  {d:'二',m:'居家 HIIT 30分鐘',t:'main',dt:['開合跳 30s×4','波比跳 20s×4','高抬腿 30s×4','平板撐 40s×3']},
+  {d:'三',m:'散步 30分鐘',t:'light',dt:['快走 30分鐘','腹式呼吸','全身拉伸']},
+  {d:'四',m:'核心訓練 25分鐘',t:'light',dt:['捲腹 15×3','側平板 30s','橋式 15×3']},
+  {d:'五',m:'跑步 HIIT 35分鐘',t:'main',dt:['慢跑熱身 5分','衝刺30s/慢跑90s×8','緩跑收操 5分']},
+  {d:'六',m:'游泳 45分 / 跑步 40分',t:'main',dt:['主力燃脂日','心率 70–80%','搭配 Cheat Dinner']},
+];
+
+function renderTodayPlan(){
+  const dow=new Date().getDay();
+  const ns=['日','一','二','三','四','五','六'];
+  const wo=WOS[dow], ml=MEALS[dow];
+  document.getElementById("today-plan").innerHTML=`
+    <div style="margin-bottom:6px">週<strong>${ns[dow]}</strong>，第 <strong>${dayNum()}</strong> 天
+      ${isCD(today())?'<span class="tag tc">🎉 Cheat Day</span>':''}
+      ${isWO(today())?'<span class="tag tw">💪 訓練日</span>':'<span style="font-size:.74rem;color:var(--muted)">🌿 輕鬆日</span>'}
+    </div>
+    <div style="margin-bottom:4px">🏃 ${wo.m}</div>
+    <div style="margin-bottom:4px">🥗 午餐：${ml.l}</div>
+    <div>🌙 晚餐：${ml.n}</div>`;
+}
+
+// ── calendar ──
+function renderCal(){
+  const y=D.calY,m=D.calM;
+  const ms=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+  document.getElementById("cal-title").textContent=`${y} 年 ${ms[m]}`;
+  const g=document.getElementById("cal-grid"); g.innerHTML="";
+  const first=new Date(y,m,1).getDay(), days=new Date(y,m+1,0).getDate();
+  for(let i=0;i<first;i++){const el=document.createElement("div");el.className="cc emp";g.appendChild(el);}
+  for(let d=1;d<=days;d++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const el=document.createElement("div"); el.className="cc"; el.textContent=d;
+    if(ds===today()) el.classList.add("today");
+    if(isWO(ds)) el.classList.add("wod");
+    if(isCD(ds)) el.classList.add("cheat");
+    if(D.logs.some(l=>l.date===ds)) el.classList.add("has-data");
+    el.onclick=()=>openDayModal(ds);
+    g.appendChild(el);
+  }
+}
+function prevM(){D.calM--;if(D.calM<0){D.calM=11;D.calY--;}renderCal();}
+function nextM(){D.calM++;if(D.calM>11){D.calM=0;D.calY++;}renderCal();}
+
+function openDayModal(ds){
+  const log=D.logs.find(l=>l.date===ds);
+  document.getElementById("dm-title").textContent=ds+(isCD(ds)?' 🎉 Cheat Day':'')+(isWO(ds)?' 💪':'');
+  document.getElementById("dm-body").innerHTML=log?`
+    <div style="font-size:.82rem;line-height:2.1;color:var(--muted)">
+      ${log.weight?`<div>⚖️ 體重：<strong style="color:var(--text)">${log.weight} kg</strong></div>`:''}
+      ${log.exercise?`<div>🏃 運動：${log.exercise}</div>`:''}
+      ${log.food?`<div>🥗 飲食：${log.food}</div>`:''}
+      ${log.water?`<div>💧 水：${log.water} 杯</div>`:''}
+      ${log.sleep?`<div>😴 睡眠：${log.sleep} 小時</div>`:''}
+      ${log.mood?`<div>😊 狀態：${'⭐'.repeat(parseInt(log.mood)||0)}</div>`:''}
+      ${log.notes?`<div>📝 ${log.notes}</div>`:''}
+    </div>`:`<p style="color:var(--muted);font-size:.82rem">這天還沒有紀錄。</p>`;
+  document.getElementById("day-modal").classList.add("open");
+}
+function closeModal(id){document.getElementById(id).classList.remove("open");}
+
+// ── log ──
+async function saveLog(){
+  const log={
+    date:document.getElementById("ld").value||today(),
+    time:document.getElementById("lt").value,
+    weight:parseFloat(document.getElementById("lw").value)||null,
+    exercise:document.getElementById("le").value,
+    food:document.getElementById("lf").value,
+    water:parseInt(document.getElementById("lwater").value)||null,
+    sleep:parseFloat(document.getElementById("lsleep").value)||null,
+    isCheatDay:document.getElementById("lcheat").value,
+    mood:parseInt(document.getElementById("lmood").value)||null,
+    notes:document.getElementById("lnote").value
+  };
+  const btn=document.getElementById("btnSave");
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span>儲存中...';
+  const r=await api({action:"saveLog",token:S.token,log});
+  btn.disabled=false; btn.textContent="💾 儲存到 Sheets";
+  if(r.success){
+    const i=D.logs.findIndex(l=>l.date===log.date);
+    if(i>=0) D.logs[i]=log; else D.logs.push(log);
+    D.logs.sort((a,b)=>b.date.localeCompare(a.date));
+    renderLogHist(); renderWChart(); updateHdr(); renderCal();
+    toast("✅ 已儲存到 Google Sheets！");
+  } else toast("❌ "+(r.error||"儲存失敗"),"err");
+}
+
+function renderLogHist(){
+  const tb=document.getElementById("log-tb"), em=document.getElementById("log-empty");
+  document.getElementById("logCnt").textContent=D.logs.length?`（${D.logs.length} 筆）`:"";
+  if(!D.logs.length){tb.innerHTML="";em.style.display="block";return;}
+  em.style.display="none";
+  tb.innerHTML=D.logs.map(l=>`<tr>
+    <td>${l.date}</td>
+    <td>${l.weight?l.weight+" kg":"—"}</td>
+    <td>${l.exercise?`<span class="tag tw">${l.exercise}</span>`:"—"}</td>
+    <td style="max-width:140px;white-space:pre-wrap;font-size:.71rem">${l.food||"—"}</td>
+    <td>${l.water?l.water+"杯":"—"}</td>
+    <td>${l.sleep?l.sleep+"h":"—"}</td>
+    <td>${l.mood?'⭐'.repeat(parseInt(l.mood)||0):"—"}</td>
+    <td style="font-size:.71rem">${l.notes||"—"}</td>
+  </tr>`).join("");
+}
+
+function exportCSV(){
+  const h=["Date","Time","Weight_kg","Exercise","Food","Water_Cups","Sleep_Hours","Is_Cheat_Day","Mood","Notes"];
+  const rows=D.logs.map(l=>[l.date,l.time||"",l.weight||"",l.exercise||"",
+    `"${(l.food||"").replace(/"/g,'""')}"`,l.water||"",l.sleep||"",l.isCheatDay||"否",l.mood||"",
+    `"${(l.notes||"").replace(/"/g,'""')}"`]);
+  const csv=[h.join(","),...rows.map(r=>r.join(","))].join("\n");
+  const a=document.createElement("a");
+  a.href="data:text/csv;charset=utf-8,\uFEFF"+encodeURIComponent(csv);
+  a.download="減脂紀錄_"+S.user.username+"_"+today()+".csv"; a.click();
+}
+
+// ── weight chart ──
+let wc=null;
+function renderWChart(){
+  const logs=D.logs.filter(l=>l.weight).sort((a,b)=>a.date.localeCompare(b.date));
+  if(wc) wc.destroy();
+  const ctx=document.getElementById("wChart").getContext("2d");
+  const goal=S.user&&S.user.goalWeight?parseFloat(S.user.goalWeight):null;
+  wc=new Chart(ctx,{
+    type:"line",
+    data:{labels:logs.map(l=>l.date.slice(5)),datasets:[{
+      label:"體重 kg",data:logs.map(l=>l.weight),
+      borderColor:"#6c63ff",backgroundColor:"rgba(108,99,255,.1)",borderWidth:2,pointRadius:4,tension:.3,fill:true
+    },goal?{label:"目標",data:logs.map(()=>goal),borderColor:"#43d99e",borderDash:[5,5],borderWidth:1,pointRadius:0}:null].filter(Boolean)},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:"#7a85a3",font:{size:11}}}},
+      scales:{x:{ticks:{color:"#7a85a3",font:{size:10}},grid:{color:"rgba(255,255,255,.05)"}},
+              y:{ticks:{color:"#7a85a3"},grid:{color:"rgba(255,255,255,.05)"}}}}
+  });
+}
+
+// ── meals ──
+function renderMeals(){
+  document.getElementById("meal-grid").innerHTML=MEALS.map(d=>`
+    <div class="mdc">
+      <div class="dlbl" style="color:${d.c?'var(--a2)':'var(--accent)'}">週${d.d}</div>
+      <div class="mi"><strong>🥗 午餐</strong>${d.l}</div>
+      <div class="mi"><strong>🌙 晚餐</strong>${d.n}</div>
+      ${d.c?'<div class="cbadge">Cheat Day</div>':''}
+    </div>`).join("");
+}
+const RECS=[
+  {n:'🐟 蒸鮭魚',t:'12分',m:'蒸',i:'鮭魚200g、薑絲、低鈉醬油',s:'①放薑絲 ②蒸10–12分 ③淋醬油+蔥絲'},
+  {n:'🍗 蒸雞胸',t:'20分',m:'蒸',i:'雞胸150g、薑片、鹽',s:'①鹽醃5分 ②蒸15–18分 ③撕絲蘸醬油+檸檬'},
+  {n:'🦐 水煮蝦',t:'8分',m:'水煮',i:'鮮蝦200g、薑片、鹽',s:'①水滾加薑鹽 ②煮3–4分至橙色 ③浸冷水保彈牙'},
+  {n:'🥦 燙花椰菜',t:'5分',m:'水煮',i:'花椰菜200g、鹽、蒜末',s:'①水滾加鹽 ②汆燙2–3分 ③淋醬油+蒜末'},
+  {n:'🥩 水煮豬里肌',t:'15分',m:'水煮',i:'豬里肌150g、薑蔥、鹽',s:'①水加薑蔥滾 ②煮12–15分 ③切片蘸黑椒+醬油'},
+  {n:'🫘 蒸豆腐',t:'8分',m:'蒸',i:'板豆腐半塊、低鈉醬油、薑末、蔥花',s:'①豆腐切片 ②蒸6–8分 ③淋醬油+薑末+蔥花'},
+];
+function renderRecipes(){
+  document.getElementById("recipe-list").innerHTML=RECS.map(r=>`
+    <div style="margin-bottom:11px;background:var(--surface);border-radius:10px;padding:13px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+        <strong>${r.n}</strong>
+        <span><span class="kb ${r.m==='蒸'?'ks':'kb2'}">${r.m}</span>
+        <span style="font-size:.7rem;color:var(--a3);margin-left:5px">⏱ ${r.t}</span></span>
+      </div>
+      <div style="font-size:.76rem;color:var(--muted);margin-bottom:4px">🛒 ${r.i}</div>
+      <div style="font-size:.76rem;color:var(--muted)">👨‍🍳 ${r.s}</div>
+    </div>`).join("");
+}
+
+// ── workout ──
+function renderWO(){
+  document.getElementById("wo-grid").innerHTML=WOS.map(w=>`
+    <div class="wdc ${w.t==='main'?'aday':w.t==='rest'?'rest':''}">
+      <div class="dlbl" style="color:${w.t==='main'?'var(--accent)':w.t==='light'?'var(--a4)':'var(--muted)'}">
+        週${w.d} ${w.t==='main'?'💪':w.t==='light'?'🌿':'😴'}
+      </div>
+      <div style="font-size:.7rem;font-weight:600;margin-bottom:4px;color:var(--text)">${w.m}</div>
+      ${w.dt.map(d=>`<div class="ei">• ${d}</div>`).join("")}
+    </div>`).join("");
+}
+function renderWODetail(){
+  document.getElementById("wo-detail").innerHTML=`<div style="font-size:.79rem;line-height:1.9;color:var(--muted)">
+    <strong style="color:var(--text);display:block;margin-bottom:5px">週二/五 — 居家 HIIT（30分，瑜伽墊）</strong>
+    熱身 5分 → 開合跳 30s×4 → 波比跳 20s×4 → 高抬腿 30s×4 → 深蹲跳 20s×3 → 平板撐 40s×3 → 緩和 5分
+    <br><br>
+    <strong style="color:var(--text);display:block;margin-bottom:5px">週五 — 跑步 HIIT（35分）</strong>
+    慢跑 5分 → 衝刺30s/慢跑90s×8–10組 → 緩跑 5分
+    <br><br>
+    <strong style="color:var(--text);display:block;margin-bottom:5px">週六/日 — 游泳（45分）</strong>
+    自由式+蛙式交替，每100m休息30s，目標800–1000m
+  </div>`;
+}
+
+// ── shop ──
+const SHOPD={
+  protein:[{n:'雞胸肉',q:'500g×2'},{n:'雞蛋',q:'一打'},{n:'鮭魚切片',q:'200g×2'},
+    {n:'鱸魚/鯛魚',q:'200g×2'},{n:'鮮蝦/蝦仁',q:'300g'},{n:'豬里肌',q:'300g'},
+    {n:'板豆腐',q:'2塊'},{n:'無糖豆漿',q:'1000ml×2'}],
+  carb:[{n:'即食燕麥片',q:'500g'},{n:'糙米',q:'1kg'},{n:'地瓜',q:'500g'},
+    {n:'南瓜',q:'半個'},{n:'玉米',q:'2條'}],
+  veg:[{n:'花椰菜（白/綠）',q:'各1棵'},{n:'菠菜',q:'2把'},{n:'高麗菜',q:'半顆'},
+    {n:'四季豆',q:'200g'},{n:'地瓜葉',q:'2把'},{n:'小黃瓜',q:'3條'},
+    {n:'毛豆（冷凍）',q:'200g'},{n:'木耳（乾）',q:'50g'}],
+  fruit:[{n:'蘋果',q:'6個'},{n:'香蕉',q:'6條'},{n:'奇異果',q:'4個'},
+    {n:'檸檬',q:'3個'},{n:'低鈉醬油',q:'1瓶'},{n:'薑',q:'~100g'},
+    {n:'蒜頭',q:'1顆'},{n:'黑胡椒粉',q:'1罐'}]
+};
+function renderShop(){
+  ['protein','carb','veg','fruit'].forEach(cat=>{
+    document.getElementById("sp-"+cat).innerHTML=SHOPD[cat].map((item,i)=>{
+      const k=cat+"_"+i, chk=D.shop[k];
+      return `<div class="si">
+        <input type="checkbox" ${chk?"checked":""} onchange="togShop('${k}',this.checked)">
+        <span style="${chk?"text-decoration:line-through;opacity:.4":""}">${item.n}</span>
+        <span class="qty">${item.q}</span>
+      </div>`;
+    }).join("");
+  });
+}
+function togShop(k,v){ D.shop[k]=v; localStorage.setItem("fld",JSON.stringify(D.shop)); }
+function clearShop(){ D.shop={}; localStorage.removeItem("fld"); renderShop(); }
+
+// ── admin ──
+async function adminAdd(){
+  const u={
+    username:document.getElementById("au").value.trim(),
+    displayName:document.getElementById("adn").value.trim(),
+    password:document.getElementById("apw").value,
+    role:document.getElementById("ar").value,
+    startDate:document.getElementById("asd").value,
+    startWeight:parseFloat(document.getElementById("asw").value)||"",
+    goalWeight:parseFloat(document.getElementById("agw").value)||""
+  };
+  if(!u.username||!u.password){toast("請填寫用戶名和密碼","err");return;}
+  if(u.password.length<6){toast("密碼至少 6 字","err");return;}
+  const r=await api({action:"adminAddUser",token:S.token,newUser:u});
+  if(r.success){
+    toast("✅ 用戶 "+u.username+" 已新增！");
+    ["au","adn","apw","asw","agw"].forEach(id=>document.getElementById(id).value="");
+    adminLoad();
+  } else toast("❌ "+(r.error||"新增失敗"),"err");
+}
+async function adminLoad(){
+  const r=await api({action:"adminListUsers",token:S.token});
+  if(!r.success){toast("❌ "+(r.error||"載入失敗"),"err");return;}
+  const tb=document.getElementById("adm-tb");
+  if(!r.users.length){tb.innerHTML=`<tr><td colspan="7" style="color:var(--muted);padding:18px;text-align:center">暫無用戶</td></tr>`;return;}
+  tb.innerHTML=r.users.map(u=>`<tr>
+    <td><code style="background:var(--surface);padding:1px 5px;border-radius:4px;font-size:.76rem">${u.username}</code></td>
+    <td>${u.displayName}</td>
+    <td><span class="rb ${u.role}">${u.role==='admin'?'管理員':'用戶'}</span></td>
+    <td>${u.startDate||"—"}</td>
+    <td>${u.goalWeight?u.goalWeight+" kg":"—"}</td>
+    <td>${u.lastLogin||"未登入"}</td>
+    <td><button class="bsm d" onclick="adminDel('${u.username}')">刪除</button></td>
+  </tr>`).join("");
+}
+async function adminDel(un){
+  if(!confirm(`確定刪除用戶 ${un}？`)) return;
+  const r=await api({action:"adminDeleteUser",token:S.token,targetUsername:un});
+  if(r.success){toast("✅ 用戶已刪除");adminLoad();}
+  else toast("❌ "+(r.error||"刪除失敗"),"err");
+}
+
+// ── pw modal ──
+function openPwModal(){
+  document.getElementById("pw-modal").classList.add("open");
+  document.getElementById("pmerr").style.display="none";
+  ["pmo","pmn","pmc"].forEach(id=>document.getElementById(id).value="");
+}
+async function inAppChangePw(){
+  const o=document.getElementById("pmo").value;
+  const n=document.getElementById("pmn").value;
+  const c=document.getElementById("pmc").value;
+  const e=document.getElementById("pmerr"); e.style.display="none";
+  if(!o||!n){e.textContent="請填寫全部欄位";e.style.display="block";return;}
+  if(n!==c){e.textContent="兩次密碼不一致";e.style.display="block";return;}
+  if(n.length<6){e.textContent="新密碼至少 6 字";e.style.display="block";return;}
+  const r=await api({action:"changePassword",token:S.token,oldPassword:o,newPassword:n});
+  if(r.success){closeModal("pw-modal");toast("✅ 密碼已更改！");}
+  else{e.textContent=r.error||"更改失敗";e.style.display="block";}
+}
+
+// ── tab switch ──
+function st(id,btn){
+  document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  document.getElementById(id).classList.add("active"); btn.classList.add("active");
+  if(id==="t-adm") adminLoad();
+}
+
+// ── boot ──
+document.addEventListener("DOMContentLoaded",()=>{
+  loadS(); loadD();
+  document.getElementById("ip").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin();});
+  if(S.token&&S.user) initApp();
+});
+</script>
+</body>
+</html>
