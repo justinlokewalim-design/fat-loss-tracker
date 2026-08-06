@@ -411,28 +411,57 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
 
 <!-- SHOPPING -->
 <div id="t-shop" class="tab-content">
-  <div class="stitle">🛒 <span>購物清單</span></div>
-  <div class="card">
-    <div class="week-nav">
+  <div class="stitle">🛒 <span>購物 &amp; 庫存</span></div>
+
+  <!-- Week nav -->
+  <div class="card" style="padding:14px 18px">
+    <div class="week-nav" style="margin-bottom:0">
       <button onclick="prevShopWeek()">◀</button>
       <div>
         <div class="wlbl" id="shop-week-label"></div>
-        <div style="font-size:.72rem;color:var(--mt)" id="shop-week-range"></div>
+        <div style="font-size:.71rem;color:var(--mt)" id="shop-week-range"></div>
       </div>
       <button onclick="nextShopWeek()">▶</button>
-      <div style="margin-left:auto;font-size:.74rem;color:var(--mt)">📅 建議週日採購</div>
+      <div style="margin-left:auto;font-size:.73rem;color:var(--mt)">📅 建議週日採購下週食材</div>
     </div>
-    <div id="recipe-this-week" style="background:var(--sf);border-radius:9px;padding:12px;margin-bottom:12px;font-size:.78rem">
+    <div style="margin-top:10px;background:var(--sf);border-radius:8px;padding:10px;font-size:.77rem">
       <strong>本週食譜：</strong><span id="recipe-week-list" style="color:var(--mt)">載入中...</span>
     </div>
-    <p style="font-size:.76rem;color:var(--mt);margin-bottom:11px">根據本週食譜自動生成。✓ = 已購買，🗑 = 已用完（自動帶入下週）</p>
-    <div class="sg" id="shop-content"></div>
-    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-      <button class="bexp" onclick="clearShop()">🔄 重置本週</button>
-      <button class="bexp" onclick="carryOverUsed()">➡️ 將用完食材帶入下週</button>
-    </div>
-    <div id="carry-msg" style="font-size:.76rem;color:var(--a3);margin-top:8px;display:none"></div>
   </div>
+
+  <!-- Stats bar -->
+  <div id="shop-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px"></div>
+
+  <!-- Two panels side by side -->
+  <div class="row">
+    <!-- LEFT: Buy list -->
+    <div class="col">
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <h2 style="margin:0">🛒 本週採購清單</h2>
+          <button class="bsm" onclick="clearBuyList()">🔄 重置</button>
+        </div>
+        <p style="font-size:.73rem;color:var(--mt);margin-bottom:10px">根據食譜自動生成。勾選表示已購買。庫存充足的食材自動標示可跳過。</p>
+        <div id="buy-list-content"></div>
+        <div id="buy-summary" style="margin-top:10px;font-size:.74rem;color:var(--mt)"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Pantry inventory -->
+    <div class="col">
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <h2 style="margin:0">📦 食材庫存</h2>
+          <button class="bsm" onclick="autoUpdatePantryFromBuy()">✅ 採購完成，更新庫存</button>
+        </div>
+        <p style="font-size:.73rem;color:var(--mt);margin-bottom:10px">記錄每樣食材的剩餘狀態。「已用完」自動加入下週採購清單。</p>
+        <div id="pantry-content"></div>
+        <div id="pantry-summary" style="margin-top:10px;font-size:.74rem;color:var(--mt)"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="shop-msg" style="font-size:.76rem;color:var(--a3);margin-top:4px;margin-bottom:14px;display:none"></div>
 </div>
 
 <!-- PROFILE -->
@@ -1116,72 +1145,200 @@ function renderWODetail(){
     <br><br><strong style="color:var(--tx);display:block;margin-bottom:5px">週六/日 — 游泳（45分）</strong>
     自由式+蛙式交替，每100m休息30s，目標800–1000m</div>`;
 }
-function getWeekKey(offset){const mon=new Date();mon.setDate(mon.getDate()-mon.getDay()+1+offset*7);return mon.toISOString().slice(0,10);}
+// ── Shopping helpers ─────────────────────────────────────────
+function getWeekKey(offset){
+  const mon=new Date();mon.setDate(mon.getDate()-mon.getDay()+1+offset*7);
+  return mon.toISOString().slice(0,10);
+}
 function updateShopWeekLabel(){
   const offset=D.shopWeekOffset;
   const mon=new Date();mon.setDate(mon.getDate()-mon.getDay()+1+offset*7);
   const sun=new Date(mon);sun.setDate(mon.getDate()+6);
-  document.getElementById("shop-week-label").textContent=offset===0?"本週":offset===1?"下週":`${offset>0?"+":""}${offset} 週`;
-  document.getElementById("shop-week-range").textContent=`${mon.toLocaleDateString('zh-HK',{month:'short',day:'numeric'})} – ${sun.toLocaleDateString('zh-HK',{month:'short',day:'numeric'})}（建議週日採購）`;
+  document.getElementById("shop-week-label").textContent=
+    offset===0?"本週（採購日：本週日）":offset===1?"下週":offset===-1?"上週":`${offset>0?"+":""}${offset} 週`;
+  document.getElementById("shop-week-range").textContent=
+    `${mon.toLocaleDateString('zh-HK',{month:'short',day:'numeric'})} – ${sun.toLocaleDateString('zh-HK',{month:'short',day:'numeric'})}`;
 }
 function getShopWeekRecipeIdx(){
-  if(!D.profile||!D.profile.planStartDate)return Math.abs(D.shopWeekOffset)%4;
+  if(!D.profile||!D.profile.planStartDate) return Math.abs(D.shopWeekOffset)%4;
   const planStart=new Date(D.profile.planStartDate);
   const shopMon=new Date();shopMon.setDate(shopMon.getDate()-shopMon.getDay()+1+D.shopWeekOffset*7);
   const weeksSinceStart=Math.floor((shopMon-planStart)/604800000);
   return Math.max(0,weeksSinceStart)%4;
 }
-function buildShopList(){
+function buildIngredientList(){
+  // Returns array of {name, cat} for this week's recipes + fixed items
   const recipeWeekIdx=getShopWeekRecipeIdx();
   const weekRecipes=getWeekRecipes(recipeWeekIdx);
-  const ingredientSet={};
+  const seen={};
+  const items=[];
   weekRecipes.forEach(r=>{
-    if(r.dinner==="Cheat Dinner 🎉")return;
+    if(r.dinner==="Cheat Dinner 🎉") return;
     r.ingredients.forEach(ing=>{
-      const cat=INGREDIENT_CATS[ing]||"veg";
-      if(!ingredientSet[ing])ingredientSet[ing]={cat};
+      if(!seen[ing]){seen[ing]=true; items.push({name:ing,cat:INGREDIENT_CATS[ing]||"veg"});}
     });
   });
-  FIXED_SHOP.forEach(f=>{if(!ingredientSet[f.n])ingredientSet[f.n]={cat:f.cat};});
-  return ingredientSet;
+  FIXED_SHOP.forEach(f=>{if(!seen[f.n]){seen[f.n]=true; items.push({name:f.n,cat:f.cat});}});
+  return items;
 }
+
+// Pantry status: "ok" | "low" | "out" | "" (unknown)
+function pantryKey(name){ return "pantry_"+name.replace(/[\s\/\(\)×]/g,'_'); }
+function getPantry(name){ return D.shop[pantryKey(name)]||""; }
+function setPantry(name,val){ D.shop[pantryKey(name)]=val; saveLocal(); }
+
+// Buy list: bought this week
+function buyKey(name,wk){ return "buy_"+wk+"_"+name.replace(/[\s\/\(\)×]/g,'_'); }
+function isBought(name,wk){ return !!D.shop[buyKey(name,wk)]; }
+function setBought(name,wk,val){ D.shop[buyKey(name,wk)]=val; saveLocal(); }
+
 function renderShop(){
   updateShopWeekLabel();
   const recipeWeekIdx=getShopWeekRecipeIdx();
   const weekRecipes=getWeekRecipes(recipeWeekIdx);
-  document.getElementById("recipe-week-list").textContent=`第 ${recipeWeekIdx+1} 週食譜 — `+weekRecipes.map(r=>r.name).join("、");
-  const shopList=buildShopList();
+  document.getElementById("recipe-week-list").textContent=
+    `第 ${recipeWeekIdx+1} 週 — `+weekRecipes.map(r=>r.name).join("、");
+
+  const items=buildIngredientList();
   const wk=getWeekKey(D.shopWeekOffset);
+
+  // ── Buy list ──────────────────────────────────────────────
+  const catOrder=["protein","carb","veg","seasoning"];
   const grouped={protein:[],carb:[],veg:[],seasoning:[]};
-  Object.entries(shopList).forEach(([name,{cat}])=>{(grouped[cat]||grouped.veg).push(name);});
-  const html=Object.entries(SHOP_CATS).map(([cat,{label,color}])=>`
-    <div class="shop-cat"><h3 style="color:${color}">${label}</h3>
-      ${grouped[cat].map((name,i)=>{
-        const k=`${wk}_${cat}_${i}_${name.replace(/[\s\/]/g,'_')}`;
-        const bought=D.shop[k+"_b"],used=D.shop[k+"_u"];
-        return `<div class="si ${used?'used-item':''}">
-          <input type="checkbox" title="已購買" ${bought?"checked":""} onchange="togShop('${k}_b',this.checked)">
-          <span>${name}</span>
-          <input type="checkbox" title="已用完" style="accent-color:var(--a2);margin-left:auto" ${used?"checked":""} onchange="togShop('${k}_u',this.checked)">
-          <span style="font-size:.62rem;color:var(--mt)">用完</span>
+  items.forEach(item=>{(grouped[item.cat]||grouped.veg).push(item.name);});
+
+  let bought=0,total=0,skip=0;
+  let buyHtml=catOrder.map(cat=>{
+    const catItems=grouped[cat]; if(!catItems||!catItems.length) return "";
+    const {label,color}=SHOP_CATS[cat];
+    return `<div style="margin-bottom:14px">
+      <div style="font-size:.74rem;font-weight:600;color:${color};margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--bd)">${label}</div>
+      ${catItems.map(name=>{
+        total++;
+        const pStatus=getPantry(name);
+        const isOk=pStatus==="ok";
+        const boughtThis=isBought(name,wk);
+        if(boughtThis) bought++;
+        if(isOk&&!boughtThis) skip++;
+        const statusBadge=boughtThis
+          ?`<span style="font-size:.65rem;padding:2px 7px;border-radius:12px;background:rgba(67,217,158,.15);color:var(--a3);white-space:nowrap">✓ 已買</span>`
+          :isOk
+          ?`<span style="font-size:.65rem;padding:2px 7px;border-radius:12px;background:rgba(255,209,102,.15);color:var(--a4);white-space:nowrap">庫存充足</span>`
+          :pStatus==="low"
+          ?`<span style="font-size:.65rem;padding:2px 7px;border-radius:12px;background:rgba(255,107,107,.12);color:var(--a2);white-space:nowrap">補買</span>`
+          :`<span style="font-size:.65rem;padding:2px 7px;border-radius:12px;background:var(--sf);color:var(--mt);white-space:nowrap">待買</span>`;
+        return `<div style="display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.8rem;${isOk&&!boughtThis?'opacity:.5':''}">
+          <input type="checkbox" ${boughtThis?"checked":""} style="accent-color:var(--ac);width:15px;height:15px;flex-shrink:0"
+            onchange="setBoughtAndRefresh('${name}','${wk}',this.checked)">
+          <span style="${boughtThis?'text-decoration:line-through;color:var(--mt)':''};flex:1">${name}</span>
+          ${statusBadge}
         </div>`;
       }).join("")}
-    </div>`).join("");
-  document.getElementById("shop-content").innerHTML=html;
+    </div>`;
+  }).join("");
+  document.getElementById("buy-list-content").innerHTML=buyHtml||'<div style="color:var(--mt);font-size:.8rem;padding:10px 0">暫無食材需要採購</div>';
+  document.getElementById("buy-summary").textContent=`共 ${total} 樣 · ${bought} 已買 · ${skip} 庫存充足可跳過 · ${total-bought-skip} 待買`;
+
+  // ── Pantry ────────────────────────────────────────────────
+  let okCount=0,lowCount=0,outCount=0;
+  let pantryHtml=catOrder.map(cat=>{
+    const catItems=grouped[cat]; if(!catItems||!catItems.length) return "";
+    const {label,color}=SHOP_CATS[cat];
+    return `<div style="margin-bottom:14px">
+      <div style="font-size:.74rem;font-weight:600;color:${color};margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--bd)">${label}</div>
+      ${catItems.map(name=>{
+        const pStatus=getPantry(name);
+        if(pStatus==="ok") okCount++;
+        else if(pStatus==="low") lowCount++;
+        else if(pStatus==="out") outCount++;
+        const icon=pStatus==="ok"?`<span style="color:var(--a3);font-size:.9rem">●</span>`
+          :pStatus==="low"?`<span style="color:var(--a4);font-size:.9rem">◐</span>`
+          :pStatus==="out"?`<span style="color:var(--a2);font-size:.9rem">○</span>`
+          :`<span style="color:var(--mt);font-size:.9rem">○</span>`;
+        const rowBg=pStatus==="low"?"background:rgba(255,209,102,.07);border:0.5px solid rgba(255,209,102,.25);"
+          :pStatus==="out"?"background:rgba(255,107,107,.07);border:0.5px solid rgba(255,107,107,.25);":"";
+        return `<div style="display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:8px;margin-bottom:4px;font-size:.8rem;${rowBg}">
+          ${icon}
+          <span style="flex:1;${pStatus==='out'?'text-decoration:line-through;color:var(--mt)':''}">${name}</span>
+          <select style="font-size:.72rem;padding:3px 6px;border-radius:6px;background:var(--sf);border:1px solid var(--bd);color:var(--tx);height:26px"
+            onchange="setPantryAndRefresh('${name}',this.value)">
+            <option value="" ${!pStatus?"selected":""}>—未記錄</option>
+            <option value="ok" ${pStatus==="ok"?"selected":""}>✓ 充足</option>
+            <option value="low" ${pStatus==="low"?"selected":""}>⚠ 快用完</option>
+            <option value="out" ${pStatus==="out"?"selected":""}>✕ 已用完</option>
+          </select>
+        </div>`;
+      }).join("")}
+    </div>`;
+  }).join("");
+  document.getElementById("pantry-content").innerHTML=pantryHtml;
+  document.getElementById("pantry-summary").textContent=
+    `${okCount} 充足 · ${lowCount} 快用完（需補買）· ${outCount} 已用完（自動加入下週清單）`;
+
+  // ── Stats bar ─────────────────────────────────────────────
+  document.getElementById("shop-stats").innerHTML=`
+    <div style="background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:12px;text-align:center">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:var(--a3)">${bought}</div>
+      <div style="font-size:.7rem;color:var(--mt)">本週已買</div>
+    </div>
+    <div style="background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:12px;text-align:center">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:var(--a4)">${total-bought-skip}</div>
+      <div style="font-size:.7rem;color:var(--mt)">待採購</div>
+    </div>
+    <div style="background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:12px;text-align:center">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:var(--ac)">${okCount}</div>
+      <div style="font-size:.7rem;color:var(--mt)">庫存充足</div>
+    </div>
+    <div style="background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:12px;text-align:center">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:var(--a2)">${outCount}</div>
+      <div style="font-size:.7rem;color:var(--mt)">已用完→下週補</div>
+    </div>`;
 }
-function togShop(k,v){D.shop[k]=v;saveLocal();}
-function clearShop(){const wk=getWeekKey(D.shopWeekOffset);Object.keys(D.shop).forEach(k=>{if(k.startsWith(wk))delete D.shop[k];});saveLocal();renderShop();}
-function carryOverUsed(){
-  const wk=getWeekKey(D.shopWeekOffset),nwk=getWeekKey(D.shopWeekOffset+1);
+
+function setBoughtAndRefresh(name,wk,val){
+  setBought(name,wk,val);
+  // When bought, auto-update pantry to "ok"
+  if(val) setPantry(name,"ok");
+  renderShop();
+}
+function setPantryAndRefresh(name,val){
+  setPantry(name,val);
+  renderShop();
+}
+
+// "採購完成" button: mark all unbought items in buy list as bought + pantry ok
+function autoUpdatePantryFromBuy(){
+  const items=buildIngredientList();
+  const wk=getWeekKey(D.shopWeekOffset);
   let count=0;
-  Object.keys(D.shop).forEach(k=>{if(k.startsWith(wk)&&k.endsWith("_u")&&D.shop[k]){D.shop[k.replace(wk,nwk).replace("_u","_b")]=false;count++;}});
-  saveLocal();
-  const msg=document.getElementById("carry-msg");
-  msg.textContent=`已將 ${count} 項食材加入下週清單`;msg.style.display="block";
-  setTimeout(()=>msg.style.display="none",3000);
+  items.forEach(({name})=>{
+    if(isBought(name,wk)){
+      setPantry(name,"ok"); count++;
+    }
+  });
+  saveLocal(); renderShop();
+  showShopMsg(`✅ 已將 ${count} 項已購買食材更新為「庫存充足」`);
 }
-function prevShopWeek(){D.shopWeekOffset--;renderShop();}
-function nextShopWeek(){D.shopWeekOffset++;renderShop();}
+
+// When opening next week's shop, auto-carry "out" items from pantry as needed
+function getNextWeekAutoItems(){
+  const items=buildIngredientList();
+  const outItems=items.filter(({name})=>getPantry(name)==="out");
+  return outItems;
+}
+
+function clearBuyList(){
+  const wk=getWeekKey(D.shopWeekOffset);
+  Object.keys(D.shop).forEach(k=>{if(k.startsWith("buy_"+wk)) delete D.shop[k];});
+  saveLocal(); renderShop(); showShopMsg("🔄 本週採購清單已重置");
+}
+function showShopMsg(msg){
+  const el=document.getElementById("shop-msg");
+  el.textContent=msg; el.style.display="block";
+  setTimeout(()=>el.style.display="none",3000);
+}
+function prevShopWeek(){ D.shopWeekOffset--; renderShop(); }
+function nextShopWeek(){ D.shopWeekOffset++; renderShop(); }
 function renderAvoidGrid(){
   document.getElementById("avoid-grid").innerHTML=AVOID_OPTIONS.map(o=>
     `<div class="avoid-tag ${D.selectedAvoid.includes(o.key)?'sel':''}" onclick="toggleAvoid('${o.key}',this)">${o.label}</div>`
