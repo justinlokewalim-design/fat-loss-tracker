@@ -1037,10 +1037,17 @@ function buildIngList(){
   FIXED_WEEKLY.forEach(f=>{if(!seenBuy[f.name]){seenBuy[f.name]=true;items.push({name:f.name,raw:f.name,cat:f.cat});}});
   return items;
 }
-function ptKey(n){return "pt_"+n.replace(/[^\w]/g,"_");}
+function ptKey(n){
+  // Use a simple hash to avoid Chinese character stripping causing collisions
+  let h=0;for(let i=0;i<n.length;i++){h=((h<<5)-h)+n.charCodeAt(i);h|=0;}
+  return "pt_"+Math.abs(h).toString(36)+"_"+n.length;
+}
 function getPt(n){return D.shop[ptKey(n)]||"";}
 function setPt(n,v){D.shop[ptKey(n)]=v;saveLocal();}
-function byKey(n,wk){return "by_"+wk+"_"+n.replace(/[^\w]/g,"_");}
+function byKey(n,wk){
+  let h=0;for(let i=0;i<n.length;i++){h=((h<<5)-h)+n.charCodeAt(i);h|=0;}
+  return "by_"+wk+"_"+Math.abs(h).toString(36)+"_"+n.length;
+}
 function isBought(n,wk){return !!D.shop[byKey(n,wk)];}
 function setBought(n,wk,v){D.shop[byKey(n,wk)]=v;saveLocal();}
 
