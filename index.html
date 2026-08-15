@@ -1038,7 +1038,7 @@ function buildIngList(){
   return items;
 }
 function ptKey(n){
-  // Use a simple hash to avoid Chinese character stripping causing collisions
+  // Hash based on full string to avoid collisions
   let h=0;for(let i=0;i<n.length;i++){h=((h<<5)-h)+n.charCodeAt(i);h|=0;}
   return "pt_"+Math.abs(h).toString(36)+"_"+n.length;
 }
@@ -1064,7 +1064,7 @@ function renderShop(){
   Object.keys(SHOP_CATS).forEach(c=>grouped[c]=[]);
   items.forEach(it=>{if(grouped[it.cat])grouped[it.cat].push(it);else grouped.veg.push(it);});
   let bought=0,total=0,skip=0,okC=0,lowC=0,outC=0;
-  items.forEach(it=>{total++;const ps=getPt(it.raw),b=isBought(it.name,wk);if(b)bought++;if(ps==="ok"&&!b)skip++;if(ps==="ok")okC++;if(ps==="low")lowC++;if(ps==="out")outC++;});
+  items.forEach(it=>{total++;const ps=getPt(it.name),b=isBought(it.name,wk);if(b)bought++;if(ps==="ok"&&!b)skip++;if(ps==="ok")okC++;if(ps==="low")lowC++;if(ps==="out")outC++;});
   document.getElementById("shop-stats").innerHTML=`
     <div class="shop-stat"><div class="v" style="color:#43d99e">${bought}</div><div class="l">本週已買</div></div>
     <div class="shop-stat"><div class="v" style="color:#ffd166">${total-bought-skip}</div><div class="l">待採購</div></div>
@@ -1074,14 +1074,14 @@ function renderShop(){
     if(!grouped[cat]||!grouped[cat].length)return;
     html+=`<div class="shop-sec-title" style="color:${color}">${label}</div>`;
     grouped[cat].forEach(item=>{
-      const ps=getPt(item.raw),b=isBought(item.name,wk);
+      const ps=getPt(item.name),b=isBought(item.name,wk);
       const isOk=ps==="ok",isOut=ps==="out";
       html+=`<div class="shop-item ${b?"bought":""}">
         <input type="checkbox" ${b?"checked":""} onchange="setBoughtR('${item.name}','${item.raw}','${wk}',this.checked)">
         <span class="sname" style="${isOk&&!b?"opacity:.4;text-decoration:line-through":""}">${item.name}</span>
         ${isOk?`<span style="font-size:.64rem;color:#43d99e;margin-left:auto;flex-shrink:0">✓庫存充足</span>`:""}
         ${isOut?`<span style="font-size:.64rem;color:#ff6b6b;margin-left:auto;flex-shrink:0">→補買</span>`:""}
-        <select class="pantry-sel" style="margin-left:${isOk||isOut?"4px":"auto"}" onchange="setPtR('${item.raw}',this.value)">
+        <select class="pantry-sel" style="margin-left:${isOk||isOut?"4px":"auto"}" onchange="setPtR('${item.name}',this.value)">
           <option value="" ${!ps?"selected":""}>—</option>
           <option value="ok" ${ps==="ok"?"selected":""}>✓充足</option>
           <option value="low" ${ps==="low"?"selected":""}>⚠快用完</option>
@@ -1092,9 +1092,14 @@ function renderShop(){
   });
   document.getElementById("shop-list").innerHTML=html;
 }
-function setBoughtR(name,raw,wk,v){setBought(name,wk,v);if(v)setPt(raw,"ok");renderShop();}
-function setPtR(raw,v){setPt(raw,v);renderShop();}
-function autoUpdatePantry(){const items=buildIngList(),wk=getWeekKey(D.shopWeekOffset);let c=0;items.forEach(it=>{if(isBought(it.name,wk)){setPt(it.raw,"ok");c++;}});saveLocal();renderShop();showShopMsg("✅ "+c+" 項食材庫存更新為充足");}
+function setBoughtR(name,raw,wk,v){setBought(name,wk,v);saveLocal();renderShop();}
+function setPtR(name,v){setPt(name,v);renderShop();}
+function autoUpdatePantry(){
+  const items=buildIngList(),wk=getWeekKey(D.shopWeekOffset);
+  let c=0;
+  items.forEach(it=>{if(isBought(it.name,wk)){setPt(it.name,"ok");c++;}});
+  saveLocal();renderShop();showShopMsg("✅ "+c+" 項食材庫存更新為充足");
+}
 function clearBuyList(){const wk=getWeekKey(D.shopWeekOffset);Object.keys(D.shop).forEach(k=>{if(k.startsWith("by_"+wk))delete D.shop[k];});saveLocal();renderShop();showShopMsg("🔄 本週採購清單已重置");}
 function showShopMsg(msg){const el=document.getElementById("shop-msg");el.textContent=msg;el.style.display="block";setTimeout(()=>el.style.display="none",3000);}
 function prevShopWeek(){D.shopWeekOffset--;renderShop();}
