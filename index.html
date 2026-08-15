@@ -219,6 +219,7 @@ body{background:var(--bg);color:var(--tx);font-family:"Noto Sans TC",sans-serif;
     <div style="display:flex;gap:7px;margin:0 12px 10px;flex-wrap:wrap">
       <button class="btn-sm" onclick="autoUpdatePantry()">✅ 採購完成→更新庫存</button>
       <button class="btn-sm" onclick="clearBuyList()">🔄 重置清單</button>
+      <button class="btn-sm" onclick="saveShopToSheets()">☁️ 備份到 Sheets</button>
     </div>
     <div id="shop-list"></div>
     <div id="shop-msg" style="text-align:center;font-size:.74rem;color:var(--a3);padding:8px;display:none"></div>
@@ -319,10 +320,15 @@ function setSS(s){
 }
 async function pullFromSheets(){
   setSS("sync");
-  const [wr,pr]=await Promise.all([syncSheets("getBodyStats",{}),syncSheets("getProfile",{})]);
+  const [wr,pr,sr]=await Promise.all([
+    syncSheets("getBodyStats",{}),
+    syncSheets("getProfile",{}),
+    syncSheets("getShop",{key:"shop_all"})
+  ]);
   let updated=false;
   if(wr&&wr.stats&&wr.stats.length){D.weights=wr.stats.map(s=>({date:s.date,wt:parseFloat(s.weight)||null})).filter(s=>s.wt).sort((a,b)=>b.date.localeCompare(a.date));saveWts();updated=true;}
   if(pr&&pr.profile){D.profile=pr.profile;D.planDays=parseInt(pr.profile.planDays)||90;savePf();loadPfUI();updated=true;}
+  if(sr&&sr.data&&sr.data.shop){D.shop={...D.shop,...sr.data.shop};saveLocal();updated=true;}
   if(updated){renderHome();toast("✅ 已從 Sheets 恢復數據！");}
   else toast("Sheets 暫無數據","err");
 }
@@ -342,7 +348,7 @@ function calcBMI(w,h){if(!w||!h)return null;return (w/((h/100)**2)).toFixed(1);}
 function bmiLabel(b){if(!b)return"";if(b<18.5)return"偏輕";if(b<24)return"✓正常";if(b<28)return"偏重";return"肥胖";}
 function calcTDEE(w,h){if(!w||!h)return null;return Math.round((10*w+6.25*h-5*30-161)*1.55);}
 function getMT(){const p=D.profile||{};return{bk:p.tBk||"07:30",am:p.tAm||"10:30",lu:p.tLu||"12:30",pm:p.tPm||"15:30",di:p.tDi||"19:00"};}
-function getCurrPlanWeek(){const d=dayNum();if(!d)return 0;return Math.floor((d-1)/7)%4;}
+function getCurrPlanWeek(){const d=dayNum();if(!d)return 0;return Math.floor((d-1)/7)%8;}
 function getWeekRecipes(wi){return RECIPE_DB.filter(r=>r.week===wi);}
 const DAY_NAMES=['日','一','二','三','四','五','六'];
 
@@ -375,113 +381,119 @@ const BREAKFASTS=[
 // 週二/五 = 在家多樣；週一/三/四 = 便當簡易；週六 = Cheat
 // ══════════════════════════════════════════════════════════════
 const RECIPE_DB=[
-  // ─── 第1週 ───────────────────────────────────────────────
-  {id:1,week:0,day:0,name:"🇯🇵 日式蒸雞+玉米",
-   lunch:"蒸雞胸（低鈉醬油+薑絲）+ 水煮玉米 + 燙菠菜",
-   dinner:"蒸鮭魚（薑絲）+ 燙菠菜 + 糙米",
-   lunchType:"home",
-   lunchHow:"電鍋蒸雞胸15分 → 淋醬油薑絲 → 玉米水煮8分 → 菠菜水煮1分",
-   dinnerHow:"鮭魚薑絲蒸12分 → 燙菠菜 → 糙米電鍋煮",
-   ingredients:["雞胸肉","鮭魚","玉米","菠菜","糙米","薑","低鈉醬油"]},
+  // ══════════════════════════════════════════════════════════
+  // 56道全球減脂食譜（8週不重複）
+  // 無豬牛｜全蒸/水煮｜新食材：香菇、番茄、玉米筍、豆芽、秋葵
+  // 週二/五=在家多樣｜週一/三/四=便當簡易｜週六=Cheat
+  // ══════════════════════════════════════════════════════════
 
-  {id:2,week:0,day:1,name:"🍱 雞胸便當",
-   lunch:"蒸雞胸 + 蒸地瓜 + 燙高麗菜",
+  // ─── 第1週 ───────────────────────────────────────────────
+  {id:1,week:0,day:0,name:"🇯🇵 日式蒸雞香菇",
+   lunch:"蒸雞胸（醬油薑絲）+ 蒸香菇 + 燙菠菜 + 水煮玉米",
+   dinner:"蒸鮭魚（薑絲）+ 燙高麗菜 + 糙米",
+   lunchType:"home",
+   lunchHow:"電鍋蒸雞胸+香菇同蒸15分 → 淋醬油薑絲 → 玉米水煮8分 → 燙菠菜1分",
+   dinnerHow:"鮭魚薑絲蒸12分 → 高麗菜水煮2分 → 糙米電鍋煮",
+   ingredients:["雞胸肉","香菇","菠菜","玉米","鮭魚","高麗菜","糙米","薑","低鈉醬油"]},
+
+  {id:2,week:0,day:1,name:"🍱 雞胸番茄便當",
+   lunch:"蒸雞胸 + 水煮番茄 + 蒸地瓜 + 燙菠菜",
    dinner:"水煮蛋 + 蒸豆腐（蒜末醬油）+ 燙花椰菜",
    lunchType:"box",
-   lunchHow:"⭐ 前晚：電鍋蒸雞胸+地瓜 → 早上燙高麗菜 → 裝盒",
+   lunchHow:"⭐ 前晚：電鍋蒸雞胸+地瓜 → 番茄切塊 → 早上燙菠菜裝盒",
    dinnerHow:"水煮蛋8分 → 豆腐蒸8分 → 蒜末+醬油淋上 → 花椰菜水煮3分",
-   ingredients:["雞胸肉","地瓜","高麗菜","雞蛋","板豆腐","花椰菜","蒜","低鈉醬油"]},
+   ingredients:["雞胸肉","番茄","地瓜","菠菜","雞蛋","板豆腐","花椰菜","蒜","低鈉醬油"]},
 
-  {id:3,week:0,day:2,name:"🇰🇷 韓式烏冬麵",
-   lunch:"水煮烏冬麵 + 蒸雞胸絲 + 燙菠菜 + 醬油薑汁湯底",
+  {id:3,week:0,day:2,name:"🇰🇷 韓式烏冬+香菇",
+   lunch:"水煮烏冬麵 + 蒸雞胸絲 + 蒸香菇 + 燙菠菜 + 薑汁醬油湯底",
    dinner:"蒸鯛魚（蒜末）+ 燙花椰菜 + 水煮毛豆",
    lunchType:"home",
-   lunchHow:"烏冬麵水煮3分 → 雞胸蒸好撕絲 → 燙菠菜 → 薑汁+醬油湯底淋上",
+   lunchHow:"烏冬麵水煮3分 → 雞胸+香菇同蒸15分 → 雞胸撕絲 → 燙菠菜 → 薑汁醬油湯底",
    dinnerHow:"鯛魚蒜末蒸10分 → 花椰菜水煮3分 → 毛豆水煮5分",
-   ingredients:["烏冬麵","雞胸肉","菠菜","鯛魚","花椰菜","毛豆","薑","蒜","低鈉醬油"]},
+   ingredients:["烏冬麵","雞胸肉","香菇","菠菜","鯛魚","花椰菜","毛豆","薑","蒜","低鈉醬油"]},
 
-  {id:4,week:0,day:3,name:"🍱 蝦仁便當",
-   lunch:"水煮蝦仁 + 糙米 + 燙菠菜",
+  {id:4,week:0,day:3,name:"🍱 蝦仁秋葵便當",
+   lunch:"水煮蝦仁 + 水煮秋葵 + 糙米 + 燙菠菜",
    dinner:"蒸豆腐（黑胡椒醬油）+ 水煮蛋 + 燙高麗菜",
    lunchType:"box",
-   lunchHow:"⭐ 前晚：蝦仁水煮3分、糙米煮好 → 早上燙菠菜 → 裝盒",
-   dinnerHow:"豆腐蒸8分 → 淋黑胡椒+醬油 → 水煮蛋 → 高麗菜水煮2分",
-   ingredients:["蝦仁","糙米","菠菜","板豆腐","雞蛋","高麗菜","黑胡椒","低鈉醬油"]},
+   lunchHow:"⭐ 前晚：蝦仁水煮3分、秋葵水煮3分、糙米煮好 → 早上燙菠菜裝盒",
+   dinnerHow:"豆腐蒸8分 → 淋黑胡椒+醬油 → 水煮蛋8分 → 高麗菜水煮2分",
+   ingredients:["蝦仁","秋葵","糙米","菠菜","板豆腐","雞蛋","高麗菜","黑胡椒","低鈉醬油"]},
 
-  {id:5,week:0,day:4,name:"🍱 毛豆蛋便當",
-   lunch:"水煮毛豆 + 水煮蛋 + 蒸地瓜 + 燙花椰菜",
+  {id:5,week:0,day:4,name:"🍱 毛豆玉米筍便當",
+   lunch:"水煮毛豆 + 水煮玉米筍 + 水煮蛋 + 蒸地瓜",
    dinner:"蒸雞胸（黑胡椒）+ 燙菠菜 + 糙米",
    lunchType:"box",
-   lunchHow:"⭐ 前晚：毛豆水煮5分、蛋水煮、地瓜蒸好 → 早上燙花椰菜 → 裝盒",
+   lunchHow:"⭐ 前晚：毛豆水煮5分、玉米筍水煮3分、蛋水煮、地瓜蒸好 → 裝盒",
    dinnerHow:"電鍋蒸雞胸 → 撒黑胡椒 → 燙菠菜 → 糙米電鍋煮",
-   ingredients:["毛豆","雞蛋","地瓜","花椰菜","雞胸肉","菠菜","糙米","黑胡椒"]},
+   ingredients:["毛豆","玉米筍","雞蛋","地瓜","雞胸肉","菠菜","糙米","黑胡椒"]},
 
   {id:6,week:0,day:5,name:"🇮🇹 地中海義大利麵",
-   lunch:"水煮義大利麵 + 蒸雞胸絲 + 燙菠菜 + 橄欖油檸檬黑胡椒",
+   lunch:"水煮義大利麵 + 蒸雞胸絲 + 番茄切塊 + 燙菠菜 + 橄欖油黑胡椒",
    dinner:"蒸鮭魚（檸檬汁）+ 燙花椰菜 + 水煮玉米",
    lunchType:"home",
-   lunchHow:"義大利麵水煮8分 → 雞胸蒸好撕絲 → 燙菠菜 → 橄欖油+檸檬汁+黑胡椒拌",
+   lunchHow:"義大利麵水煮8分 → 雞胸蒸好撕絲 → 番茄切塊 → 燙菠菜 → 橄欖油+檸檬+黑胡椒拌",
    dinnerHow:"鮭魚蒸12分 → 擠檸檬汁 → 花椰菜+玉米水煮",
-   ingredients:["義大利麵","雞胸肉","菠菜","鮭魚","花椰菜","玉米","橄欖油","檸檬","黑胡椒"]},
+   ingredients:["義大利麵","雞胸肉","番茄","菠菜","鮭魚","花椰菜","玉米","橄欖油","檸檬","黑胡椒"]},
 
-  {id:7,week:0,day:6,name:"週六清淡便當 + Cheat",
+  {id:7,week:0,day:6,name:"週六便當 + Cheat",
    lunch:"蒸雞胸 + 蒸地瓜 + 燙花椰菜",
    dinner:"Cheat Dinner 🎉",
    lunchType:"box",
    lunchHow:"電鍋同時蒸雞胸+地瓜 → 花椰菜水煮3分",
-   dinnerHow:"今天 Cheat！享受美食，明天繼續 💪",
+   dinnerHow:"今天 Cheat！享受美食 💪",
    ingredients:["雞胸肉","地瓜","花椰菜"]},
 
   // ─── 第2週 ───────────────────────────────────────────────
-  {id:8,week:1,day:0,name:"🇹🇭 泰式蒸魚",
-   lunch:"蒸雞胸（薑絲+低鈉魚露）+ 水煮玉米 + 燙高麗菜",
-   dinner:"蒸鱸魚（薑蔥+醬油）+ 燙菠菜 + 糙米",
+  {id:8,week:1,day:0,name:"🇹🇭 泰式蒸魚+豆芽",
+   lunch:"蒸雞胸（薑絲醬油）+ 水煮豆芽 + 燙高麗菜 + 水煮玉米",
+   dinner:"蒸鱸魚（薑蔥醬油）+ 燙菠菜 + 糙米",
    lunchType:"home",
-   lunchHow:"電鍋蒸雞胸15分 → 薑絲+少量魚露（或醬油）淋上 → 玉米水煮 → 高麗菜水煮",
-   dinnerHow:"鱸魚薑蔥鋪底蒸12分 → 淋醬油 → 燙菠菜 → 糙米電鍋煮",
-   ingredients:["雞胸肉","鱸魚","玉米","高麗菜","菠菜","糙米","薑","蔥","低鈉醬油"]},
+   lunchHow:"電鍋蒸雞胸15分 → 豆芽水煮2分 → 高麗菜水煮2分 → 玉米水煮8分",
+   dinnerHow:"鱸魚薑蔥蒸12分 → 淋醬油 → 燙菠菜 → 糙米電鍋煮",
+   ingredients:["雞胸肉","豆芽","高麗菜","玉米","鱸魚","菠菜","糙米","薑","蔥","低鈉醬油"]},
 
-  {id:9,week:1,day:1,name:"🍱 豆腐蛋便當",
-   lunch:"蒸豆腐 + 水煮蛋 + 糙米 + 燙菠菜",
+  {id:9,week:1,day:1,name:"🍱 香菇蛋便當",
+   lunch:"蒸香菇 + 水煮蛋 + 糙米 + 燙菠菜",
    dinner:"蒸雞胸（薑絲）+ 燙花椰菜 + 水煮毛豆",
    lunchType:"box",
-   lunchHow:"⭐ 前晚：豆腐蒸8分、蛋水煮、糙米煮好 → 早上燙菠菜 → 裝盒",
+   lunchHow:"⭐ 前晚：香菇蒸10分、蛋水煮、糙米煮好 → 早上燙菠菜裝盒",
    dinnerHow:"電鍋蒸雞胸 → 薑絲鋪上 → 花椰菜水煮 → 毛豆水煮5分",
-   ingredients:["板豆腐","雞蛋","糙米","菠菜","雞胸肉","花椰菜","毛豆","薑"]},
+   ingredients:["香菇","雞蛋","糙米","菠菜","雞胸肉","花椰菜","毛豆","薑"]},
 
-  {id:10,week:1,day:2,name:"🇻🇳 越式烏冬麵",
-   lunch:"水煮烏冬麵 + 水煮蝦仁 + 燙菠菜 + 薑汁醬油湯底",
-   dinner:"蒸鯛魚（檸檬汁+蒜末）+ 燙花椰菜 + 蒸地瓜",
+  {id:10,week:1,day:2,name:"🇻🇳 越式烏冬+玉米筍",
+   lunch:"水煮烏冬麵 + 水煮蝦仁 + 水煮玉米筍 + 燙菠菜 + 薑汁湯底",
+   dinner:"蒸鯛魚（檸檬蒜末）+ 燙花椰菜 + 蒸地瓜",
    lunchType:"home",
-   lunchHow:"烏冬麵水煮3分 → 蝦仁水煮3分 → 燙菠菜 → 薑汁+醬油湯底",
-   dinnerHow:"鯛魚蒜末蒸10分 → 擠檸檬汁 → 花椰菜+地瓜水煮/蒸",
-   ingredients:["烏冬麵","蝦仁","菠菜","鯛魚","花椰菜","地瓜","薑","蒜","檸檬","低鈉醬油"]},
+   lunchHow:"烏冬麵水煮3分 → 蝦仁水煮3分 → 玉米筍水煮3分 → 燙菠菜 → 薑汁+醬油湯底",
+   dinnerHow:"鯛魚蒜末蒸10分 → 擠檸檬汁 → 花椰菜+地瓜蒸煮",
+   ingredients:["烏冬麵","蝦仁","玉米筍","菠菜","鯛魚","花椰菜","地瓜","薑","蒜","檸檬","低鈉醬油"]},
 
-  {id:11,week:1,day:3,name:"🍱 蒸雞高麗菜便當",
-   lunch:"蒸雞胸 + 高麗菜 + 水煮蛋 + 地瓜",
-   dinner:"水煮蝦仁 + 蒸豆腐 + 燙花椰菜",
+  {id:11,week:1,day:3,name:"🍱 秋葵蝦仁便當",
+   lunch:"水煮蝦仁 + 水煮秋葵 + 蒸地瓜 + 燙高麗菜",
+   dinner:"水煮蛋 + 蒸豆腐 + 燙花椰菜",
    lunchType:"box",
-   lunchHow:"⭐ 前晚：蒸雞胸+地瓜 → 早上燙高麗菜、拿水煮蛋 → 裝盒",
-   dinnerHow:"蝦仁水煮3分 → 豆腐蒸8分 → 花椰菜水煮3分",
-   ingredients:["雞胸肉","高麗菜","雞蛋","地瓜","蝦仁","板豆腐","花椰菜"]},
+   lunchHow:"⭐ 前晚：蝦仁水煮3分、秋葵水煮3分、地瓜蒸好 → 早上燙高麗菜裝盒",
+   dinnerHow:"蛋水煮8分 → 豆腐蒸8分 → 淋醬油 → 花椰菜水煮3分",
+   ingredients:["蝦仁","秋葵","地瓜","高麗菜","雞蛋","板豆腐","花椰菜","低鈉醬油"]},
 
-  {id:12,week:1,day:4,name:"🍱 糙米毛豆便當",
-   lunch:"糙米 + 水煮毛豆 + 蒸雞胸 + 燙菠菜",
+  {id:12,week:1,day:4,name:"🍱 糙米毛豆香菇便當",
+   lunch:"糙米 + 水煮毛豆 + 蒸香菇 + 燙菠菜",
    dinner:"蒸鮭魚（黑胡椒）+ 燙高麗菜 + 水煮玉米",
    lunchType:"box",
-   lunchHow:"⭐ 前晚：糙米煮好、毛豆水煮、雞胸蒸好 → 早上燙菠菜 → 裝盒",
+   lunchHow:"⭐ 前晚：糙米煮好、毛豆水煮、香菇蒸10分 → 早上燙菠菜裝盒",
    dinnerHow:"鮭魚蒸12分 → 撒黑胡椒 → 高麗菜+玉米水煮",
-   ingredients:["糙米","毛豆","雞胸肉","菠菜","鮭魚","高麗菜","玉米","黑胡椒"]},
+   ingredients:["糙米","毛豆","香菇","菠菜","鮭魚","高麗菜","玉米","黑胡椒"]},
 
-  {id:13,week:1,day:5,name:"🇬🇷 地中海蝦仁麵",
-   lunch:"水煮義大利麵 + 水煮蝦仁 + 燙花椰菜 + 橄欖油+黑胡椒+檸檬",
-   dinner:"蒸雞胸（蒜末+醬油）+ 燙菠菜 + 水煮玉米",
+  {id:13,week:1,day:5,name:"🇬🇷 地中海蝦仁麵+番茄",
+   lunch:"水煮義大利麵 + 水煮蝦仁 + 番茄切塊 + 燙花椰菜 + 橄欖油黑胡椒",
+   dinner:"蒸雞胸（蒜末醬油）+ 燙菠菜 + 水煮玉米",
    lunchType:"home",
-   lunchHow:"義大利麵水煮8分 → 蝦仁水煮3分 → 花椰菜水煮 → 橄欖油+黑胡椒+檸檬拌",
+   lunchHow:"義大利麵水煮8分 → 蝦仁水煮3分 → 番茄切塊擺上 → 花椰菜水煮 → 橄欖油+黑胡椒+檸檬拌",
    dinnerHow:"電鍋蒸雞胸 → 蒜末+醬油淋上 → 燙菠菜 → 玉米水煮",
-   ingredients:["義大利麵","蝦仁","花椰菜","雞胸肉","菠菜","玉米","橄欖油","黑胡椒","檸檬"]},
+   ingredients:["義大利麵","蝦仁","番茄","花椰菜","雞胸肉","菠菜","玉米","橄欖油","黑胡椒","檸檬","蒜","低鈉醬油"]},
 
-  {id:14,week:1,day:6,name:"週六清淡便當 + Cheat",
+  {id:14,week:1,day:6,name:"週六便當 + Cheat",
    lunch:"蒸雞胸 + 糙米 + 燙菠菜",
    dinner:"Cheat Dinner 🎉",
    lunchType:"box",
@@ -490,55 +502,55 @@ const RECIPE_DB=[
    ingredients:["雞胸肉","糙米","菠菜"]},
 
   // ─── 第3週 ───────────────────────────────────────────────
-  {id:15,week:2,day:0,name:"🇨🇳 港式蒸鱸魚",
-   lunch:"蒸雞胸（薑蔥+醬油）+ 水煮花椰菜 + 糙米",
+  {id:15,week:2,day:0,name:"🇨🇳 港式蒸魚+豆腐",
+   lunch:"蒸雞胸（薑蔥醬油）+ 蒸香菇 + 燙花椰菜 + 糙米",
    dinner:"蒸鱸魚（薑蔥醬油）+ 燙菠菜 + 水煮玉米",
    lunchType:"home",
-   lunchHow:"電鍋蒸雞胸 → 燙花椰菜 → 糙米電鍋煮",
-   dinnerHow:"鱸魚薑蔥鋪底蒸12分 → 燙菠菜 → 玉米水煮",
-   ingredients:["雞胸肉","鱸魚","花椰菜","菠菜","糙米","玉米","薑","蔥","低鈉醬油"]},
+   lunchHow:"電鍋蒸雞胸+香菇 → 燙花椰菜 → 糙米電鍋煮",
+   dinnerHow:"鱸魚薑蔥蒸12分 → 淋醬油 → 燙菠菜 → 玉米水煮",
+   ingredients:["雞胸肉","香菇","花椰菜","糙米","鱸魚","菠菜","玉米","薑","蔥","低鈉醬油"]},
 
-  {id:16,week:2,day:1,name:"🍱 蝦蛋便當",
-   lunch:"水煮蝦仁 + 水煮蛋 + 蒸地瓜 + 燙高麗菜",
-   dinner:"蒸豆腐（蒜末+黑胡椒）+ 燙花椰菜 + 糙米",
+  {id:16,week:2,day:1,name:"🍱 蝦蛋秋葵便當",
+   lunch:"水煮蝦仁 + 水煮秋葵 + 水煮蛋 + 蒸地瓜",
+   dinner:"蒸豆腐（蒜末黑胡椒）+ 燙花椰菜 + 糙米",
    lunchType:"box",
-   lunchHow:"⭐ 前晚：蝦仁水煮、蛋水煮、地瓜蒸好 → 早上燙高麗菜 → 裝盒",
+   lunchHow:"⭐ 前晚：蝦仁水煮、秋葵水煮3分、蛋水煮、地瓜蒸好 → 裝盒",
    dinnerHow:"豆腐蒸8分 → 蒜末+黑胡椒淋上 → 花椰菜水煮 → 糙米煮好",
-   ingredients:["蝦仁","雞蛋","地瓜","高麗菜","板豆腐","花椰菜","糙米","蒜","黑胡椒"]},
+   ingredients:["蝦仁","秋葵","雞蛋","地瓜","板豆腐","花椰菜","糙米","蒜","黑胡椒"]},
 
-  {id:17,week:2,day:2,name:"🇯🇵 日式烏冬麵套餐",
-   lunch:"水煮烏冬麵 + 蒸雞胸絲 + 燙菠菜 + 低鈉醬油湯底",
+  {id:17,week:2,day:2,name:"🇯🇵 日式烏冬+豆芽",
+   lunch:"水煮烏冬麵 + 蒸雞胸絲 + 水煮豆芽 + 燙菠菜 + 醬油薑絲湯底",
    dinner:"蒸鮭魚（薑絲）+ 燙高麗菜 + 水煮毛豆",
    lunchType:"home",
-   lunchHow:"烏冬麵水煮3分 → 雞胸蒸好撕絲 → 燙菠菜 → 醬油薑絲湯底",
+   lunchHow:"烏冬麵水煮3分 → 雞胸蒸好撕絲 → 豆芽水煮2分 → 燙菠菜 → 醬油薑絲湯底",
    dinnerHow:"鮭魚薑絲蒸12分 → 高麗菜水煮 → 毛豆水煮5分",
-   ingredients:["烏冬麵","雞胸肉","菠菜","鮭魚","高麗菜","毛豆","薑","低鈉醬油"]},
+   ingredients:["烏冬麵","雞胸肉","豆芽","菠菜","鮭魚","高麗菜","毛豆","薑","低鈉醬油"]},
 
-  {id:18,week:2,day:3,name:"🍱 豆腐糙米便當",
-   lunch:"蒸豆腐 + 糙米 + 燙菠菜 + 水煮蛋",
+  {id:18,week:2,day:3,name:"🍱 番茄豆腐糙米便當",
+   lunch:"蒸豆腐 + 番茄切塊 + 糙米 + 燙菠菜",
    dinner:"蒸雞胸（薑絲）+ 燙花椰菜 + 水煮玉米",
    lunchType:"box",
-   lunchHow:"⭐ 前晚：豆腐蒸好、糙米煮好、蛋水煮 → 早上燙菠菜 → 裝盒",
+   lunchHow:"⭐ 前晚：豆腐蒸8分、番茄切塊備好、糙米煮好 → 早上燙菠菜裝盒",
    dinnerHow:"電鍋蒸雞胸 → 薑絲鋪上 → 花椰菜+玉米水煮",
-   ingredients:["板豆腐","糙米","菠菜","雞蛋","雞胸肉","花椰菜","玉米","薑"]},
+   ingredients:["板豆腐","番茄","糙米","菠菜","雞胸肉","花椰菜","玉米","薑"]},
 
-  {id:19,week:2,day:4,name:"🍱 毛豆雞胸便當",
-   lunch:"蒸雞胸 + 水煮毛豆 + 蒸地瓜 + 燙花椰菜",
+  {id:19,week:2,day:4,name:"🍱 玉米筍雞胸便當",
+   lunch:"蒸雞胸 + 水煮玉米筍 + 蒸地瓜 + 燙花椰菜",
    dinner:"水煮蝦仁 + 燙高麗菜 + 糙米",
    lunchType:"box",
-   lunchHow:"⭐ 前晚：蒸雞胸、毛豆水煮5分、蒸地瓜 → 早上燙花椰菜 → 裝盒",
+   lunchHow:"⭐ 前晚：蒸雞胸、玉米筍水煮3分、地瓜蒸好 → 早上燙花椰菜裝盒",
    dinnerHow:"蝦仁水煮3分 → 高麗菜水煮 → 糙米電鍋煮",
-   ingredients:["雞胸肉","毛豆","地瓜","花椰菜","蝦仁","高麗菜","糙米"]},
+   ingredients:["雞胸肉","玉米筍","地瓜","花椰菜","蝦仁","高麗菜","糙米"]},
 
-  {id:20,week:2,day:5,name:"🇹🇼 台式義大利麵",
-   lunch:"水煮義大利麵 + 蒸鯛魚碎 + 燙菠菜 + 蒜末醬油",
-   dinner:"蒸雞胸（檸檬汁+黑胡椒）+ 燙花椰菜 + 水煮玉米",
+  {id:20,week:2,day:5,name:"🇹🇼 台式義大利麵+香菇",
+   lunch:"水煮義大利麵 + 蒸鯛魚碎 + 蒸香菇 + 燙菠菜 + 蒜末醬油",
+   dinner:"蒸雞胸（檸檬黑胡椒）+ 燙花椰菜 + 水煮玉米",
    lunchType:"home",
-   lunchHow:"義大利麵水煮8分 → 鯛魚蒸10分弄碎 → 燙菠菜 → 蒜末+醬油拌",
+   lunchHow:"義大利麵水煮8分 → 鯛魚+香菇同蒸10分 → 鯛魚弄碎 → 燙菠菜 → 蒜末+醬油拌",
    dinnerHow:"電鍋蒸雞胸 → 擠檸檬汁+黑胡椒 → 花椰菜+玉米水煮",
-   ingredients:["義大利麵","鯛魚","菠菜","雞胸肉","花椰菜","玉米","蒜","低鈉醬油","檸檬","黑胡椒"]},
+   ingredients:["義大利麵","鯛魚","香菇","菠菜","雞胸肉","花椰菜","玉米","蒜","低鈉醬油","檸檬","黑胡椒"]},
 
-  {id:21,week:2,day:6,name:"週六清淡便當 + Cheat",
+  {id:21,week:2,day:6,name:"週六便當 + Cheat",
    lunch:"蒸雞胸 + 蒸地瓜 + 燙花椰菜",
    dinner:"Cheat Dinner 🎉",
    lunchType:"box",
@@ -547,66 +559,292 @@ const RECIPE_DB=[
    ingredients:["雞胸肉","地瓜","花椰菜"]},
 
   // ─── 第4週 ───────────────────────────────────────────────
-  {id:22,week:3,day:0,name:"🇰🇷 韓式蒸雞套餐",
-   lunch:"蒸雞胸（蒜末+薑絲+醬油）+ 水煮毛豆 + 糙米",
-   dinner:"蒸鮭魚（薑絲）+ 燙菠菜 + 水煮花椰菜",
+  {id:22,week:3,day:0,name:"🇰🇷 韓式蒸雞+豆芽",
+   lunch:"蒸雞胸（蒜末薑絲醬油）+ 水煮豆芽 + 糙米 + 燙菠菜",
+   dinner:"蒸鮭魚（薑絲）+ 水煮花椰菜 + 水煮玉米",
    lunchType:"home",
-   lunchHow:"電鍋蒸雞胸15分 → 蒜末+薑絲+醬油淋上 → 毛豆水煮5分 → 糙米煮好",
-   dinnerHow:"鮭魚薑絲蒸12分 → 燙菠菜 → 花椰菜水煮3分",
-   ingredients:["雞胸肉","毛豆","糙米","鮭魚","菠菜","花椰菜","薑","蒜","低鈉醬油"]},
+   lunchHow:"電鍋蒸雞胸15分 → 蒜末+薑絲+醬油淋上 → 豆芽水煮2分 → 糙米煮好 → 燙菠菜",
+   dinnerHow:"鮭魚薑絲蒸12分 → 花椰菜+玉米水煮",
+   ingredients:["雞胸肉","豆芽","糙米","菠菜","鮭魚","花椰菜","玉米","薑","蒜","低鈉醬油"]},
 
-  {id:23,week:3,day:1,name:"🍱 鮭魚蛋便當",
-   lunch:"水煮蛋 + 蒸地瓜 + 燙高麗菜 + 水煮毛豆",
+  {id:23,week:3,day:1,name:"🍱 香菇蛋地瓜便當",
+   lunch:"蒸香菇 + 水煮蛋 + 蒸地瓜 + 燙高麗菜",
    dinner:"蒸鮭魚（黑胡椒）+ 燙花椰菜 + 糙米",
    lunchType:"box",
-   lunchHow:"⭐ 前晚：蛋水煮、地瓜蒸好、毛豆水煮 → 早上燙高麗菜 → 裝盒",
+   lunchHow:"⭐ 前晚：香菇蒸10分、蛋水煮、地瓜蒸好 → 早上燙高麗菜裝盒",
    dinnerHow:"鮭魚蒸12分 → 撒黑胡椒 → 花椰菜水煮 → 糙米煮好",
-   ingredients:["雞蛋","地瓜","高麗菜","毛豆","鮭魚","花椰菜","糙米","黑胡椒"]},
+   ingredients:["香菇","雞蛋","地瓜","高麗菜","鮭魚","花椰菜","糙米","黑胡椒"]},
 
-  {id:24,week:3,day:2,name:"🌏 亞洲烏冬麵",
-   lunch:"水煮烏冬麵 + 蒸鱸魚碎 + 燙高麗菜 + 薑汁醬油湯底",
-   dinner:"蒸雞胸（蒜末+黑胡椒）+ 燙花椰菜 + 水煮毛豆",
+  {id:24,week:3,day:2,name:"🌏 亞洲烏冬+玉米筍",
+   lunch:"水煮烏冬麵 + 蒸鱸魚碎 + 水煮玉米筍 + 燙高麗菜 + 薑汁醬油湯底",
+   dinner:"蒸雞胸（蒜末黑胡椒）+ 燙花椰菜 + 水煮毛豆",
    lunchType:"home",
-   lunchHow:"烏冬麵水煮3分 → 鱸魚蒸12分弄碎 → 燙高麗菜 → 薑汁+醬油湯底",
+   lunchHow:"烏冬麵水煮3分 → 鱸魚蒸12分弄碎 → 玉米筍水煮3分 → 燙高麗菜 → 薑汁+醬油湯底",
    dinnerHow:"電鍋蒸雞胸 → 蒜末+黑胡椒 → 花椰菜水煮 → 毛豆水煮5分",
-   ingredients:["烏冬麵","鱸魚","高麗菜","雞胸肉","花椰菜","毛豆","薑","蒜","低鈉醬油","黑胡椒"]},
+   ingredients:["烏冬麵","鱸魚","玉米筍","高麗菜","雞胸肉","花椰菜","毛豆","薑","蒜","低鈉醬油","黑胡椒"]},
 
-  {id:25,week:3,day:3,name:"🍱 蝦豆腐便當",
-   lunch:"水煮蝦仁 + 蒸豆腐 + 糙米 + 燙菠菜",
+  {id:25,week:3,day:3,name:"🍱 蝦豆腐秋葵便當",
+   lunch:"水煮蝦仁 + 蒸豆腐 + 水煮秋葵 + 糙米",
    dinner:"蒸雞胸（薑絲）+ 燙高麗菜 + 水煮玉米",
    lunchType:"box",
-   lunchHow:"⭐ 前晚：蝦仁水煮、豆腐蒸8分、糙米煮好 → 早上燙菠菜 → 裝盒",
+   lunchHow:"⭐ 前晚：蝦仁水煮、豆腐蒸8分、秋葵水煮3分、糙米煮好 → 裝盒",
    dinnerHow:"電鍋蒸雞胸 → 薑絲鋪上 → 高麗菜+玉米水煮",
-   ingredients:["蝦仁","板豆腐","糙米","菠菜","雞胸肉","高麗菜","玉米","薑"]},
+   ingredients:["蝦仁","板豆腐","秋葵","糙米","雞胸肉","高麗菜","玉米","薑"]},
 
-  {id:26,week:3,day:4,name:"🍱 玉米蛋雞胸便當",
-   lunch:"蒸雞胸 + 水煮玉米 + 燙菠菜 + 水煮蛋",
-   dinner:"蒸鯛魚（蒜末+醬油）+ 燙花椰菜 + 糙米",
+  {id:26,week:3,day:4,name:"🍱 番茄蛋雞胸便當",
+   lunch:"蒸雞胸 + 番茄切塊 + 燙菠菜 + 水煮蛋",
+   dinner:"蒸鯛魚（蒜末醬油）+ 燙花椰菜 + 糙米",
    lunchType:"box",
-   lunchHow:"⭐ 前晚：蒸雞胸、玉米水煮、蛋水煮 → 早上燙菠菜 → 裝盒",
+   lunchHow:"⭐ 前晚：蒸雞胸、番茄切塊備好、蛋水煮 → 早上燙菠菜裝盒",
    dinnerHow:"鯛魚蒜末蒸10分 → 淋醬油 → 花椰菜水煮 → 糙米電鍋煮",
-   ingredients:["雞胸肉","玉米","菠菜","雞蛋","鯛魚","花椰菜","糙米","蒜","低鈉醬油"]},
+   ingredients:["雞胸肉","番茄","菠菜","雞蛋","鯛魚","花椰菜","糙米","蒜","低鈉醬油"]},
 
-  {id:27,week:3,day:5,name:"🇮🇹 意式蒸魚麵",
-   lunch:"水煮義大利麵 + 蒸鮭魚碎 + 燙菠菜 + 橄欖油+黑胡椒+檸檬",
-   dinner:"蒸雞胸（薑絲+醬油）+ 燙高麗菜 + 水煮毛豆",
+  {id:27,week:3,day:5,name:"🇮🇹 意式蒸魚麵+番茄",
+   lunch:"水煮義大利麵 + 蒸鮭魚碎 + 番茄切塊 + 燙菠菜 + 橄欖油黑胡椒",
+   dinner:"蒸雞胸（薑絲醬油）+ 燙高麗菜 + 水煮毛豆",
    lunchType:"home",
-   lunchHow:"義大利麵水煮8分 → 鮭魚蒸12分弄碎 → 燙菠菜 → 橄欖油+黑胡椒+檸檬拌",
+   lunchHow:"義大利麵水煮8分 → 鮭魚蒸12分弄碎 → 番茄切塊 → 燙菠菜 → 橄欖油+黑胡椒+檸檬拌",
    dinnerHow:"電鍋蒸雞胸 → 薑絲+醬油 → 高麗菜水煮 → 毛豆水煮5分",
-   ingredients:["義大利麵","鮭魚","菠菜","雞胸肉","高麗菜","毛豆","橄欖油","黑胡椒","檸檬","薑","低鈉醬油"]},
+   ingredients:["義大利麵","鮭魚","番茄","菠菜","雞胸肉","高麗菜","毛豆","橄欖油","黑胡椒","檸檬","薑","低鈉醬油"]},
 
-  {id:28,week:3,day:6,name:"週六清淡便當 + Cheat",
+  {id:28,week:3,day:6,name:"週六便當 + Cheat",
    lunch:"蒸雞胸 + 糙米 + 燙高麗菜",
    dinner:"Cheat Dinner 🎉",
    lunchType:"box",
    lunchHow:"電鍋蒸雞胸 → 糙米煮好 → 燙高麗菜",
    dinnerHow:"今天 Cheat！",
    ingredients:["雞胸肉","糙米","高麗菜"]},
+
+  // ─── 第5週 ───────────────────────────────────────────────
+  {id:29,week:4,day:0,name:"🇯🇵 日式蒸雞+秋葵",
+   lunch:"蒸雞胸（味醂醬油）+ 水煮秋葵 + 蒸香菇 + 糙米",
+   dinner:"蒸鮭魚（薑汁）+ 水煮豆芽 + 燙菠菜",
+   lunchType:"home",
+   lunchHow:"電鍋蒸雞胸+香菇 → 秋葵水煮3分 → 糙米煮好 → 醬油少量淋上",
+   dinnerHow:"鮭魚薑汁蒸12分 → 豆芽水煮2分 → 燙菠菜1分",
+   ingredients:["雞胸肉","秋葵","香菇","糙米","鮭魚","豆芽","菠菜","薑","低鈉醬油"]},
+
+  {id:30,week:4,day:1,name:"🍱 玉米筍蛋便當",
+   lunch:"水煮玉米筍 + 水煮蛋 + 蒸地瓜 + 燙花椰菜",
+   dinner:"蒸雞胸（黑胡椒）+ 蒸香菇 + 燙高麗菜",
+   lunchType:"box",
+   lunchHow:"⭐ 前晚：玉米筍水煮3分、蛋水煮、地瓜蒸好 → 早上燙花椰菜裝盒",
+   dinnerHow:"電鍋蒸雞胸+香菇15分 → 撒黑胡椒 → 燙高麗菜",
+   ingredients:["玉米筍","雞蛋","地瓜","花椰菜","雞胸肉","香菇","高麗菜","黑胡椒"]},
+
+  {id:31,week:4,day:2,name:"🇹🇭 泰式烏冬+秋葵",
+   lunch:"水煮烏冬麵 + 蒸雞胸絲 + 水煮秋葵 + 水煮豆芽 + 薑汁魚露湯底",
+   dinner:"蒸鯛魚（蒜末檸檬）+ 燙花椰菜 + 糙米",
+   lunchType:"home",
+   lunchHow:"烏冬麵水煮3分 → 雞胸蒸好撕絲 → 秋葵+豆芽水煮 → 薑汁+醬油湯底",
+   dinnerHow:"鯛魚蒜末蒸10分 → 擠檸檬汁 → 花椰菜水煮 → 糙米煮好",
+   ingredients:["烏冬麵","雞胸肉","秋葵","豆芽","鯛魚","花椰菜","糙米","薑","蒜","檸檬","低鈉醬油"]},
+
+  {id:32,week:4,day:3,name:"🍱 毛豆番茄便當",
+   lunch:"水煮毛豆 + 番茄切塊 + 蒸豆腐 + 糙米",
+   dinner:"水煮蝦仁 + 燙菠菜 + 水煮玉米",
+   lunchType:"box",
+   lunchHow:"⭐ 前晚：毛豆水煮5分、豆腐蒸8分、番茄切塊備好、糙米煮好 → 裝盒",
+   dinnerHow:"蝦仁水煮3分 → 燙菠菜 → 玉米水煮8分",
+   ingredients:["毛豆","番茄","板豆腐","糙米","蝦仁","菠菜","玉米"]},
+
+  {id:33,week:4,day:4,name:"🍱 香菇雞胸便當",
+   lunch:"蒸雞胸 + 蒸香菇 + 燙菠菜 + 蒸地瓜",
+   dinner:"蒸鱸魚（蒜末醬油）+ 水煮秋葵 + 糙米",
+   lunchType:"box",
+   lunchHow:"⭐ 前晚：雞胸+香菇同蒸15分、地瓜蒸好 → 早上燙菠菜裝盒",
+   dinnerHow:"鱸魚蒜末蒸12分 → 秋葵水煮3分 → 糙米電鍋煮",
+   ingredients:["雞胸肉","香菇","菠菜","地瓜","鱸魚","秋葵","糙米","蒜","低鈉醬油"]},
+
+  {id:34,week:4,day:5,name:"🇬🇷 地中海義麵+秋葵",
+   lunch:"水煮義大利麵 + 水煮蝦仁 + 水煮秋葵 + 番茄切塊 + 橄欖油檸檬",
+   dinner:"蒸雞胸（黑胡椒薑絲）+ 燙高麗菜 + 水煮毛豆",
+   lunchType:"home",
+   lunchHow:"義大利麵水煮8分 → 蝦仁水煮3分 → 秋葵水煮3分 → 番茄切塊 → 橄欖油+檸檬+黑胡椒拌",
+   dinnerHow:"電鍋蒸雞胸 → 薑絲+黑胡椒 → 高麗菜水煮 → 毛豆水煮5分",
+   ingredients:["義大利麵","蝦仁","秋葵","番茄","雞胸肉","高麗菜","毛豆","橄欖油","檸檬","黑胡椒","薑"]},
+
+  {id:35,week:4,day:6,name:"週六便當 + Cheat",
+   lunch:"蒸雞胸 + 蒸地瓜 + 燙菠菜",
+   dinner:"Cheat Dinner 🎉",
+   lunchType:"box",
+   lunchHow:"電鍋蒸雞胸+地瓜 → 燙菠菜",
+   dinnerHow:"今天 Cheat！",
+   ingredients:["雞胸肉","地瓜","菠菜"]},
+
+  // ─── 第6週 ───────────────────────────────────────────────
+  {id:36,week:5,day:0,name:"🇨🇳 港式蒸雞+玉米筍",
+   lunch:"蒸雞胸（薑蔥醬油）+ 水煮玉米筍 + 蒸香菇 + 糙米",
+   dinner:"蒸鮭魚（薑絲檸檬）+ 燙花椰菜 + 燙菠菜",
+   lunchType:"home",
+   lunchHow:"電鍋蒸雞胸+香菇15分 → 玉米筍水煮3分 → 糙米煮好 → 薑蔥醬油淋上",
+   dinnerHow:"鮭魚薑絲蒸12分 → 擠檸檬汁 → 花椰菜+菠菜水煮",
+   ingredients:["雞胸肉","玉米筍","香菇","糙米","鮭魚","花椰菜","菠菜","薑","蔥","檸檬","低鈉醬油"]},
+
+  {id:37,week:5,day:1,name:"🍱 豆芽蛋糙米便當",
+   lunch:"水煮豆芽 + 水煮蛋 + 糙米 + 燙高麗菜",
+   dinner:"蒸雞胸（蒜末黑胡椒）+ 燙花椰菜 + 水煮秋葵",
+   lunchType:"box",
+   lunchHow:"⭐ 前晚：豆芽水煮2分、蛋水煮、糙米煮好 → 早上燙高麗菜裝盒",
+   dinnerHow:"電鍋蒸雞胸 → 蒜末+黑胡椒 → 花椰菜水煮 → 秋葵水煮3分",
+   ingredients:["豆芽","雞蛋","糙米","高麗菜","雞胸肉","花椰菜","秋葵","蒜","黑胡椒"]},
+
+  {id:38,week:5,day:2,name:"🇰🇷 韓式烏冬+香菇豆芽",
+   lunch:"水煮烏冬麵 + 蒸雞胸絲 + 蒸香菇 + 水煮豆芽 + 醬油薑汁湯底",
+   dinner:"蒸鱸魚（蒜末）+ 燙菠菜 + 水煮玉米",
+   lunchType:"home",
+   lunchHow:"烏冬麵水煮3分 → 雞胸+香菇同蒸15分 → 雞胸撕絲 → 豆芽水煮2分 → 薑汁醬油湯底",
+   dinnerHow:"鱸魚蒜末蒸12分 → 燙菠菜 → 玉米水煮8分",
+   ingredients:["烏冬麵","雞胸肉","香菇","豆芽","鱸魚","菠菜","玉米","薑","蒜","低鈉醬油"]},
+
+  {id:39,week:5,day:3,name:"🍱 蝦仁番茄便當",
+   lunch:"水煮蝦仁 + 番茄切塊 + 蒸地瓜 + 燙菠菜",
+   dinner:"蒸豆腐（薑絲醬油）+ 水煮毛豆 + 燙花椰菜",
+   lunchType:"box",
+   lunchHow:"⭐ 前晚：蝦仁水煮3分、番茄切塊備好、地瓜蒸好 → 早上燙菠菜裝盒",
+   dinnerHow:"豆腐蒸8分 → 薑絲+醬油淋上 → 毛豆水煮5分 → 花椰菜水煮3分",
+   ingredients:["蝦仁","番茄","地瓜","菠菜","板豆腐","毛豆","花椰菜","薑","低鈉醬油"]},
+
+  {id:40,week:5,day:4,name:"🍱 玉米筍香菇便當",
+   lunch:"蒸雞胸 + 水煮玉米筍 + 蒸香菇 + 燙高麗菜",
+   dinner:"蒸鯛魚（薑絲）+ 燙菠菜 + 糙米",
+   lunchType:"box",
+   lunchHow:"⭐ 前晚：雞胸+香菇同蒸15分、玉米筍水煮3分 → 早上燙高麗菜裝盒",
+   dinnerHow:"鯛魚薑絲蒸10分 → 燙菠菜 → 糙米電鍋煮",
+   ingredients:["雞胸肉","玉米筍","香菇","高麗菜","鯛魚","菠菜","糙米","薑"]},
+
+  {id:41,week:5,day:5,name:"🇻🇳 越式義大利麵+豆芽",
+   lunch:"水煮義大利麵 + 水煮蝦仁 + 水煮豆芽 + 燙花椰菜 + 薑汁檸檬醬",
+   dinner:"蒸雞胸（蒜末醬油）+ 水煮秋葵 + 蒸地瓜",
+   lunchType:"home",
+   lunchHow:"義大利麵水煮8分 → 蝦仁水煮3分 → 豆芽水煮2分 → 花椰菜水煮 → 薑汁+檸檬+醬油拌",
+   dinnerHow:"電鍋蒸雞胸 → 蒜末+醬油 → 秋葵水煮3分 → 地瓜蒸20分",
+   ingredients:["義大利麵","蝦仁","豆芽","花椰菜","雞胸肉","秋葵","地瓜","薑","蒜","檸檬","低鈉醬油"]},
+
+  {id:42,week:5,day:6,name:"週六便當 + Cheat",
+   lunch:"蒸雞胸 + 糙米 + 燙花椰菜",
+   dinner:"Cheat Dinner 🎉",
+   lunchType:"box",
+   lunchHow:"電鍋蒸雞胸 → 糙米煮好 → 花椰菜水煮",
+   dinnerHow:"今天 Cheat！",
+   ingredients:["雞胸肉","糙米","花椰菜"]},
+
+  // ─── 第7週 ───────────────────────────────────────────────
+  {id:43,week:6,day:0,name:"🇯🇵 日式蒸雞+番茄",
+   lunch:"蒸雞胸（薑汁醬油）+ 番茄切塊 + 水煮玉米筍 + 糙米",
+   dinner:"蒸鮭魚（薑絲）+ 水煮秋葵 + 燙高麗菜",
+   lunchType:"home",
+   lunchHow:"電鍋蒸雞胸15分 → 番茄切塊 → 玉米筍水煮3分 → 糙米煮好",
+   dinnerHow:"鮭魚薑絲蒸12分 → 秋葵水煮3分 → 高麗菜水煮2分",
+   ingredients:["雞胸肉","番茄","玉米筍","糙米","鮭魚","秋葵","高麗菜","薑","低鈉醬油"]},
+
+  {id:44,week:6,day:1,name:"🍱 香菇豆腐便當",
+   lunch:"蒸香菇 + 蒸豆腐（醬油）+ 糙米 + 燙菠菜",
+   dinner:"水煮蝦仁 + 燙花椰菜 + 水煮毛豆",
+   lunchType:"box",
+   lunchHow:"⭐ 前晚：香菇+豆腐同蒸10分、糙米煮好 → 早上燙菠菜裝盒 → 淋醬油",
+   dinnerHow:"蝦仁水煮3分 → 花椰菜水煮3分 → 毛豆水煮5分",
+   ingredients:["香菇","板豆腐","糙米","菠菜","蝦仁","花椰菜","毛豆","低鈉醬油"]},
+
+  {id:45,week:6,day:2,name:"🌏 亞洲烏冬+番茄秋葵",
+   lunch:"水煮烏冬麵 + 蒸雞胸絲 + 番茄切塊 + 水煮秋葵 + 薑汁醬油",
+   dinner:"蒸鱸魚（蒜末檸檬）+ 燙花椰菜 + 糙米",
+   lunchType:"home",
+   lunchHow:"烏冬麵水煮3分 → 雞胸蒸好撕絲 → 番茄切塊 → 秋葵水煮3分 → 薑汁+醬油湯底",
+   dinnerHow:"鱸魚蒜末蒸12分 → 擠檸檬 → 花椰菜水煮 → 糙米煮好",
+   ingredients:["烏冬麵","雞胸肉","番茄","秋葵","鱸魚","花椰菜","糙米","薑","蒜","檸檬","低鈉醬油"]},
+
+  {id:46,week:6,day:3,name:"🍱 毛豆豆芽雞胸便當",
+   lunch:"蒸雞胸 + 水煮毛豆 + 水煮豆芽 + 蒸地瓜",
+   dinner:"蒸豆腐（黑胡椒蒜末）+ 燙菠菜 + 水煮玉米",
+   lunchType:"box",
+   lunchHow:"⭐ 前晚：蒸雞胸、毛豆水煮5分、豆芽水煮2分、地瓜蒸好 → 裝盒",
+   dinnerHow:"豆腐蒸8分 → 黑胡椒+蒜末淋上 → 燙菠菜 → 玉米水煮8分",
+   ingredients:["雞胸肉","毛豆","豆芽","地瓜","板豆腐","菠菜","玉米","蒜","黑胡椒"]},
+
+  {id:47,week:6,day:4,name:"🍱 玉米筍蝦仁便當",
+   lunch:"水煮蝦仁 + 水煮玉米筍 + 燙花椰菜 + 糙米",
+   dinner:"蒸雞胸（薑蔥醬油）+ 蒸香菇 + 燙高麗菜",
+   lunchType:"box",
+   lunchHow:"⭐ 前晚：蝦仁水煮3分、玉米筍水煮3分、糙米煮好 → 早上燙花椰菜裝盒",
+   dinnerHow:"電鍋蒸雞胸+香菇15分 → 薑蔥醬油淋上 → 燙高麗菜",
+   ingredients:["蝦仁","玉米筍","花椰菜","糙米","雞胸肉","香菇","高麗菜","薑","蔥","低鈉醬油"]},
+
+  {id:48,week:6,day:5,name:"🇮🇹 義麵+香菇番茄",
+   lunch:"水煮義大利麵 + 蒸雞胸絲 + 蒸香菇 + 番茄切塊 + 橄欖油黑胡椒",
+   dinner:"蒸鮭魚（檸檬薑絲）+ 水煮豆芽 + 燙菠菜",
+   lunchType:"home",
+   lunchHow:"義大利麵水煮8分 → 雞胸+香菇同蒸15分 → 雞胸撕絲 → 番茄切塊 → 橄欖油+黑胡椒+檸檬拌",
+   dinnerHow:"鮭魚薑絲蒸12分 → 擠檸檬汁 → 豆芽水煮2分 → 燙菠菜",
+   ingredients:["義大利麵","雞胸肉","香菇","番茄","鮭魚","豆芽","菠菜","橄欖油","黑胡椒","檸檬","薑"]},
+
+  {id:49,week:6,day:6,name:"週六便當 + Cheat",
+   lunch:"蒸雞胸 + 蒸地瓜 + 燙高麗菜",
+   dinner:"Cheat Dinner 🎉",
+   lunchType:"box",
+   lunchHow:"電鍋蒸雞胸+地瓜 → 燙高麗菜",
+   dinnerHow:"今天 Cheat！",
+   ingredients:["雞胸肉","地瓜","高麗菜"]},
+
+  // ─── 第8週 ───────────────────────────────────────────────
+  {id:50,week:7,day:0,name:"🇰🇷 韓式蒸雞+玉米筍香菇",
+   lunch:"蒸雞胸（蒜末薑絲醬油）+ 蒸香菇 + 水煮玉米筍 + 糙米",
+   dinner:"蒸鯛魚（薑絲）+ 水煮秋葵 + 燙菠菜",
+   lunchType:"home",
+   lunchHow:"電鍋蒸雞胸+香菇15分 → 玉米筍水煮3分 → 糙米煮好 → 蒜末+薑絲+醬油淋上",
+   dinnerHow:"鯛魚薑絲蒸10分 → 秋葵水煮3分 → 燙菠菜",
+   ingredients:["雞胸肉","香菇","玉米筍","糙米","鯛魚","秋葵","菠菜","薑","蒜","低鈉醬油"]},
+
+  {id:51,week:7,day:1,name:"🍱 秋葵豆腐蛋便當",
+   lunch:"蒸豆腐 + 水煮秋葵 + 水煮蛋 + 燙高麗菜",
+   dinner:"蒸雞胸（黑胡椒）+ 蒸香菇 + 燙花椰菜",
+   lunchType:"box",
+   lunchHow:"⭐ 前晚：豆腐蒸8分、秋葵水煮3分、蛋水煮 → 早上燙高麗菜裝盒",
+   dinnerHow:"電鍋蒸雞胸+香菇15分 → 撒黑胡椒 → 花椰菜水煮3分",
+   ingredients:["板豆腐","秋葵","雞蛋","高麗菜","雞胸肉","香菇","花椰菜","黑胡椒"]},
+
+  {id:52,week:7,day:2,name:"🇹🇼 台式烏冬+番茄豆芽",
+   lunch:"水煮烏冬麵 + 水煮蝦仁 + 番茄切塊 + 水煮豆芽 + 蒜末醬油湯底",
+   dinner:"蒸鱸魚（薑絲醬油）+ 燙花椰菜 + 水煮玉米",
+   lunchType:"home",
+   lunchHow:"烏冬麵水煮3分 → 蝦仁水煮3分 → 番茄切塊 → 豆芽水煮2分 → 蒜末+醬油湯底",
+   dinnerHow:"鱸魚薑絲蒸12分 → 淋醬油 → 花椰菜+玉米水煮",
+   ingredients:["烏冬麵","蝦仁","番茄","豆芽","鱸魚","花椰菜","玉米","薑","蒜","低鈉醬油"]},
+
+  {id:53,week:7,day:3,name:"🍱 香菇番茄毛豆便當",
+   lunch:"蒸香菇 + 番茄切塊 + 水煮毛豆 + 糙米",
+   dinner:"水煮蝦仁 + 燙菠菜 + 水煮秋葵",
+   lunchType:"box",
+   lunchHow:"⭐ 前晚：香菇蒸10分、毛豆水煮5分、番茄切塊備好、糙米煮好 → 裝盒",
+   dinnerHow:"蝦仁水煮3分 → 燙菠菜 → 秋葵水煮3分",
+   ingredients:["香菇","番茄","毛豆","糙米","蝦仁","菠菜","秋葵"]},
+
+  {id:54,week:7,day:4,name:"🍱 豆芽雞胸地瓜便當",
+   lunch:"蒸雞胸 + 水煮豆芽 + 蒸地瓜 + 燙菠菜",
+   dinner:"蒸鮭魚（蒜末黑胡椒）+ 燙花椰菜 + 糙米",
+   lunchType:"box",
+   lunchHow:"⭐ 前晚：蒸雞胸、豆芽水煮2分、地瓜蒸好 → 早上燙菠菜裝盒",
+   dinnerHow:"鮭魚蒸12分 → 蒜末+黑胡椒撒上 → 花椰菜水煮 → 糙米煮好",
+   ingredients:["雞胸肉","豆芽","地瓜","菠菜","鮭魚","花椰菜","糙米","蒜","黑胡椒"]},
+
+  {id:55,week:7,day:5,name:"🇬🇷 地中海義麵+香菇豆芽",
+   lunch:"水煮義大利麵 + 蒸雞胸絲 + 蒸香菇 + 水煮豆芽 + 橄欖油薑汁檸檬",
+   dinner:"蒸鯛魚（蒜末醬油）+ 水煮玉米筍 + 燙高麗菜",
+   lunchType:"home",
+   lunchHow:"義大利麵水煮8分 → 雞胸+香菇同蒸15分 → 雞胸撕絲 → 豆芽水煮2分 → 橄欖油+薑汁+檸檬拌",
+   dinnerHow:"鯛魚蒜末蒸10分 → 淋醬油 → 玉米筍水煮3分 → 燙高麗菜",
+   ingredients:["義大利麵","雞胸肉","香菇","豆芽","鯛魚","玉米筍","高麗菜","橄欖油","薑","檸檬","蒜","低鈉醬油"]},
+
+  {id:56,week:7,day:6,name:"週六便當 + Cheat",
+   lunch:"蒸雞胸 + 蒸香菇 + 燙菠菜 + 糙米",
+   dinner:"Cheat Dinner 🎉",
+   lunchType:"box",
+   lunchHow:"電鍋蒸雞胸+香菇15分 → 燙菠菜 → 糙米煮好",
+   dinnerHow:"今天 Cheat！",
+   ingredients:["雞胸肉","香菇","菠菜","糙米"]},
 ];
 
-// ── 購物食材（去除重複，含調味料）─────────────────────────────
-// 每週食材根據食譜自動生成 + 調味料 + 固定必買
-const SEASONINGS=["薑","蒜","低鈉醬油","黑胡椒粉","橄欖油","檸檬"];
+// ── 購物食材（含新食材）──────────────────────────────────────
 const FIXED_WEEKLY=[
   {name:"Herbalife 奶昔粉（確認庫存）",cat:"protein"},
   {name:"雞蛋 1排（10個）",cat:"protein"},
@@ -631,7 +869,13 @@ const INGREDIENT_UNIT={
   "花椰菜":{buy:"花椰菜 1棵（約400g）",cat:"veg"},
   "菠菜":{buy:"菠菜 1包（約200g）",cat:"veg"},
   "高麗菜":{buy:"高麗菜 半顆",cat:"veg"},
+  "香菇":{buy:"新鮮香菇 200g袋裝",cat:"veg"},
+  "番茄":{buy:"番茄 4–6個",cat:"veg"},
+  "玉米筍":{buy:"玉米筍 1包（約200g）",cat:"veg"},
+  "豆芽":{buy:"豆芽 1包（約200g）",cat:"veg"},
+  "秋葵":{buy:"秋葵 1包（約150g）",cat:"veg"},
   "薑":{buy:"薑 1塊（約100g）",cat:"seasoning"},
+  "蔥":{buy:"蔥 1把",cat:"seasoning"},
   "蒜":{buy:"蒜頭 1顆",cat:"seasoning"},
   "低鈉醬油":{buy:"低鈉醬油 1瓶（500ml）",cat:"seasoning"},
   "黑胡椒":{buy:"黑胡椒粉 1罐",cat:"seasoning"},
@@ -641,7 +885,7 @@ const INGREDIENT_UNIT={
 const SHOP_CATS={
   protein:{label:"🥩 蛋白質",color:"#43d99e"},
   carb:{label:"🌾 主食",color:"#ffd166"},
-  veg:{label:"🥦 蔬菜",color:"#60c5fa"},
+  veg:{label:"🥦 蔬菜 & 菇類",color:"#60c5fa"},
   fruit:{label:"🍎 水果",color:"#ff9f7f"},
   seasoning:{label:"🧂 調味料",color:"#7a85a3"},
 };
@@ -875,7 +1119,8 @@ function saveWeight(){
 function renderMealTab(){
   renderBkGrid();renderMealGrid(getCurrPlanWeek());
   const tabs=document.getElementById("week-tabs");
-  tabs.innerHTML=[0,1,2,3].map(i=>`<button class="week-tab ${i===getCurrPlanWeek()?"active":""}" onclick="renderMealGrid(${i});document.querySelectorAll('.week-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">第${i+1}週</button>`).join("");
+  const cw=getCurrPlanWeek();
+  tabs.innerHTML=[0,1,2,3,4,5,6,7].map(i=>`<button class="week-tab ${i===cw?"active":""}" onclick="renderMealGrid(${i});document.querySelectorAll('.week-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">第${i+1}週</button>`).join("");
 }
 function renderBkGrid(){
   const dow=new Date().getDay();
@@ -1015,7 +1260,7 @@ function getShopRI(){
   if(!D.profile||!D.profile.planStartDate)return Math.abs(D.shopWeekOffset)%4;
   const ps=new Date(D.profile.planStartDate),sm=new Date();
   sm.setDate(sm.getDate()-sm.getDay()+1+D.shopWeekOffset*7);
-  return Math.max(0,Math.floor((sm-ps)/604800000))%4;
+  return Math.max(0,Math.floor((sm-ps)/604800000))%8;
 }
 function buildIngList(){
   const ri=getShopRI(),recs=getWeekRecipes(ri),seenBuy={},items=[];
@@ -1099,8 +1344,23 @@ function autoUpdatePantry(){
   let c=0;
   items.forEach(it=>{if(isBought(it.name,wk)){setPt(it.name,"ok");c++;}});
   saveLocal();renderShop();showShopMsg("✅ "+c+" 項食材庫存更新為充足");
+  // Sync shop data to Sheets
+  setSS("sync");
+  syncSheets("saveShop",{key:"shop_"+wk,data:{shop:D.shop}}).then(r=>setSS(r&&r.success?"ok":"err"));
 }
-function clearBuyList(){const wk=getWeekKey(D.shopWeekOffset);Object.keys(D.shop).forEach(k=>{if(k.startsWith("by_"+wk))delete D.shop[k];});saveLocal();renderShop();showShopMsg("🔄 本週採購清單已重置");}
+function clearBuyList(){
+  const wk=getWeekKey(D.shopWeekOffset);
+  Object.keys(D.shop).forEach(k=>{if(k.startsWith("by_"+wk))delete D.shop[k];});
+  saveLocal();renderShop();showShopMsg("🔄 本週採購清單已重置");
+}
+function saveShopToSheets(){
+  const wk=getWeekKey(D.shopWeekOffset);
+  setSS("sync");
+  syncSheets("saveShop",{key:"shop_all",data:{shop:D.shop}}).then(r=>{
+    setSS(r&&r.success?"ok":"err");
+    showShopMsg(r&&r.success?"☁️ 購物清單已備份到 Sheets！":"❌ 備份失敗，請檢查網絡");
+  });
+}
 function showShopMsg(msg){const el=document.getElementById("shop-msg");el.textContent=msg;el.style.display="block";setTimeout(()=>el.style.display="none",3000);}
 function prevShopWeek(){D.shopWeekOffset--;renderShop();}
 function nextShopWeek(){D.shopWeekOffset++;renderShop();}
