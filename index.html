@@ -159,19 +159,19 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
       <div class="pin-dot" id="d0"></div><div class="pin-dot" id="d1"></div>
       <div class="pin-dot" id="d2"></div><div class="pin-dot" id="d3"></div>
     </div>
-    <div class="pin-grid">
-      <button class="pin-btn" onclick="pinPress('1')">1</button>
-      <button class="pin-btn" onclick="pinPress('2')">2</button>
-      <button class="pin-btn" onclick="pinPress('3')">3</button>
-      <button class="pin-btn" onclick="pinPress('4')">4</button>
-      <button class="pin-btn" onclick="pinPress('5')">5</button>
-      <button class="pin-btn" onclick="pinPress('6')">6</button>
-      <button class="pin-btn" onclick="pinPress('7')">7</button>
-      <button class="pin-btn" onclick="pinPress('8')">8</button>
-      <button class="pin-btn" onclick="pinPress('9')">9</button>
-      <button class="pin-btn" onclick="pinReset()" style="font-size:.75rem;color:var(--mt)">忘記</button>
-      <button class="pin-btn" onclick="pinPress('0')">0</button>
-      <button class="pin-btn" onclick="pinDel()">⌫</button>
+    <div class="pin-grid" id="pin-grid">
+      <button class="pin-btn" data-pin="1">1</button>
+      <button class="pin-btn" data-pin="2">2</button>
+      <button class="pin-btn" data-pin="3">3</button>
+      <button class="pin-btn" data-pin="4">4</button>
+      <button class="pin-btn" data-pin="5">5</button>
+      <button class="pin-btn" data-pin="6">6</button>
+      <button class="pin-btn" data-pin="7">7</button>
+      <button class="pin-btn" data-pin="8">8</button>
+      <button class="pin-btn" data-pin="9">9</button>
+      <button class="pin-btn" data-pin="reset" style="font-size:.75rem;color:var(--mt)">忘記</button>
+      <button class="pin-btn" data-pin="0">0</button>
+      <button class="pin-btn" data-pin="del">⌫</button>
     </div>
     <div class="pin-err" id="pin-err"></div>
     <div class="pin-hint" id="pin-hint"></div>
@@ -471,8 +471,9 @@ main{max-width:1100px;margin:0 auto;padding:18px 13px;}
 <div class="mov" id="day-modal"><div class="mo"><button class="mclose" onclick="closeModal('day-modal')">✕</button><h2 id="dm-title" style="margin-bottom:12px"></h2><div id="dm-body"></div></div></div>
 <div class="mov" id="bk-modal"><div class="mo"><button class="mclose" onclick="closeModal('bk-modal')">✕</button><h2 id="bk-title" style="margin-bottom:12px"></h2><div id="bk-body"></div></div></div>
 <div id="toast"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script>
+// Chart.js loaded below — safe fallback if CDN fails
+window.Chart=window.Chart||null;
 // ═══════════ CONFIG ═══════════
 const DEFAULT_PIN="1234";
 // ═══════════════════════════════
@@ -945,6 +946,7 @@ function renderBodyStats(){
 }
 function switchChart(t,btn){currentChartType=t;document.querySelectorAll(".ctab").forEach(b=>b.classList.remove("active"));btn.classList.add("active");renderBodyChart(t);}
 function renderBodyChart(type){
+  if(typeof Chart==="undefined") return;
   const stats=[...D.bodyStats].sort((a,b)=>a.date.localeCompare(b.date));
   const labels=stats.map(s=>s.date.slice(5));let ds=[];
   const goal=D.profile?parseFloat(D.profile.goalWeight)||null:null;
@@ -959,12 +961,15 @@ function renderBodyChart(type){
   charts.body=new Chart(ctx,{type:"line",data:{labels,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:"#7a85a3",font:{size:11}}}},scales:sc}});
 }
 function renderWChart(){
+  if(typeof Chart==="undefined") return;
   const stats=[...D.bodyStats].filter(s=>s.weight).sort((a,b)=>a.date.localeCompare(b.date));
   if(charts.w)charts.w.destroy();
   const ctx=document.getElementById("wChart").getContext("2d");
   const goal=D.profile?parseFloat(D.profile.goalWeight)||null:null;
   charts.w=new Chart(ctx,{type:"line",data:{labels:stats.map(s=>s.date.slice(5)),datasets:[{label:"體重",data:stats.map(s=>s.weight),borderColor:"#6c63ff",backgroundColor:"rgba(108,99,255,.1)",borderWidth:2,pointRadius:3,tension:.3,fill:true},goal?{label:"目標",data:stats.map(()=>goal),borderColor:"#43d99e",borderDash:[5,5],borderWidth:1,pointRadius:0}:null].filter(Boolean)},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:"#7a85a3",font:{size:10}}}},scales:{x:{ticks:{color:"#7a85a3",font:{size:9}},grid:{color:"rgba(255,255,255,.05)"}},y:{ticks:{color:"#7a85a3"},grid:{color:"rgba(255,255,255,.05)"}}}}});
 }
+// Called by Chart.js onload to render charts after library is ready
+function initCharts(){renderBodyChart(currentChartType);renderWChart();}
 
 // ── Breakfast ──────────────────────────────────────────────────
 function renderBreakfastGrid(){
@@ -1396,11 +1401,25 @@ function st(id,btn){
 // ── Boot ───────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded",()=>{
   loadLocal();
+
+  // Wire PIN buttons via addEventListener (avoids CSP inline-handler issues)
+  document.querySelectorAll("#pin-grid .pin-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const v=btn.getAttribute("data-pin");
+      if(v==="del") pinDel();
+      else if(v==="reset") pinReset();
+      else pinPress(v);
+    });
+  });
+
+  // Keyboard support — check visibility via class or style
   document.addEventListener("keydown",e=>{
     const ps=document.getElementById("pin-screen");
-    if(ps.style.display!=="none"&&/^\d$/.test(e.key))pinPress(e.key);
-    if(ps.style.display!=="none"&&e.key==="Backspace")pinDel();
+    const visible=ps&&ps.offsetParent!==null;
+    if(visible&&/^\d$/.test(e.key)) pinPress(e.key);
+    if(visible&&e.key==="Backspace") pinDel();
   });
+
   if(!localStorage.getItem("myPin")){
     document.getElementById("pin-sub").textContent="首次使用，請設定你的 PIN 碼";
     document.getElementById("pin-hint").textContent="輸入任意4位數字作為 PIN";
@@ -1408,5 +1427,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
 });
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js" onload="if(typeof initCharts==='function')initCharts()"></script>
 </body>
 </html>
