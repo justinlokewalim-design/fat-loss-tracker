@@ -363,17 +363,40 @@ function getPhase(){
 }
 
 // ── DATA ══════════════════════════════════════════════════════
+// 早餐類型：
+// 週一/三/四（帶便當日）= 奶昔 + 水煮蛋（簡單快速）
+// 週二/五（在家日）= 奶昔 + 豐富配食（輪替）
+// 週六（Cheat日）= 奶昔 + 豐富配食
+// 週日（訓練日）= 奶昔 + 豐富配食
 const BREAKFASTS=[
-  {id:0,icon:"🥤",type:"training",name:"奶昔 + 水煮蛋",time:"5分",desc:"Herbalife 奶昔 + 水煮蛋 2個",kcal:"約320–380 kcal",
-   detail:"訓練日蛋白質需求更高。蛋補充完整氨基酸，幫助肌肉修復。",
-   ing:["Herbalife 奶昔粉（按包裝量）","水煮蛋 2個（前晚備好）"],
-   how:"① 沖奶昔 → ② 冰箱拿蛋 → 完成！前晚煮3–4個蛋放冰箱，可用2–3天",
-   days:[0,2,5,6]},
-  {id:1,icon:"🥤",type:"rest",name:"奶昔 + 水果",time:"3分",desc:"Herbalife 奶昔 + 蘋果/奇異果/香蕉",kcal:"約280–330 kcal",
-   detail:"休息日水果補充維C、鉀和膳食纖維，延長飽腹感。",
-   ing:["Herbalife 奶昔粉（按包裝量）","水果 1個（蘋果/奇異果/香蕉）"],
-   how:"① 沖奶昔 → ② 水果洗好直接吃 → 完成！",
+  {id:0,icon:"🥤",type:"box",name:"奶昔 + 水煮蛋",time:"3分鐘",
+   desc:"Herbalife 奶昔 + 水煮蛋 2個",kcal:"約320 kcal",
+   detail:"帶便當日首選！水煮蛋前晚備好，早上30秒搞定，高蛋白撐到午餐。",
+   ing:["Herbalife 奶昔粉（按包裝量）","水煮蛋 2個（前晚備好放冰箱）"],
+   how:"① 沖奶昔 → ② 冰箱拿蛋 → 完成！",
+   tip:"前晚煮3–4個蛋，可用2–3天",
    days:[1,3,4]},
+  {id:1,icon:"🥤",type:"rich1",name:"奶昔 + 希臘優格 + 奇異果",time:"5分鐘",
+   desc:"Herbalife 奶昔 + 無糖希臘優格100g + 奇異果1個",kcal:"約380 kcal",
+   detail:"希臘優格蛋白質是普通優格2倍，奇異果維C幫助脂肪代謝，組合完美！",
+   ing:["Herbalife 奶昔粉","無糖希臘優格 100g","奇異果 1個"],
+   how:"① 沖奶昔 → ② 優格倒小碗 → ③ 奇異果切片擺上 → 完成！",
+   tip:"優格+奶昔都是高蛋白，飽腹感可撐到午餐",
+   days:[2,5]},
+  {id:2,icon:"🥤",type:"rich2",name:"奶昔 + 燕麥 + 香蕉",time:"5分鐘",
+   desc:"Herbalife 奶昔 + 即食燕麥30g + 香蕉半條",kcal:"約400 kcal",
+   detail:"訓練日最佳！燕麥慢釋碳水提供持久能量，香蕉補充鉀幫助肌肉收縮。",
+   ing:["Herbalife 奶昔粉","即食燕麥 30g","香蕉 半條"],
+   how:"① 沖奶昔 → ② 燕麥用少量熱水沖泡2分 → ③ 香蕉切片 → 完成！",
+   tip:"訓練前30分鐘吃最佳，提供運動能量",
+   days:[0,6]},
+  {id:3,icon:"🥤",type:"rich3",name:"奶昔 + 水煮蛋 + 蘋果",time:"5分鐘",
+   desc:"Herbalife 奶昔 + 水煮蛋1個 + 蘋果半個",kcal:"約360 kcal",
+   detail:"蛋白質+纖維+維C三重組合，蘋果果膠延緩消化，飽腹感超強。",
+   ing:["Herbalife 奶昔粉","水煮蛋 1個（前晚備好）","蘋果 半個"],
+   how:"① 沖奶昔 → ② 拿蛋 → ③ 蘋果切塊 → 完成！",
+   tip:"蘋果切開後擠少量檸檬汁防氧化",
+   days:[0,2,5,6]},
 ];
 
 // ══════════════════════════════════════════════════════════════
@@ -890,6 +913,24 @@ const SHOP_CATS={
   seasoning:{label:"🧂 調味料",color:"#7a85a3"},
 };
 
+// 根據星期幾選擇早餐
+// 週一/三/四 = id:0（便當日，簡單）
+// 週二/五 = 輪替 id:1, id:3
+// 週日/六 = id:2（訓練日豐富款）
+function getBkByDay(dow){
+  if([1,3,4].includes(dow)) return BREAKFASTS[0]; // 便當日：奶昔+蛋
+  if(dow===2) return BREAKFASTS[1]; // 週二：奶昔+優格+奇異果
+  if(dow===5) return BREAKFASTS[3]; // 週五：奶昔+蛋+蘋果
+  if([0,6].includes(dow)) return BREAKFASTS[2]; // 週日/六（訓練日）：奶昔+燕麥+香蕉
+  return BREAKFASTS[0];
+}
+function getBkLabel(dow){
+  if([1,3,4].includes(dow)) return "早餐（便當日）";
+  if([2,5].includes(dow)) return "早餐（在家日）";
+  if([0,6].includes(dow)) return "早餐（訓練日）";
+  return "早餐";
+}
+
 const WO_DATA=[
   {d:"日",m:"游泳 45分鐘 / 跑步 30分鐘",t:"main",dt:["游泳自由式+蛙式","目標800–1000m","緩游5分收操"]},
   {d:"一",m:"床上運動10分 + 拉伸",t:"rest",dt:["早上床上小腹操","全身拉伸15分","輕鬆散步可選"]},
@@ -984,8 +1025,7 @@ function renderTodayMeals(){
   const dow=new Date().getDay();
   const pw=getCurrPlanWeek();
   const recipe=RECIPE_DB.find(r=>r.week===pw&&r.day===dow);
-  const trainingDay=isWO(dow);
-  const bk=trainingDay?BREAKFASTS[0]:BREAKFASTS[1];
+  const bk=getBkByDay(dow);
   const mt=getMT();
   const cheat=isCD(today());
   const amSnacks=["🍎 蘋果1個","🥚 水煮蛋1個","🌰 無鹽堅果10粒","🫙 希臘優格100g","🍌 香蕉半條"];
@@ -993,7 +1033,7 @@ function renderTodayMeals(){
   const amS=amSnacks[dow%amSnacks.length];
   const pmS=pmSnacks[dow%pmSnacks.length];
   const slots=[
-    {time:mt.bk,icon:"🌅",label:trainingDay?"早餐（訓練日）":"早餐（休息日）",name:bk.name,kcal:bk.kcal,detail:`食材：${bk.ing.join("、")}<br>${bk.how}`,snack:false},
+    {time:mt.bk,icon:"🌅",label:getBkLabel(dow),name:bk.name,kcal:bk.kcal,detail:`食材：${bk.ing.join("、")}<br>${bk.how}`,snack:false},
     {time:mt.am,icon:"🍎",label:"上午加餐",name:amS,kcal:"80–120 kcal",detail:"選一樣即可，避免午餐前過餓。蛋白質類最佳。",snack:true},
     {time:mt.lu,icon:"☀️",label:"午餐"+(recipe&&recipe.lunchType==="box"?" 🍱":""),name:recipe?recipe.lunch.split("+")[0]+"...":"-- 請設定計劃",kcal:"約450–550 kcal",detail:recipe?`<strong>${recipe.lunch}</strong><br>${recipe.lunchHow}`:"請先在設定中設定計劃開始日期",snack:false},
     {time:mt.pm,icon:"🫐",label:"下午加餐",name:pmS,kcal:"80–150 kcal",detail:"3–4點補充，防止下午飢餓影響工作效率。",snack:true},
@@ -1021,7 +1061,8 @@ function toggleMealSlot(i){
   if(open)el.classList.add("open");
 }
 function renderWeekSummary(){
-  const mon=new Date();mon.setDate(mon.getDate()-mon.getDay()+1);
+  const today_dow=new Date().getDay();
+  const mon=new Date();mon.setDate(mon.getDate()-(today_dow===0?6:today_dow-1));
   const weekWts=D.weights.filter(w=>new Date(w.date)>=mon);
   const first=weekWts.length?weekWts[weekWts.length-1]:null;
   const last=weekWts.length?weekWts[0]:null;
@@ -1064,13 +1105,14 @@ function renderTmrPrep(){
   const pw=getCurrPlanWeek();
   const tmrRecipe=RECIPE_DB.find(r=>r.week===pw&&r.day===tmrDow);
   const tmrWo=WO_DATA[tmrDow];
-  const tmrIsTraining=isWO(tmrDow);
-  const tmrBk=tmrIsTraining?BREAKFASTS[0]:BREAKFASTS[1];
+  const tmrBk=getBkByDay(tmrDow);
+  const tmrIsBoxDay=[1,3,4].includes(tmrDow); // 便當日
+  const tmrIsTraining=[0,2,5,6].includes(tmrDow); // 訓練日
 
   // Work out what needs to be prepped tonight
   const prepList=[];
   // Breakfast prep
-  if(tmrIsTraining){
+  if(tmrIsBoxDay){
     prepList.push({icon:"🥚",item:"水煮蛋 2–3個",tip:"今晚煮好放冰箱，明早直接拿"});
   } else {
     prepList.push({icon:"🍎",item:"水果洗好放冰箱",tip:"蘋果/奇異果/香蕉，明早配奶昔"});
@@ -1124,14 +1166,17 @@ function renderMealTab(){
 }
 function renderBkGrid(){
   const dow=new Date().getDay();
-  const todayBk=isWO(dow)?BREAKFASTS[0]:BREAKFASTS[1];
+  const todayBk=getBkByDay(dow);
+  const dayLabels={0:"週一/三/四",1:"週二",2:"週六/日",3:"週五"};
+  const typeColors={box:"#7a85a3",rich1:"#43d99e",rich2:"#6c63ff",rich3:"#ffd166"};
   document.getElementById("bk-grid").innerHTML=`
-    <div style="grid-column:1/-1;background:rgba(108,99,255,.08);border-radius:9px;padding:9px 12px;margin-bottom:4px;font-size:.76rem;color:var(--mt)">
-      💡 訓練日（週二/五/六/日）→ 奶昔+水煮蛋 | 休息日（週一/三/四）→ 奶昔+水果
+    <div style="grid-column:1/-1;background:rgba(108,99,255,.08);border-radius:9px;padding:9px 12px;margin-bottom:6px;font-size:.75rem;color:var(--mt)">
+      💡 週一/三/四便當日 → 奶昔+水煮蛋 | 週二/五在家日 → 奶昔+優格/蘋果 | 週六/日訓練日 → 奶昔+燕麥香蕉
     </div>
     ${BREAKFASTS.map(bk=>`
     <div class="bk-card ${bk.id===todayBk.id?"today-bk":""}" onclick="openBkModal(${bk.id})">
       <div class="bk-icon">${bk.icon}</div>
+      <div style="font-size:.62rem;padding:1px 6px;border-radius:8px;display:inline-block;margin-bottom:4px;background:rgba(255,255,255,.07);color:var(--mt)">${bk.days.map(d=>["日","一","二","三","四","五","六"][d]).map(d=>"週"+d).join("/")}</div>
       <div class="bk-name">${bk.name}${bk.id===todayBk.id?" ← 今天":""}</div>
       <div class="bk-desc">${bk.desc}</div>
       <div class="bk-kcal">${bk.kcal}</div>
@@ -1146,14 +1191,20 @@ function openBkModal(id){
       <div style="font-size:.78rem;font-weight:600;margin-bottom:7px">🛒 食材</div>
       ${bk.ing.map(i=>`<div style="font-size:.76rem;color:var(--mt);padding:3px 0;border-bottom:1px solid rgba(255,255,255,.05)">${i}</div>`).join("")}
     </div>
-    <div style="background:var(--sf);border-radius:9px;padding:12px">
+    <div style="background:var(--sf);border-radius:9px;padding:12px;margin-bottom:10px">
       <div style="font-size:.78rem;font-weight:600;margin-bottom:7px">👨‍🍳 做法</div>
       <div style="font-size:.76rem;color:var(--mt);line-height:1.8">${bk.how}</div>
-    </div>`;
+    </div>
+    ${bk.tip?`<div style="background:rgba(108,99,255,.08);border-radius:9px;padding:10px 12px;border-left:3px solid var(--ac)">
+      <div style="font-size:.75rem;font-weight:600;color:var(--ac);margin-bottom:3px">💡 備餐小貼士</div>
+      <div style="font-size:.74rem;color:var(--mt)">${bk.tip}</div>
+    </div>`:""}`;
   document.getElementById("bk-modal").classList.add("open");
 }
 function renderMealGrid(wi){
-  const recs=getWeekRecipes(wi);
+  // Sort Monday first: 1,2,3,4,5,6,0
+  const dayOrder=[1,2,3,4,5,6,0];
+  const recs=getWeekRecipes(wi).sort((a,b)=>dayOrder.indexOf(a.day)-dayOrder.indexOf(b.day));
   document.getElementById("meal-list").innerHTML=recs.map(r=>{
     const isCheat=r.dinner==="Cheat Dinner 🎉";
     const badge=r.lunchType==="box"?`<span class="mdc-badge box-b">🍱便當</span>`:r.lunchType==="home"?`<span class="mdc-badge home-b">🏠在家</span>`:"";
